@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.LookAtThis" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
@@ -6,4 +6,53 @@
     </style>
 
     <style name="Theme.LookAtThis" parent="Base.Theme.LookAtThis" />
+
+    <style name="Text.Normal.8" parent="android:TextAppearance">
+        <item name="android:fontFamily">@font/uhheekangja</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">@dimen/text_size_8</item>
+    </style>
+
+    <style name="Text.Normal.11" parent="android:TextAppearance">
+        <item name="android:fontFamily">@font/uhheekangja</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">@dimen/text_size_11</item>
+    </style>
+
+    <style name="Text.Normal.16" parent="android:TextAppearance">
+        <item name="android:fontFamily">@font/uhheekangja</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+    </style>
+
+    <style name="Text.Bold.20" parent="android:TextAppearance">
+        <item name="android:fontFamily">@font/uhheekangja</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">@dimen/text_size_20</item>
+    </style>
+
+    <style name="Text.Bold.22" parent="android:TextAppearance">
+        <item name="android:fontFamily">@font/uhheekangja</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">@dimen/text_size_22</item>
+    </style>
+
+    <style name="Text.Bold.24" parent="android:TextAppearance">
+        <item name="android:fontFamily">@font/uhheekangja</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">@dimen/text_size_24</item>
+    </style>
+
+    <style name="Text.Bold.28" parent="android:TextAppearance">
+        <item name="android:fontFamily">@font/uhheekangja</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">@dimen/text_size_28</item>
+    </style>
+
+    <style name="Text.Bold.32" parent="android:TextAppearance">
+        <item name="android:fontFamily">@font/uhheekangja</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">@dimen/text_size_32</item>
+    </style>
+
 </resources>
