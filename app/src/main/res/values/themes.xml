@@ -33,6 +33,10 @@
         <item name="android:textSize">@dimen/text_size_13</item>
     </style>
 
+    <style name="Text.Bold.15" parent="Text.Bold">
+        <item name="android:textSize">@dimen/text_size_15</item>
+    </style>
+
     <style name="Text.Bold.20" parent="Text.Bold">
         <item name="android:textSize">@dimen/text_size_20</item>
     </style>
@@ -73,6 +77,12 @@
         <item name="android:layout_width">79dp</item>
         <item name="android:layout_height">27dp</item>
         <item name="android:textAppearance">@style/Text.Bold.13</item>
+    </style>
+
+    <style name="AppToggle" parent="Widget.AppCompat.CompoundButton.Switch">
+        <item name="android:switchMinWidth">75dp</item>
+        <item name="android:thumb">@drawable/toggle_thumb</item>
+        <item name="android:track">@drawable/selector_toggle_track</item>
     </style>
 
 </resources>
