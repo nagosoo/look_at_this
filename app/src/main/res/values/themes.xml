@@ -53,15 +53,26 @@
         <item name="android:textSize">@dimen/text_size_32</item>
     </style>
 
-    <style name="AppButtonStyle" parent="Widget.Material3.Button">
-        <item name="background">@drawable/selector_button</item>
+    <style name="AppButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/selector_button</item>
     </style>
 
-    <style name="AppButtonLargeStyle" parent="Widget.MaterialComponents.Button">
+    <style name="AppButtonLargeStyle" parent="AppButtonStyle">
         <item name="android:layout_width">147dp</item>
         <item name="android:layout_height">50dp</item>
-        <item name="backgroundTint">@drawable/selector_button</item>
         <item name="android:textAppearance">@style/Text.Bold.24</item>
+    </style>
+
+    <style name="AppButtonMediumStyle" parent="AppButtonStyle">
+        <item name="android:layout_width">97dp</item>
+        <item name="android:layout_height">42dp</item>
+        <item name="android:textAppearance">@style/Text.Bold.20</item>
+    </style>
+
+    <style name="AppButtonSmallStyle" parent="AppButtonStyle">
+        <item name="android:layout_width">79dp</item>
+        <item name="android:layout_height">27dp</item>
+        <item name="android:textAppearance">@style/Text.Bold.13</item>
     </style>
 
 </resources>
