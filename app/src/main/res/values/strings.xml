@@ -4,5 +4,8 @@
     <string name="text_id">아이디</string>
     <string name="text_pw">비밀번호</string>
     <string name="text_pw_recheck">비밀번호 확인</string>
+    <string name="text_already_exist_id">이미 존재하는 아이디야ㅠ_ㅠ</string>
+    <string name="ok">확인</string>
     <string name="contentDescription_hello">유저를 환영하는 그림</string>
+    <string name="contentDescription_error">에러를 나타내는 그림</string>
 </resources>

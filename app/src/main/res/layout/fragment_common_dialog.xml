@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/ll"
+        android:layout_width="356dp"
+        android:layout_height="239dp"
+        android:background="@drawable/common_dialog_background"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_content"
+            style="@style/Text.Bold.24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="@string/text_already_exist_id" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="36dp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_ok"
+            style="@style/AppButtonMediumStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ok" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/iv"
+        android:layout_width="179dp"
+        android:layout_height="180dp"
+        android:layout_marginTop="-112dp"
+        android:contentDescription="@string/contentDescription_error"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/ll"
+        tools:src="@drawable/error" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
