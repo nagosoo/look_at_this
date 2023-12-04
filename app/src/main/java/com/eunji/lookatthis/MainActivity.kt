@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.eunji.lookatthis.databinding.ActivityMainBinding
 import com.eunji.lookatthis.view.SignUpFragment
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -12,7 +13,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setPage()
-        setAppBarTitle("Look At This")
     }
 
     private fun setPage() {
@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
-     fun setAppBarTitle(title: String) {
+    fun setAppBarTitle(title: String) {
         binding.appbar.tvTitle.text = title
     }
 
