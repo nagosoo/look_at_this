@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">이거봐봐</string>
+    <string name="text_sign_up">회원가입</string>
+    <string name="text_id">아이디</string>
+    <string name="text_pw">비밀번호</string>
+    <string name="text_pw_recheck">비밀번호 확인</string>
+    <string name="contentDescription_hello">유저를 환영하는 그림</string>
 </resources>

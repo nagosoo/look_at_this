@@ -3,6 +3,8 @@
     <style name="Base.Theme.LookAtThis" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:statusBarColor">@color/yellow</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="Theme.LookAtThis" parent="Base.Theme.LookAtThis" />
@@ -27,6 +29,10 @@
 
     <style name="Text.Normal.16" parent="Text.Normal">
         <item name="android:textSize">@dimen/text_size_16</item>
+    </style>
+
+    <style name="Text.Normal.20" parent="Text.Normal">
+        <item name="android:textSize">@dimen/text_size_20</item>
     </style>
 
     <style name="Text.Bold.13" parent="Text.Bold">
@@ -58,7 +64,8 @@
     </style>
 
     <style name="AppButtonStyle" parent="Widget.AppCompat.Button">
-        <item name="android:background">@drawable/selector_button</item>
+        <item name="android:background">@drawable/selector_button_background</item>
+        <item name="android:textColor">@color/selector_button_text_color</item>
     </style>
 
     <style name="AppButtonLargeStyle" parent="AppButtonStyle">
