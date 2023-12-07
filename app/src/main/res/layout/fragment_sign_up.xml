@@ -104,6 +104,7 @@
             android:layout_height="70dp" />
 
         <androidx.appcompat.widget.AppCompatButton
+            android:enabled="false"
             android:id="@+id/button_sign_up"
             style="@style/AppButtonLargeStyle"
             android:layout_gravity="center_horizontal"

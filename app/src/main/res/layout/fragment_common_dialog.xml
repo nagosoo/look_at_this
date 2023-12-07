@@ -7,9 +7,10 @@
 
     <LinearLayout
         android:id="@+id/ll"
-        android:layout_width="356dp"
+        android:layout_width="0dp"
         android:layout_height="239dp"
-        android:background="@drawable/common_dialog_background"
+        app:layout_constraintWidth_percent="0.9"
+        android:background="@drawable/rectangular_grey_light_radius_8"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"

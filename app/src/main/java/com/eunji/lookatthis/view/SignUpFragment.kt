@@ -29,17 +29,22 @@ class SignUpFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (requireActivity() as? MainActivity)?.let { mainActivity ->
-            mainActivity.setAppBarTitle(getString(R.string.text_sign_up))
+        (requireActivity() as? MainActivity)?.setAppBarTitle(getString(R.string.text_sign_up))
+        setOnEdittextListener()
+        setOnClickListener()
+    }
+
+    private fun setOnClickListener() {
+        binding.buttonSignUp.setOnClickListener {
+            CommonDialog().show(childFragmentManager, CommonDialog.TAG)
         }
-        setEdittextListener()
     }
 
     private fun setSignUpButton() {
         binding.buttonSignUp.isEnabled = isIdNotEmpty && isPwNotEmpty && isPwRecheckNotEmpty
     }
 
-    private fun setEdittextListener() {
+    private fun setOnEdittextListener() {
         binding.etId.addTextChangedListener { text ->
             isIdNotEmpty = text?.isNotEmpty() ?: false
             setSignUpButton()
