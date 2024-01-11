@@ -9,20 +9,21 @@
         android:id="@+id/ll"
         android:layout_width="0dp"
         android:layout_height="239dp"
-        app:layout_constraintWidth_percent="0.9"
         android:background="@drawable/rectangular_grey_light_radius_8"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.9">
 
         <TextView
             android:id="@+id/tv_content"
             style="@style/Text.Bold.24"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
+            android:textColor="@color/black"
             tools:text="@string/text_already_exist_id" />
 
         <Space
@@ -30,11 +31,11 @@
             android:layout_height="36dp" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button_ok"
+            android:id="@+id/btn_positive"
             style="@style/AppButtonMediumStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/ok" />
+            tools:text="@string/ok" />
 
     </LinearLayout>
 
@@ -48,6 +49,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/ll"
         tools:src="@drawable/error" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -36,7 +36,10 @@ class SignUpFragment : Fragment() {
 
     private fun setOnClickListener() {
         binding.buttonSignUp.setOnClickListener {
-            CommonDialog().show(childFragmentManager, CommonDialog.TAG)
+            CommonDialog(
+                title = getString(R.string.text_already_exist_id),
+                drawableResId = R.drawable.error,
+            ).show(childFragmentManager, CommonDialog.TAG)
         }
     }
 

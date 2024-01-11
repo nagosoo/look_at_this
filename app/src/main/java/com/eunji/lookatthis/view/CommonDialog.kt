@@ -10,7 +10,12 @@ import com.eunji.lookatthis.R
 import com.eunji.lookatthis.databinding.FragmentCommonDialogBinding
 
 
-class CommonDialog : DialogFragment() {
+class CommonDialog(
+    private val title: String,
+    private val drawableResId: Int,
+    private val onPositiveBtnClickListener: (() -> Unit)? = null,
+    private val positiveBtnText: String = "확인"
+) : DialogFragment() {
 
     private var _binding: FragmentCommonDialogBinding? = null
     private val binding get() = _binding!!
@@ -33,19 +38,28 @@ class CommonDialog : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         setImage()
         setContent()
+        setButton()
     }
 
     private fun setImage() {
         binding.iv.setImageDrawable(
             ContextCompat.getDrawable(
                 requireContext(),
-                R.drawable.error
+                drawableResId
             )
         )
     }
 
     private fun setContent() {
-        binding.tvContent.text = "이미 존재하는 아이디입니다."
+        binding.tvContent.text = title
+    }
+
+    private fun setButton() {
+        binding.btnPositive.text = positiveBtnText
+        binding.btnPositive.setOnClickListener {
+            onPositiveBtnClickListener?.invoke()
+            dismiss()
+        }
     }
 
     override fun onDestroyView() {
@@ -56,5 +70,4 @@ class CommonDialog : DialogFragment() {
     companion object {
         const val TAG = "CommonDialog"
     }
-
 }
