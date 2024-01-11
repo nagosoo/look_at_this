@@ -46,7 +46,7 @@ class AlarmSettingFragment : Fragment() {
             binding.switchOnlyOnce.tvOff.isVisible = !isChecked
             binding.switchOnlyOnce.tvOn.isVisible = isChecked
             binding.switchEveryTime.toggle.isChecked = !isChecked
-            setTimeTextColor(isChecked)
+            setTimeTextColor(!isChecked)
         }
     }
 
