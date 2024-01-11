@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.eunji.lookatthis.databinding.ActivityMainBinding
+import com.eunji.lookatthis.view.LinkRegisterFragment
 import com.eunji.lookatthis.view.SignInFragment
 import com.eunji.lookatthis.view.SignUpFragment
 
@@ -20,7 +21,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setPage() {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, SignInFragment())
+            .replace(R.id.fragment_container, LinkRegisterFragment())
             .commit()
     }
 

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="30dp"
+        android:paddingTop="30dp"
+        android:paddingEnd="30dp"
+        android:paddingBottom="45dp">
+
+        <TextView
+            android:id="@+id/tv_link"
+            style="@style/Text.Bold.24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/link"
+            app:layout_constraintBottom_toTopOf="@id/et_link"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/et_link"
+            style="@style/Text.Normal.16"
+            android:layout_width="match_parent"
+            android:layout_height="256dp"
+            android:layout_marginTop="19dp"
+            android:autofillHints="no"
+            android:background="@drawable/rectangular_grey_light_radius_4"
+            android:gravity="top"
+            android:inputType="textMultiLine"
+            android:labelFor="@id/tv_link"
+            android:padding="13dp"
+            app:layout_constraintBottom_toTopOf="@id/tv_memo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_link"
+            tools:text="https://www.google.com" />
+
+        <TextView
+            android:id="@+id/tv_memo"
+            style="@style/Text.Bold.24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="@string/memo"
+            app:layout_constraintBottom_toTopOf="@id/et_memo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_link" />
+
+        <EditText
+            android:id="@+id/et_memo"
+            style="@style/Text.Normal.16"
+            android:layout_width="match_parent"
+            android:layout_height="256dp"
+            android:layout_marginTop="19dp"
+            android:autofillHints="no"
+            android:background="@drawable/rectangular_grey_light_radius_4"
+            android:gravity="top"
+            android:inputType="textMultiLine"
+            android:labelFor="@id/tv_memo"
+            android:maxLength="100"
+            android:padding="13dp"
+            app:layout_constraintBottom_toTopOf="@id/et_memo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_memo"
+            tools:text="푸바오 너무 귀여워!!!" />
+
+        <TextView
+            android:id="@+id/tv_count"
+            style="@style/Text.Normal.11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/grey_dark"
+            app:layout_constraintBottom_toBottomOf="@id/et_memo"
+            app:layout_constraintEnd_toEndOf="@id/et_memo"
+            tools:text="100/100" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_register"
+            style="@style/AppButtonLargeStyle"
+            android:layout_marginTop="52dp"
+            android:layout_marginBottom="45dp"
+            android:enabled="false"
+            android:text="@string/register"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_memo" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

@@ -8,6 +8,11 @@
     <string name="text_already_exist_id">이미 존재하는 아이디야ㅠ_ㅠ</string>
     <string name="text_wrong_id_or_pw">아이디 혹은 비밀번호가 틀렸어ㅠ_ㅠ</string>
     <string name="ok">확인</string>
+    <string name="link">링크</string>
+    <string name="memo">메모</string>
+    <string name="register">등록하기</string>
+    <string name="link_register">링크등록</string>
+    <string name="max_memo_size">/100</string>
     <string name="contentDescription_hello">유저를 환영하는 그림</string>
     <string name="contentDescription_error">에러를 나타내는 그림</string>
 </resources>
