@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">이거봐봐</string>
+
     <string name="text_sign_up">회원가입</string>
     <string name="text_sign_in">로그인</string>
     <string name="text_id">아이디</string>
@@ -7,12 +8,24 @@
     <string name="text_pw_recheck">비밀번호 확인</string>
     <string name="text_already_exist_id">이미 존재하는 아이디야ㅠ_ㅠ</string>
     <string name="text_wrong_id_or_pw">아이디 혹은 비밀번호가 틀렸어ㅠ_ㅠ</string>
-    <string name="ok">확인</string>
-    <string name="link">링크</string>
-    <string name="memo">메모</string>
-    <string name="register">등록하기</string>
-    <string name="link_register">링크등록</string>
-    <string name="max_memo_size">/100</string>
-    <string name="contentDescription_hello">유저를 환영하는 그림</string>
-    <string name="contentDescription_error">에러를 나타내는 그림</string>
+    <string name="text_alarm_setting">알림 받을 시간을 골라줘</string>
+    <string name="text_alarm_get_every_time">새 글이 올라올 때 마다 받을래</string>
+    <string name="text_alarm_get_only_once">한번에 모아서 받을래</string>
+    <string name="text_off">OFF</string>
+    <string name="text_on">ON</string>
+    <string name="text_pm">PM</string>
+    <string name="text_am">AM</string>
+    <string name="text_default_alarm_time">9:00PM</string>
+    <string name="text_link">링크</string>
+    <string name="text_memo">메모</string>
+    <string name="text_register">등록하기</string>
+    <string name="text_ok">확인</string>
+    <string name="text_cancel">취소</string>
+    <string name="text_link_register">링크등록</string>
+    <string name="text_max_memo_size">/100</string>
+    <string name="text_alarm_setting_appbar">알림설정</string>
+
+    <string name="content_description_hello">유저를 환영하는 그림</string>
+    <string name="content_description_error">에러를 나타내는 그림</string>
+    <string name="content_description_alarm_setting">알림 세팅 페이지의 그림</string>
 </resources>

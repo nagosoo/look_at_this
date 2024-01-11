@@ -7,7 +7,7 @@
 
     <Switch
         android:id="@+id/toggle"
-        style="@style/AppToggle"
+        style="@style/AppSwitch"
         android:layout_width="75dp"
         android:layout_height="29dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="35dp"
-        android:text="OFF"
+        android:text="@string/text_off"
         app:layout_constraintBottom_toBottomOf="@id/toggle"
         app:layout_constraintStart_toStartOf="@id/toggle"
         app:layout_constraintTop_toTopOf="@id/toggle" />
@@ -33,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="14dp"
-        android:text="ON"
+        android:text="@string/text_on"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/toggle"
         app:layout_constraintStart_toStartOf="@id/toggle"

@@ -16,7 +16,7 @@
             android:layout_height="195dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="60dp"
-            android:contentDescription="@string/contentDescription_hello"
+            android:contentDescription="@string/content_description_hello"
             android:src="@drawable/hello" />
 
         <Space

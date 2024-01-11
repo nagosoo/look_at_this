@@ -27,7 +27,7 @@ class LinkRegisterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (requireActivity() as? MainActivity)?.setAppBarTitle(getString(R.string.link_register))
+        (requireActivity() as? MainActivity)?.setAppBarTitle(getString(R.string.text_link_register))
         setOnEditTextListener()
     }
 
@@ -48,7 +48,7 @@ class LinkRegisterFragment : Fragment() {
             if (memoSize == 100) requireContext().getColor(R.color.red)
             else requireContext().getColor(R.color.grey_dark)
         binding.tvCount.apply {
-            text = "$memoSize${requireContext().getString(R.string.max_memo_size)}"
+            text = "$memoSize${requireContext().getString(R.string.text_max_memo_size)}"
             setTextColor(color)
         }
     }

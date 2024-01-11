@@ -18,7 +18,7 @@
             style="@style/Text.Bold.24"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/link"
+            android:text="@string/text_link"
             app:layout_constraintBottom_toTopOf="@id/et_link"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -47,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
-            android:text="@string/memo"
+            android:text="@string/text_memo"
             app:layout_constraintBottom_toTopOf="@id/et_memo"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/et_link" />
@@ -89,7 +89,7 @@
             android:layout_marginTop="52dp"
             android:layout_marginBottom="45dp"
             android:enabled="false"
-            android:text="@string/register"
+            android:text="@string/text_register"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

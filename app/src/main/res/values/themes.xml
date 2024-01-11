@@ -86,8 +86,9 @@
         <item name="android:textAppearance">@style/Text.Bold.13</item>
     </style>
 
-    <style name="AppToggle" parent="Widget.AppCompat.CompoundButton.Switch">
+    <style name="AppSwitch" parent="Widget.AppCompat.CompoundButton.Switch">
         <item name="android:switchMinWidth">75dp</item>
+        <item name="android:background">@null</item>
         <item name="android:thumb">@drawable/toggle_thumb</item>
         <item name="android:track">@drawable/selector_toggle_track</item>
     </style>
@@ -98,6 +99,13 @@
         <item name="android:minHeight">400dp</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
+
+    <style name="TimePickerDialogStyle">
+        <item name="android:windowMinWidthMajor">90%</item>
+        <item name="android:windowMinWidthMinor">90%</item>
+        <item name="windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item>
     </style>
 

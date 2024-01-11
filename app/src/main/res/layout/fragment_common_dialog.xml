@@ -35,7 +35,7 @@
             style="@style/AppButtonMediumStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="@string/ok" />
+            tools:text="@string/text_ok" />
 
     </LinearLayout>
 
@@ -44,7 +44,7 @@
         android:layout_width="179dp"
         android:layout_height="180dp"
         android:layout_marginTop="-112dp"
-        android:contentDescription="@string/contentDescription_error"
+        android:contentDescription="@string/content_description_error"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/ll"
