@@ -29,6 +29,7 @@ class LinkRegisterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as? MainActivity)?.setAppBarTitle(getString(R.string.text_link_register))
         setOnEditTextListener()
+        setOnClickListener()
     }
 
     private fun setOnEditTextListener() {
@@ -55,6 +56,12 @@ class LinkRegisterFragment : Fragment() {
 
     private fun setLinkRegisterButton() {
         binding.btnRegister.isEnabled = isLinkNotEmpty
+    }
+
+    private fun setOnClickListener() {
+        binding.btnRegister.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
     }
 
     override fun onDestroyView() {

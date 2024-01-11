@@ -13,4 +13,6 @@
 
     <dimen name="radius_4">4dp</dimen>
     <dimen name="radius_8">8dp</dimen>
+
+    <dimen name="appbar_height">49dp</dimen>
 </resources>

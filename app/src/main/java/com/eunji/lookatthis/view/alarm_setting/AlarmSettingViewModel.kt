@@ -1,4 +1,4 @@
-package com.eunji.lookatthis.view
+package com.eunji.lookatthis.view.alarm_setting
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

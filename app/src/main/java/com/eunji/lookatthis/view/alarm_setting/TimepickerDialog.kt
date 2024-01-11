@@ -1,4 +1,4 @@
-package com.eunji.lookatthis.view
+package com.eunji.lookatthis.view.alarm_setting
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.eunji.lookatthis.R
 import com.eunji.lookatthis.databinding.FragmentTimePickerDialogBinding
+import com.eunji.lookatthis.view.alarm_setting.AlarmSettingViewModel
 
 class TimepickerDialog : DialogFragment() {
 

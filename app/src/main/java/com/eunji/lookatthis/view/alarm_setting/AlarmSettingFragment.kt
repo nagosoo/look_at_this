@@ -1,4 +1,4 @@
-package com.eunji.lookatthis.view
+package com.eunji.lookatthis.view.alarm_setting
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -58,6 +58,9 @@ class AlarmSettingFragment : Fragment() {
     private fun setOnClickListener() {
         binding.tvSwitchOnlyOnce.setOnClickListener {
             showTimePickerDialog()
+        }
+        binding.btnOk.setOnClickListener {
+            parentFragmentManager.popBackStack()
         }
     }
 
