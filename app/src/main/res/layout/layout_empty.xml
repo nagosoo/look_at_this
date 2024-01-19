@@ -19,9 +19,4 @@
         android:text="@string/text_empty"
         android:textColor="@color/black" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        style="@style/AppButtonLargeStyle"
-        android:layout_marginTop="53dp"
-        android:text="@string/text_register" />
-
 </androidx.appcompat.widget.LinearLayoutCompat>

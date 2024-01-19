@@ -44,4 +44,12 @@
         tools:itemCount="10"
         tools:listitem="@layout/item_main" />
 
+    <include
+        layout="@layout/layout_empty"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
