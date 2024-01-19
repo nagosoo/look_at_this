@@ -27,6 +27,7 @@
     <string name="text_show_only_bookmark">북마크만 보기</string>
     <string name="text_show_all">모두 보기</string>
     <string name="text_empty">볼게 없오..</string>
+    <string name="text_paste">붙여넣기</string>
 
 
     <string name="content_description_hello">유저를 환영하는 그림</string>

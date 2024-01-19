@@ -23,6 +23,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_paste"
+            style="@style/AppButtonSmallStyle"
+            android:layout_marginStart="4dp"
+            android:elevation="0dp"
+            android:text="@string/text_paste"
+            app:layout_constraintBottom_toBottomOf="@id/tv_link"
+            app:layout_constraintStart_toEndOf="@id/tv_link"
+            app:layout_constraintTop_toTopOf="@id/tv_link" />
+
         <EditText
             android:id="@+id/et_link"
             style="@style/Text.Normal.16"

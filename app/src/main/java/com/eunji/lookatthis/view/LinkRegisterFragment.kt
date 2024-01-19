@@ -7,8 +7,9 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.eunji.lookatthis.MainActivity
-import com.eunji.lookatthis.R
 import com.eunji.lookatthis.databinding.FragmentLinkRegisterBinding
+import com.eunji.lookatthis.util.ClipboardHelper
+
 
 class LinkRegisterFragment : Fragment() {
 
@@ -27,7 +28,7 @@ class LinkRegisterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (requireActivity() as? MainActivity)?.setAppBarTitle(getString(R.string.text_link_register))
+        (requireActivity() as? MainActivity)?.setAppBarTitle(getString(com.eunji.lookatthis.R.string.text_link_register))
         setOnEditTextListener()
         setOnClickListener()
     }
@@ -46,10 +47,11 @@ class LinkRegisterFragment : Fragment() {
 
     private fun setMemoSize(memoSize: Int) {
         val color =
-            if (memoSize == 100) requireContext().getColor(R.color.red)
-            else requireContext().getColor(R.color.grey_dark)
+            if (memoSize == 100) requireContext().getColor(com.eunji.lookatthis.R.color.red)
+            else requireContext().getColor(com.eunji.lookatthis.R.color.grey_dark)
         binding.tvCount.apply {
-            text = "$memoSize${requireContext().getString(R.string.text_max_memo_size)}"
+            text =
+                "$memoSize${requireContext().getString(com.eunji.lookatthis.R.string.text_max_memo_size)}"
             setTextColor(color)
         }
     }
@@ -62,7 +64,18 @@ class LinkRegisterFragment : Fragment() {
         binding.btnRegister.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
+        binding.btnPaste.setOnClickListener {
+            paste()
+        }
     }
+
+    private fun paste() {
+        val clipboardHelper = ClipboardHelper(requireContext())
+        clipboardHelper.getTextFromClipBoard()?.let {
+            binding.etLink.setText(it)
+        }
+    }
+
 
     override fun onDestroyView() {
         _binding = null
