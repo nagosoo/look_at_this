@@ -2,6 +2,7 @@ package com.eunji.lookatthis.presentation.view.sign_up
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.eunji.lookatthis.data.model.TokenModel
 import com.eunji.lookatthis.domain.UiState
 import com.eunji.lookatthis.domain.usecase.user.PostSignUpUseCase
 import com.eunji.lookatthis.domain.usecase.user.SaveBasicTokenUseCase
@@ -40,7 +41,7 @@ class SignUpViewModel @Inject constructor(
     fun postAccountResultFlow(
         id: String,
         password: String,
-    ): Flow<UiState<String?>> = userAccountUseCase(
+    ): Flow<UiState<TokenModel?>> = userAccountUseCase(
         memberId = id,
         memberPassword = password,
     )

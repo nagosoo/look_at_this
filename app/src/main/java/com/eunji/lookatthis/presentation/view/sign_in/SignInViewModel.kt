@@ -2,6 +2,7 @@ package com.eunji.lookatthis.presentation.view.sign_in
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.eunji.lookatthis.data.model.TokenModel
 import com.eunji.lookatthis.domain.UiState
 import com.eunji.lookatthis.domain.usecase.user.PostSignInUseCase
 import com.eunji.lookatthis.domain.usecase.user.SaveBasicTokenUseCase
@@ -21,7 +22,7 @@ class SignInViewModel @Inject constructor(
     fun signIn(
         id: String,
         password: String
-    ): Flow<UiState<String?>> {
+    ): Flow<UiState<TokenModel?>> {
         return signInUseCase(
             memberId = id,
             memberPassword = password

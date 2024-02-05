@@ -3,6 +3,7 @@ package com.eunji.lookatthis.domain.repositoryImpl
 import com.eunji.lookatthis.data.datasource.local.UserDataSourceLocal
 import com.eunji.lookatthis.data.datasource.remote.UserDataSourceRemote
 import com.eunji.lookatthis.data.model.PostUserAccountReqModel
+import com.eunji.lookatthis.data.model.TokenModel
 import com.eunji.lookatthis.data.repository.UserRepository
 import com.eunji.lookatthis.domain.UiState
 import com.eunji.lookatthis.domain.safeApiCall
@@ -23,9 +24,9 @@ class UserRepositoryImpl @Inject constructor(
         return userDataSourceLocal.getBasicToken()
     }
 
-    override fun postSignUp(postUserAccountReqModel: PostUserAccountReqModel): Flow<UiState<String?>> =
+    override fun postSignUp(postUserAccountReqModel: PostUserAccountReqModel): Flow<UiState<TokenModel?>> =
         safeApiCall { userDataSourceRemote.postSignUp(postUserAccountReqModel) }
 
-    override fun postSignIn(postUserAccountReqModel: PostUserAccountReqModel): Flow<UiState<String?>> =
+    override fun postSignIn(postUserAccountReqModel: PostUserAccountReqModel): Flow<UiState<TokenModel?>> =
         safeApiCall { userDataSourceRemote.postSignIn(postUserAccountReqModel) }
 }

@@ -11,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.eunji.lookatthis.R
+import com.eunji.lookatthis.data.model.TokenModel
 import com.eunji.lookatthis.databinding.FragmentSignUpBinding
 import com.eunji.lookatthis.domain.UiState
 import com.eunji.lookatthis.presentation.view.CommonDialog
@@ -77,12 +78,12 @@ class SignUpFragment : Fragment() {
         ).show(childFragmentManager, CommonDialog.TAG)
     }
 
-    private fun render(uiState: UiState<String?>) {
+    private fun render(uiState: UiState<TokenModel?>) {
         when (uiState) {
             is UiState.Loading -> {}
             is UiState.Success -> {
-                uiState.value?.let { token ->
-                    viewModel.saveBasicToken(token, ::goToMain)
+                uiState.value?.let { value ->
+                    viewModel.saveBasicToken(value.basicToken, ::goToMain)
                 }
             }
 
