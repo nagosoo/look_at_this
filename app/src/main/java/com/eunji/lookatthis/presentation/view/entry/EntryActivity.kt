@@ -1,4 +1,4 @@
-package com.eunji.lookatthis.presentation.view.spalsh
+package com.eunji.lookatthis.presentation.view.entry
 
 import android.Manifest
 import android.content.Intent
@@ -11,10 +11,11 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.eunji.lookatthis.databinding.ActivitySplashBinding
+import com.eunji.lookatthis.databinding.ActivityEntryBinding
 import com.eunji.lookatthis.presentation.Constance.EXTRA_PAGE
 import com.eunji.lookatthis.presentation.Constance.MAIN
 import com.eunji.lookatthis.presentation.Constance.SIGN_IN
@@ -24,10 +25,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class SplashActivity : AppCompatActivity() {
+class EntryActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivitySplashBinding
-    private val viewModel: SplashViewModel by viewModels()
+    private lateinit var binding: ActivityEntryBinding
+    private val viewModel: EntryViewModel by viewModels()
+    private var isDoneCheckToken = false
     private val requestPermissionLauncher =
         registerForActivityResult(
             ActivityResultContracts.RequestPermission()
@@ -40,11 +42,16 @@ class SplashActivity : AppCompatActivity() {
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
-        binding = ActivitySplashBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        splashScreen.setKeepOnScreenCondition {
+            //true이면 splash가 계속 보임
+            !isDoneCheckToken
+        }
+        checkToken()
         requestNotificationPermission()
-        setPage()
+        binding = ActivityEntryBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setOnClickListener()
     }
 
@@ -79,13 +86,12 @@ class SplashActivity : AppCompatActivity() {
         }
     }
 
-    private fun setPage() {
+    private fun checkToken() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 val token = viewModel.getBasicToken()
-                token?.let {
-                    goToMain()
-                }
+                token?.let { goToMain() }
+                isDoneCheckToken = true
             }
         }
     }

@@ -26,7 +26,8 @@
         </service>
 
         <activity
-            android:name=".presentation.view.spalsh.SplashActivity"
+            android:theme="@style/Theme.App.Splash"
+            android:name=".presentation.view.entry.EntryActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
