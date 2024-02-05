@@ -11,7 +11,9 @@
     <string name="text_not_same_password">비밀번호가 일치하지 않아ㅠ_ㅠ</string>
     <string name="text_alarm_setting">알림 받을 시간을 골라줘</string>
     <string name="text_alarm_get_every_time">새 글이 올라올 때 마다 받을래</string>
-    <string name="text_alarm_get_only_once">한번에 모아서 받을래</string>
+    <string name="text_alarm_get_11_AM">11:00AM에 한번만 받을래</string>
+    <string name="text_alarm_get_15_PM">15:00PM에 한번만 받을래</string>
+    <string name="text_alarm_get_20_PM">20:00PM에 한번만 받을래</string>
     <string name="text_off">OFF</string>
     <string name="text_on">ON</string>
     <string name="text_pm">PM</string>

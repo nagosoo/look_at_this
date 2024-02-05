@@ -2,7 +2,6 @@
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -19,87 +18,74 @@
             android:layout_marginTop="90dp"
             android:contentDescription="@string/text_register"
             android:src="@drawable/alarm_setting"
-            app:layout_constraintBottom_toTopOf="@id/tv_alarm_setting"
+            app:layout_constraintBottom_toTopOf="@id/tv_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_alarm_setting"
+            android:id="@+id/tv_title"
             style="@style/Text.Bold.28"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="@string/text_alarm_setting"
-            app:layout_constraintBottom_toTopOf="@id/tv_switch_every_time"
+            app:layout_constraintBottom_toTopOf="@id/custom_item_every_time"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_alarm_setting" />
 
-        <TextView
-            android:id="@+id/tv_switch_every_time"
-            style="@style/Text.Bold.22"
+        <com.eunji.lookatthis.presentation.view.alarm_setting.CustomAlarmSettingItem
+            android:id="@+id/custom_item_every_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="17dp"
-            android:text="@string/text_alarm_get_every_time"
-            app:layout_constraintEnd_toStartOf="@id/switch_every_time"
-            app:layout_constraintTop_toBottomOf="@id/tv_alarm_setting"
-            app:layout_goneMarginTop="111dp" />
-
-        <include
-            android:id="@+id/switch_every_time"
-            layout="@layout/toggle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@id/tv_switch_every_time"
+            android:layout_marginTop="65dp"
+            app:layout_constraintBottom_toTopOf="@id/custom_item_11_am"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tv_switch_every_time" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_title"
+            app:text_alarm_time="@string/text_alarm_get_every_time" />
 
-        <TextView
-            android:id="@+id/tv_switch_only_once"
-            style="@style/Text.Bold.22"
+        <com.eunji.lookatthis.presentation.view.alarm_setting.CustomAlarmSettingItem
+            android:id="@+id/custom_item_11_am"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="17dp"
-            android:text="@string/text_alarm_get_only_once"
-            app:layout_constraintEnd_toStartOf="@id/switch_only_once"
-            app:layout_constraintTop_toBottomOf="@id/tv_switch_every_time"
-            app:layout_goneMarginTop="31dp" />
+            android:layout_marginTop="14dp"
+            app:layout_constraintBottom_toTopOf="@id/custom_item_15_pm"
+            app:layout_constraintStart_toStartOf="@id/custom_item_every_time"
+            app:layout_constraintTop_toBottomOf="@id/custom_item_every_time"
+            app:text_alarm_time="@string/text_alarm_get_11_AM" />
 
-        <include
-            android:id="@+id/switch_only_once"
-            layout="@layout/toggle"
+        <com.eunji.lookatthis.presentation.view.alarm_setting.CustomAlarmSettingItem
+            android:id="@+id/custom_item_15_pm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@id/tv_switch_only_once"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tv_switch_only_once" />
+            android:layout_marginTop="14dp"
+            app:layout_constraintBottom_toTopOf="@id/custom_item_20_pm"
+            app:layout_constraintStart_toStartOf="@id/custom_item_every_time"
+            app:layout_constraintTop_toBottomOf="@id/custom_item_11_am"
+            app:text_alarm_time="@string/text_alarm_get_15_PM" />
 
-        <TextView
-            android:id="@+id/tv_time_only_once"
-            style="@style/Text.Normal.16"
+        <com.eunji.lookatthis.presentation.view.alarm_setting.CustomAlarmSettingItem
+            android:id="@+id/custom_item_20_pm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-5dp"
-            android:textColor="@color/grey_dark"
-            app:layout_constraintEnd_toEndOf="@id/switch_only_once"
-            app:layout_constraintStart_toStartOf="@id/switch_only_once"
-            app:layout_constraintTop_toBottomOf="@id/switch_only_once"
-            android:text="@string/text_default_alarm_time" />
+            android:layout_marginTop="14dp"
+            app:layout_constraintBottom_toTopOf="@id/btn_ok"
+            app:layout_constraintStart_toStartOf="@id/custom_item_every_time"
+            app:layout_constraintTop_toBottomOf="@id/custom_item_15_pm"
+            app:text_alarm_time="@string/text_alarm_get_20_PM" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:layout_marginBottom="16dp"
             android:id="@+id/btn_ok"
             style="@style/AppButtonLargeStyle"
             android:layout_marginTop="70dp"
+            android:layout_marginBottom="16dp"
             android:text="@string/text_ok"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_time_only_once" />
+            app:layout_constraintTop_toBottomOf="@id/custom_item_20_pm" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

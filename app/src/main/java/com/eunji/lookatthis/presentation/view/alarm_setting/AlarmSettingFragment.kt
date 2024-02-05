@@ -4,18 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.eunji.lookatthis.presentation.view.MainActivity
 import com.eunji.lookatthis.R
 import com.eunji.lookatthis.databinding.FragmentAlarmSettingBinding
-import com.eunji.lookatthis.presentation.util.TimeUtil
+import com.eunji.lookatthis.presentation.model.AlarmType
+import com.eunji.lookatthis.presentation.view.MainActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AlarmSettingFragment : Fragment() {
     private var _binding: FragmentAlarmSettingBinding? = null
     private val binding get() = _binding!!
     private val viewModel: AlarmSettingViewModel by activityViewModels()
+    private val alarmTypes = AlarmType.values().toList()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,51 +31,52 @@ class AlarmSettingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as? MainActivity)?.setAppBarTitle(getString(R.string.text_alarm_setting_appbar))
-        setSwitch()
         setOnClickListener()
+        setRadioButton()
         setObserver()
     }
 
-    private fun setSwitch() {
-        binding.switchEveryTime.toggle.setOnCheckedChangeListener { _, isChecked ->
-            binding.switchEveryTime.tvOff.isVisible = !isChecked
-            binding.switchEveryTime.tvOn.isVisible = isChecked
-            binding.switchOnlyOnce.toggle.isChecked = !isChecked
-            setTimeTextColor(isChecked)
-        }
-
-        binding.switchOnlyOnce.toggle.setOnCheckedChangeListener { _, isChecked ->
-            binding.switchOnlyOnce.tvOff.isVisible = !isChecked
-            binding.switchOnlyOnce.tvOn.isVisible = isChecked
-            binding.switchEveryTime.toggle.isChecked = !isChecked
-            setTimeTextColor(!isChecked)
+    private fun setObserver() {
+        viewModel.checkedItem.observe(viewLifecycleOwner) { alarmType ->
+            alarmTypes.filterNot { type ->
+                type == alarmType
+            }.forEach {
+                unCheck(it)
+            }
         }
     }
 
-    private fun setTimeTextColor(isEveryTimeChecked: Boolean) {
-        val color = if (isEveryTimeChecked) R.color.grey_dark else R.color.black
-        binding.tvTimeOnlyOnce.setTextColor(requireContext().getColor(color))
+    private fun unCheck(alarmType: AlarmType) {
+        val checkBox = when (alarmType) {
+            AlarmType.EVERY_TIME -> binding.customItemEveryTime.checkBox
+            AlarmType.AM11 -> binding.customItem11Am.checkBox
+            AlarmType.PM15 -> binding.customItem15Pm.checkBox
+            AlarmType.PM20 -> binding.customItem20Pm.checkBox
+        }
+        checkBox.isChecked = false
     }
 
     private fun setOnClickListener() {
-        binding.tvSwitchOnlyOnce.setOnClickListener {
-            showTimePickerDialog()
-        }
         binding.btnOk.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
     }
 
-    private fun showTimePickerDialog() {
-        TimepickerDialog().show(childFragmentManager, TimepickerDialog.TAG)
-    }
-
-    private fun setObserver() {
-        viewModel.time.observe(viewLifecycleOwner) { time ->
-            binding.tvTimeOnlyOnce.text =
-                "${TimeUtil.getHour(time)}:${TimeUtil.getMinute(time)}${TimeUtil.getAmPm(time)}"
+    private fun setRadioButton() {
+        binding.customItemEveryTime.checkBox.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) viewModel.setCheckedItem(AlarmType.EVERY_TIME)
+        }
+        binding.customItem11Am.checkBox.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) viewModel.setCheckedItem(AlarmType.AM11)
+        }
+        binding.customItem15Pm.checkBox.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) viewModel.setCheckedItem(AlarmType.PM15)
+        }
+        binding.customItem20Pm.checkBox.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) viewModel.setCheckedItem(AlarmType.PM20)
         }
     }
+
 
     override fun onDestroyView() {
         _binding = null
