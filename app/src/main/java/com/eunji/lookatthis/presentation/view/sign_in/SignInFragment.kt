@@ -6,17 +6,27 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import com.eunji.lookatthis.presentation.MainActivity
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.eunji.lookatthis.R
 import com.eunji.lookatthis.databinding.FragmentSignInBinding
+import com.eunji.lookatthis.domain.UiState
 import com.eunji.lookatthis.presentation.view.CommonDialog
+import com.eunji.lookatthis.presentation.view.MainActivity
+import com.eunji.lookatthis.presentation.view.main.MainFragment
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class SignInFragment : Fragment() {
 
     private var _binding: FragmentSignInBinding? = null
     private val binding get() = _binding!!
-    private var isIdNotEmpty = false
-    private var isPwNotEmpty = false
+    private val viewModel: SignInViewModel by viewModels()
+    private var id: String? = null
+    private var password: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,25 +46,60 @@ class SignInFragment : Fragment() {
 
     private fun setOnClickListener() {
         binding.buttonSignUp.setOnClickListener {
-            CommonDialog(
-                title = getString(R.string.text_wrong_id_or_pw),
-                drawableResId = R.drawable.error,
-            ).show(childFragmentManager, CommonDialog.TAG)
+            signIn()
         }
     }
 
-    private fun setSignUpButton() {
-        binding.buttonSignUp.isEnabled = isIdNotEmpty && isPwNotEmpty
+    private fun signIn() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.signIn(id = id!!, password = password!!).collect {
+                    render(it)
+                }
+            }
+        }
+    }
+
+    private fun render(uiState: UiState<String?>) {
+        when (uiState) {
+            is UiState.Loading -> {}
+            is UiState.Success -> {
+                uiState.value?.let { token ->
+                    viewModel.saveBasicToken(token, ::goToMain)
+                }
+            }
+
+            is UiState.Error -> {
+                showErrorDialog(uiState.errorMessage)
+            }
+        }
+    }
+
+    private fun goToMain() {
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, MainFragment())
+            .commit()
+    }
+
+    private fun showErrorDialog(title: String) {
+        CommonDialog(
+            title = title,
+            drawableResId = R.drawable.error,
+        ).show(childFragmentManager, CommonDialog.TAG)
+    }
+
+    private fun setSignInButton() {
+        binding.buttonSignUp.isEnabled = !id.isNullOrBlank() && !password.isNullOrBlank()
     }
 
     private fun setOnEdittextListener() {
         binding.etId.addTextChangedListener { text ->
-            isIdNotEmpty = text?.isNotEmpty() ?: false
-            setSignUpButton()
+            id = text.toString()
+            setSignInButton()
         }
         binding.etPw.addTextChangedListener { text ->
-            isPwNotEmpty = text?.isNotEmpty() ?: false
-            setSignUpButton()
+            password = text.toString()
+            setSignInButton()
         }
     }
 

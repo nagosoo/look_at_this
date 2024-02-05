@@ -1,21 +1,21 @@
 package com.eunji.lookatthis.domain.usecase.user
 
-import com.eunji.lookatthis.data.model.PostUserReqModel
+import com.eunji.lookatthis.data.model.PostUserAccountReqModel
 import com.eunji.lookatthis.data.repository.UserRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class PostUserAccountUseCase @Inject constructor(
+class PostSignUpUseCase @Inject constructor(
     private val userRepository: UserRepository,
 ) {
      operator fun invoke(
-        memberEmail: String,
+        memberId: String,
         memberPassword: String,
-    ) = userRepository.postUserAccount(
-        PostUserReqModel(
+    ) = userRepository.postSignUp(
+        PostUserAccountReqModel(
             memberPassword = memberPassword,
-            memberEmail = memberEmail,
+            memberId = memberId,
         )
     )
 }

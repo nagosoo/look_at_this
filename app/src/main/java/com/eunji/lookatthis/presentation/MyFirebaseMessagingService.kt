@@ -13,6 +13,7 @@ import com.eunji.lookatthis.R
 import com.eunji.lookatthis.presentation.Constance.CHANNEL_DESCRIPTION
 import com.eunji.lookatthis.presentation.Constance.CHANNEL_ID
 import com.eunji.lookatthis.presentation.Constance.CHANNEL_NAME
+import com.eunji.lookatthis.presentation.view.MainActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import kotlin.random.Random

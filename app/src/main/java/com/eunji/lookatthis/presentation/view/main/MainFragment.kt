@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.eunji.lookatthis.presentation.MainActivity
+import com.eunji.lookatthis.presentation.view.MainActivity
 import com.eunji.lookatthis.R
 import com.eunji.lookatthis.databinding.FragmentMainBinding
 import com.eunji.lookatthis.presentation.model.MainItemModel
@@ -37,7 +37,7 @@ class MainFragment : Fragment() {
         val dummies = List(10)
         {
             MainItemModel(
-                "https://i.namu.wiki/i/qMlTxHoLhsm3nCB-KVEPNLf85S50Sgs3fHZI-O_OaoOepBiHxeCn2JLUpfzZ2xv8xE7Xf0Y033CYsjQALyxJlgC2U--7HyX7ytaevt1eAEPxrV8Ybkdh76kLQOHNX0gvLRj-foT5xzzFVUGfoQA2NA.webp",
+                "https://img.seoul.co.kr/img/upload/2023/08/27/SSC_20230827144801_O2.jpg",
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod, nisl eget ultricies aliquam, nisl nisl aliquet nisl, eu ultricies nisl nisl eget ultricies aliquam, nisl nisl aliquet nisl, eu ultricies nisl",
                 "20231101",
                 false,

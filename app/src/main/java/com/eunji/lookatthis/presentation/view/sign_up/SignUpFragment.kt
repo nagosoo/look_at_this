@@ -12,8 +12,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.eunji.lookatthis.R
 import com.eunji.lookatthis.databinding.FragmentSignUpBinding
-import com.eunji.lookatthis.presentation.MainActivity
 import com.eunji.lookatthis.domain.UiState
+import com.eunji.lookatthis.presentation.view.CommonDialog
+import com.eunji.lookatthis.presentation.view.MainActivity
+import com.eunji.lookatthis.presentation.view.main.MainFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -22,10 +24,11 @@ class SignUpFragment : Fragment() {
 
     private var _binding: FragmentSignUpBinding? = null
     private val binding get() = _binding!!
-    private var isIdNotEmpty = false
-    private var isPwNotEmpty = false
-    private var isPwRecheckNotEmpty = false
     private val viewModel: SignUpViewModel by viewModels()
+    private var id: String? = null
+    private var password: String? = null
+    private var reCheckPassword: String? = null
+    private var isPasswordSame: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,43 +48,74 @@ class SignUpFragment : Fragment() {
 
     private fun setOnClickListener() {
         binding.buttonSignUp.setOnClickListener {
-            lifecycleScope.launch {
-                repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    viewModel.postAccountResultFlow.collect {
-                        render(it)
-                    }
-                }
-            }
-//            CommonDialog(
-//                title = getString(R.string.text_already_exist_id),
-//                drawableResId = R.drawable.error,
-//            ).show(childFragmentManager, CommonDialog.TAG)
+            signUp()
         }
     }
 
-    private fun render(uiState: UiState<Int?>) {
-        when (uiState) {
-            is UiState.Loading -> println("this is my uiState : Loading")
-            is UiState.Success -> println("this is my uiState : Success")
-            is UiState.Error -> println("this is my uiState : Error")
+    private fun signUp() {
+        if (!isPasswordSame) {
+            showErrorDialog(getString(R.string.text_not_same_password))
+            return
         }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.postAccountResultFlow(
+                    id = id!!,
+                    password = password!!,
+                ).collect {
+                    render(it)
+                }
+            }
+        }
+    }
+
+    private fun showErrorDialog(title: String) {
+        CommonDialog(
+            title = title,
+            drawableResId = R.drawable.error,
+        ).show(childFragmentManager, CommonDialog.TAG)
+    }
+
+    private fun render(uiState: UiState<String?>) {
+        when (uiState) {
+            is UiState.Loading -> {}
+            is UiState.Success -> {
+                uiState.value?.let { token ->
+                    viewModel.saveBasicToken(token, ::goToMain)
+                }
+            }
+
+            is UiState.Error -> {
+                showErrorDialog(uiState.errorMessage)
+            }
+        }
+    }
+
+    private fun goToMain() {
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, MainFragment())
+            .commit()
     }
 
     private fun setSignUpButton() {
-        binding.buttonSignUp.isEnabled = isIdNotEmpty && isPwNotEmpty && isPwRecheckNotEmpty
+        binding.buttonSignUp.isEnabled =
+            !id.isNullOrBlank() && !password.isNullOrBlank() && !reCheckPassword.isNullOrBlank()
     }
 
     private fun setOnEdittextListener() {
         binding.etId.addTextChangedListener { text ->
-            isIdNotEmpty = text?.isNotEmpty() ?: false
+            id = text.toString()
             setSignUpButton()
         }
         binding.etPw.addTextChangedListener { text ->
-            isPwNotEmpty = text?.isNotEmpty() ?: false
+            password = text.toString()
+            isPasswordSame = password == reCheckPassword
             setSignUpButton()
         }
         binding.etPwRecheck.addTextChangedListener { text ->
-            isPwRecheckNotEmpty = text?.isNotEmpty() ?: false
+            reCheckPassword = text.toString()
+            isPasswordSame = password == reCheckPassword
             setSignUpButton()
         }
     }

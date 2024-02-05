@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.eunji.lookatthis.presentation.MainActivity
+import com.eunji.lookatthis.presentation.view.MainActivity
 import com.eunji.lookatthis.R
 import com.eunji.lookatthis.databinding.FragmentAlarmSettingBinding
 import com.eunji.lookatthis.presentation.util.TimeUtil

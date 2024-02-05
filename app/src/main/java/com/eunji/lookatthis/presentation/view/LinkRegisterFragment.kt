@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import com.eunji.lookatthis.presentation.MainActivity
 import com.eunji.lookatthis.databinding.FragmentLinkRegisterBinding
 import com.eunji.lookatthis.presentation.util.ClipboardHelper
 

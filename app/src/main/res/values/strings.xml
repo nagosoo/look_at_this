@@ -8,6 +8,7 @@
     <string name="text_pw_recheck">비밀번호 확인</string>
     <string name="text_already_exist_id">이미 존재하는 아이디야ㅠ_ㅠ</string>
     <string name="text_wrong_id_or_pw">아이디 혹은 비밀번호가 틀렸어ㅠ_ㅠ</string>
+    <string name="text_not_same_password">비밀번호가 일치하지 않아ㅠ_ㅠ</string>
     <string name="text_alarm_setting">알림 받을 시간을 골라줘</string>
     <string name="text_alarm_get_every_time">새 글이 올라올 때 마다 받을래</string>
     <string name="text_alarm_get_only_once">한번에 모아서 받을래</string>
@@ -36,4 +37,5 @@
     <string name="content_description_main_image">메인 이미지의 그림</string>
     <string name="content_description_like">링크를 좋아요 눌렀는지 나타내는 그림</string>
     <string name="content_description_empty">링크가 하나도 없을 때 나타나는 그림</string>
+    <string name="content_description_splash">스플래시 그림</string>
 </resources>

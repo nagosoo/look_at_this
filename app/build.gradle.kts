@@ -12,7 +12,8 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        buildConfigField("String", "baseUrl", "\"http://lookatthisbe-env.eba-mmt8camh.ap-northeast-2.elasticbeanstalk.com\"")
+        buildConfigField("String", "baseUrl", "\"http://192.168.0.109:8080\"")
+       // buildConfigField("String", "baseUrl", "\"http://lookatthisbe-env.eba-mmt8camh.ap-northeast-2.elasticbeanstalk.com\"")
 
         applicationId = "com.eunji.lookatthis"
         minSdk = 26
@@ -93,6 +94,9 @@ dependencies {
 
     //ktx
     implementation ("androidx.activity:activity-ktx:1.8.2")
+
+    //dataStore
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 }
 
 kapt {
