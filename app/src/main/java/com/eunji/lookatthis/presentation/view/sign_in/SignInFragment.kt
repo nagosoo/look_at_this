@@ -14,6 +14,7 @@ import com.eunji.lookatthis.R
 import com.eunji.lookatthis.data.model.TokenModel
 import com.eunji.lookatthis.databinding.FragmentSignInBinding
 import com.eunji.lookatthis.domain.UiState
+import com.eunji.lookatthis.presentation.util.DialogUtil.showErrorDialog
 import com.eunji.lookatthis.presentation.view.CommonDialog
 import com.eunji.lookatthis.presentation.view.MainActivity
 import com.eunji.lookatthis.presentation.view.main.MainFragment
@@ -71,7 +72,7 @@ class SignInFragment : Fragment() {
             }
 
             is UiState.Error -> {
-                showErrorDialog(uiState.errorMessage)
+                showErrorDialog(parentFragmentManager, uiState.errorMessage)
             }
         }
     }
@@ -80,13 +81,6 @@ class SignInFragment : Fragment() {
         parentFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, MainFragment())
             .commit()
-    }
-
-    private fun showErrorDialog(title: String) {
-        CommonDialog(
-            title = title,
-            drawableResId = R.drawable.error,
-        ).show(childFragmentManager, CommonDialog.TAG)
     }
 
     private fun setSignInButton() {

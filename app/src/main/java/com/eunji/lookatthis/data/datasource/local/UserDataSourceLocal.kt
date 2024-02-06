@@ -36,4 +36,10 @@ class UserDataSourceLocal @Inject constructor(
                 prefs[BASIC_TOKEN]
             }
     }
+
+    suspend fun deleteBasicToken() {
+        dataStore.edit { prefs ->
+            if (prefs.contains(BASIC_TOKEN)) prefs.remove(BASIC_TOKEN)
+        }
+    }
 }

@@ -30,6 +30,7 @@
     <string name="text_show_only_bookmark">북마크만 보기</string>
     <string name="text_show_all">모두 보기</string>
     <string name="text_empty">볼게 없오..</string>
+    <string name="text_loading">로딩중..</string>
     <string name="text_paste">붙여넣기</string>
 
 

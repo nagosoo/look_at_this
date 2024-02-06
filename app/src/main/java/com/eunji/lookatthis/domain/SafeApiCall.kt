@@ -8,7 +8,6 @@ import kotlinx.serialization.json.Json
 import retrofit2.HttpException
 import retrofit2.Response
 
-
 fun <T> safeApiCall(apiCall: suspend () -> Response<ResponseModel<T>>): Flow<UiState<T?>> = flow {
     try {
         val result = apiCall()

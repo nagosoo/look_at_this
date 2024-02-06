@@ -13,7 +13,8 @@ import javax.inject.Singleton
 
 @Singleton
 class ApiClient @Inject constructor(
-    private val authorizationInterceptor: AuthorizationInterceptor
+    private val authorizationInterceptor: AuthorizationInterceptor,
+    private val unAuthorizationInterceptor: UnAuthorizationInterceptor
 ) {
     private val httpLoggingInterceptor: HttpLoggingInterceptor by lazy { HttpLoggingInterceptor() }
 
@@ -42,6 +43,7 @@ class ApiClient @Inject constructor(
                     level = HttpLoggingInterceptor.Level.BODY
                 })
                 if (needAuthorization) add(authorizationInterceptor)
+                add(unAuthorizationInterceptor)
             }
         }.build()
     }

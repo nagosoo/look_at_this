@@ -4,20 +4,45 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.eunji.lookatthis.R
+import com.eunji.lookatthis.data.model.AlarmModel
 import com.eunji.lookatthis.databinding.FragmentAlarmSettingBinding
+import com.eunji.lookatthis.domain.UiState
 import com.eunji.lookatthis.presentation.model.AlarmType
+import com.eunji.lookatthis.presentation.util.AlarmUtil.getAlarmModelFromAlarmType
+import com.eunji.lookatthis.presentation.util.AlarmUtil.getAlarmTypeFromAlarmModel
+import com.eunji.lookatthis.presentation.util.DialogUtil.closeDialog
+import com.eunji.lookatthis.presentation.util.DialogUtil.showErrorDialog
+import com.eunji.lookatthis.presentation.util.DialogUtil.showLoadingDialog
+import com.eunji.lookatthis.presentation.view.CommonDialog
 import com.eunji.lookatthis.presentation.view.MainActivity
+import com.eunji.lookatthis.presentation.view.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class AlarmSettingFragment : Fragment() {
     private var _binding: FragmentAlarmSettingBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: AlarmSettingViewModel by activityViewModels()
+    private val viewModel: AlarmSettingViewModel by viewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
     private val alarmTypes = AlarmType.values().toList()
+    private val checkBoxs: List<CheckBox?> by lazy {
+        (binding.root.children.first() as ConstraintLayout).children.filter { view ->
+            view.tag == "checkbox"
+        }.map { view ->
+            (view as? CustomAlarmSettingItem)?.checkBox
+        }.toList()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,51 +57,108 @@ class AlarmSettingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as? MainActivity)?.setAppBarTitle(getString(R.string.text_alarm_setting_appbar))
         setOnClickListener()
-        setRadioButton()
         setObserver()
+        getAlarm()
     }
 
-    private fun setObserver() {
-        viewModel.checkedItem.observe(viewLifecycleOwner) { alarmType ->
-            alarmTypes.filterNot { type ->
-                type == alarmType
-            }.forEach {
-                unCheck(it)
+    private fun getAlarm() {
+        mainViewModel.alarmType?.let { alarmType ->
+            val alarmModel = getAlarmModelFromAlarmType(alarmType)
+            renderGetAlarmApiResult(UiState.Success(alarmModel))
+            return
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.getAlarmSetting().collect { uiState ->
+                    renderGetAlarmApiResult(uiState)
+                }
             }
         }
     }
 
-    private fun unCheck(alarmType: AlarmType) {
-        val checkBox = when (alarmType) {
-            AlarmType.EVERY_TIME -> binding.customItemEveryTime.checkBox
-            AlarmType.AM11 -> binding.customItem11Am.checkBox
-            AlarmType.PM15 -> binding.customItem15Pm.checkBox
-            AlarmType.PM20 -> binding.customItem20Pm.checkBox
+    private fun renderGetAlarmApiResult(uiState: UiState<AlarmModel?>) {
+        when (uiState) {
+            is UiState.Loading -> {
+                showLoadingDialog(parentFragmentManager, requireContext())
+            }
+
+            is UiState.Success -> {
+                closeDialog(parentFragmentManager, CommonDialog.TAG)
+                uiState.value?.let { alarmModel ->
+                    val alarmType = getAlarmTypeFromAlarmModel(alarmModel, alarmTypes)
+                    saveAlarmCache(alarmType)
+                    toggleCheckBox(alarmType, true)
+                }
+            }
+
+            is UiState.Error -> {
+                showErrorDialog(parentFragmentManager, uiState.errorMessage)
+            }
         }
-        checkBox.isChecked = false
+    }
+
+    private fun renderPostAlarmResult(uiState: UiState<AlarmModel?>, alarmType: AlarmType) {
+        when (uiState) {
+            is UiState.Loading -> {
+            }
+
+            is UiState.Success -> {
+                saveAlarmCache(alarmType)
+                parentFragmentManager.popBackStack()
+            }
+
+            is UiState.Error -> {
+                showErrorDialog(parentFragmentManager, uiState.errorMessage)
+            }
+        }
+    }
+
+    private fun setObserver() {
+        viewModel.checkedAlarmType.observe(viewLifecycleOwner) { alarmType ->
+            alarmTypes.filterNot { type ->
+                type == alarmType
+            }.forEach {
+                toggleCheckBox(it, false)
+            }
+        }
+    }
+
+    private fun toggleCheckBox(alarmType: AlarmType, shouldCheck: Boolean) {
+        alarmTypes.forEachIndexed { index, type ->
+            if (type == alarmType) {
+                checkBoxs[index]?.isChecked = shouldCheck
+            }
+        }
+    }
+
+    private fun saveAlarm() {
+        viewModel.checkedAlarmType.value?.let { alarmType ->
+            val alarmModel = getAlarmModelFromAlarmType(alarmType)
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    viewModel.postAlarmSetting(alarmModel).collect { uiState ->
+                        renderPostAlarmResult(uiState, alarmType)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun saveAlarmCache(alarmType: AlarmType) {
+        mainViewModel.setAlarmType(alarmType)
     }
 
     private fun setOnClickListener() {
         binding.btnOk.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            saveAlarm()
+        }
+
+        checkBoxs.forEachIndexed { index, checkBox ->
+            checkBox?.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) viewModel.setCheckedItem(alarmTypes[index])
+            }
         }
     }
-
-    private fun setRadioButton() {
-        binding.customItemEveryTime.checkBox.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) viewModel.setCheckedItem(AlarmType.EVERY_TIME)
-        }
-        binding.customItem11Am.checkBox.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) viewModel.setCheckedItem(AlarmType.AM11)
-        }
-        binding.customItem15Pm.checkBox.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) viewModel.setCheckedItem(AlarmType.PM15)
-        }
-        binding.customItem20Pm.checkBox.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) viewModel.setCheckedItem(AlarmType.PM20)
-        }
-    }
-
 
     override fun onDestroyView() {
         _binding = null

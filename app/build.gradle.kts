@@ -12,7 +12,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        buildConfigField("String", "baseUrl", "\"http://192.168.0.109:8080\"")
+        buildConfigField("String", "baseUrl", "\"http://192.168.0.105:8080\"")
        // buildConfigField("String", "baseUrl", "\"http://lookatthisbe-env.eba-mmt8camh.ap-northeast-2.elasticbeanstalk.com\"")
 
         applicationId = "com.eunji.lookatthis"

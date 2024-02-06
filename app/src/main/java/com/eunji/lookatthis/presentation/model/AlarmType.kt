@@ -1,8 +1,8 @@
 package com.eunji.lookatthis.presentation.model
 
-enum class AlarmType {
-    EVERY_TIME,
-    AM11,
-    PM15,
-    PM20
+enum class AlarmType(val time:String?) {
+    EVERY_TIME(null),
+    AM11("11:00"),
+    PM15("15:00"),
+    PM20("20:00")
 }

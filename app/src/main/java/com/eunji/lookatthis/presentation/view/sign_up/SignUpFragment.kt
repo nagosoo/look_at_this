@@ -14,7 +14,7 @@ import com.eunji.lookatthis.R
 import com.eunji.lookatthis.data.model.TokenModel
 import com.eunji.lookatthis.databinding.FragmentSignUpBinding
 import com.eunji.lookatthis.domain.UiState
-import com.eunji.lookatthis.presentation.view.CommonDialog
+import com.eunji.lookatthis.presentation.util.DialogUtil.showErrorDialog
 import com.eunji.lookatthis.presentation.view.MainActivity
 import com.eunji.lookatthis.presentation.view.main.MainFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,7 +55,7 @@ class SignUpFragment : Fragment() {
 
     private fun signUp() {
         if (!isPasswordSame) {
-            showErrorDialog(getString(R.string.text_not_same_password))
+            showErrorDialog(parentFragmentManager, getString(R.string.text_not_same_password))
             return
         }
 
@@ -71,13 +71,6 @@ class SignUpFragment : Fragment() {
         }
     }
 
-    private fun showErrorDialog(title: String) {
-        CommonDialog(
-            title = title,
-            drawableResId = R.drawable.error,
-        ).show(childFragmentManager, CommonDialog.TAG)
-    }
-
     private fun render(uiState: UiState<TokenModel?>) {
         when (uiState) {
             is UiState.Loading -> {}
@@ -88,7 +81,7 @@ class SignUpFragment : Fragment() {
             }
 
             is UiState.Error -> {
-                showErrorDialog(uiState.errorMessage)
+                showErrorDialog(parentFragmentManager, uiState.errorMessage)
             }
         }
     }
