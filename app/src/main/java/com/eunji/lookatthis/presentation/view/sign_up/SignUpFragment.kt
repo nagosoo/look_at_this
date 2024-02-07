@@ -11,7 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.eunji.lookatthis.R
-import com.eunji.lookatthis.data.model.TokenModel
+import com.eunji.lookatthis.data.model.BasicTokenModel
 import com.eunji.lookatthis.databinding.FragmentSignUpBinding
 import com.eunji.lookatthis.domain.UiState
 import com.eunji.lookatthis.presentation.util.DialogUtil.showErrorDialog
@@ -27,9 +27,6 @@ class SignUpFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: SignUpViewModel by viewModels()
     private var id: String? = null
-    private var password: String? = null
-    private var reCheckPassword: String? = null
-    private var isPasswordSame: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,6 +42,34 @@ class SignUpFragment : Fragment() {
         (requireActivity() as? MainActivity)?.setAppBarTitle(getString(R.string.text_sign_up))
         setOnEdittextListener()
         setOnClickListener()
+        setObserver()
+        init()
+    }
+
+    private fun init() {
+        viewModel.id.value?.let { id ->
+            binding.etId.setText(id)
+        }
+
+        viewModel.password.value?.let { password ->
+            binding.etPw.setText(password)
+        }
+
+        viewModel.reCheckPassword.value?.let { reCheckPassword ->
+            binding.etPwRecheck.setText(reCheckPassword)
+        }
+    }
+
+    private fun setObserver() {
+        viewModel.id.observe(viewLifecycleOwner) {
+            setSignUpButton()
+        }
+        viewModel.password.observe(viewLifecycleOwner) {
+            setSignUpButton()
+        }
+        viewModel.reCheckPassword.observe(viewLifecycleOwner) {
+            setSignUpButton()
+        }
     }
 
     private fun setOnClickListener() {
@@ -54,7 +79,7 @@ class SignUpFragment : Fragment() {
     }
 
     private fun signUp() {
-        if (!isPasswordSame) {
+        if (viewModel.isPasswordSame.value != true) {
             showErrorDialog(parentFragmentManager, getString(R.string.text_not_same_password))
             return
         }
@@ -62,8 +87,8 @@ class SignUpFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.postAccountResultFlow(
-                    id = id!!,
-                    password = password!!,
+                    id = viewModel.id.value!!,
+                    password = viewModel.password.value!!,
                 ).collect {
                     render(it)
                 }
@@ -71,7 +96,7 @@ class SignUpFragment : Fragment() {
         }
     }
 
-    private fun render(uiState: UiState<TokenModel?>) {
+    private fun render(uiState: UiState<BasicTokenModel?>) {
         when (uiState) {
             is UiState.Loading -> {}
             is UiState.Success -> {
@@ -94,23 +119,18 @@ class SignUpFragment : Fragment() {
 
     private fun setSignUpButton() {
         binding.buttonSignUp.isEnabled =
-            !id.isNullOrBlank() && !password.isNullOrBlank() && !reCheckPassword.isNullOrBlank()
+            !viewModel.id.value.isNullOrBlank() && !viewModel.password.value.isNullOrBlank() && !viewModel.reCheckPassword.value.isNullOrBlank()
     }
 
     private fun setOnEdittextListener() {
         binding.etId.addTextChangedListener { text ->
-            id = text.toString()
-            setSignUpButton()
+            viewModel.setId(text.toString())
         }
         binding.etPw.addTextChangedListener { text ->
-            password = text.toString()
-            isPasswordSame = password == reCheckPassword
-            setSignUpButton()
+            viewModel.setPassword(text.toString())
         }
         binding.etPwRecheck.addTextChangedListener { text ->
-            reCheckPassword = text.toString()
-            isPasswordSame = password == reCheckPassword
-            setSignUpButton()
+            viewModel.setReCheckPassword(text.toString())
         }
     }
 

@@ -1,7 +1,7 @@
 package com.eunji.lookatthis.domain.usecase.user
 
 import com.eunji.lookatthis.data.model.PostUserAccountReqModel
-import com.eunji.lookatthis.data.model.TokenModel
+import com.eunji.lookatthis.data.model.BasicTokenModel
 import com.eunji.lookatthis.data.repository.UserRepository
 import com.eunji.lookatthis.domain.UiState
 import kotlinx.coroutines.flow.Flow
@@ -15,7 +15,7 @@ class PostSignUpUseCase @Inject constructor(
      operator fun invoke(
         memberId: String,
         memberPassword: String,
-    ) : Flow<UiState<TokenModel?>> = userRepository.postSignUp(
+    ) : Flow<UiState<BasicTokenModel?>> = userRepository.postSignUp(
         PostUserAccountReqModel(
             memberPassword = memberPassword,
             memberId = memberId,

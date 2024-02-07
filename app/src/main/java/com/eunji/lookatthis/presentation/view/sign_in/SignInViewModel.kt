@@ -1,8 +1,10 @@
 package com.eunji.lookatthis.presentation.view.sign_in
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.eunji.lookatthis.data.model.TokenModel
+import com.eunji.lookatthis.data.model.BasicTokenModel
 import com.eunji.lookatthis.domain.UiState
 import com.eunji.lookatthis.domain.usecase.user.PostSignInUseCase
 import com.eunji.lookatthis.domain.usecase.user.SaveBasicTokenUseCase
@@ -19,10 +21,23 @@ class SignInViewModel @Inject constructor(
     private val saveBasicTokenUseCase: SaveBasicTokenUseCase,
 ) : ViewModel() {
 
+    private val _id: MutableLiveData<String?> = MutableLiveData()
+    val id: LiveData<String?> = _id
+    private val _password: MutableLiveData<String?> = MutableLiveData()
+    val password: LiveData<String?> = _password
+
+    fun setId(id: String) {
+        _id.value = id
+    }
+
+    fun setPassword(password: String) {
+        _password.value = password
+    }
+
     fun signIn(
         id: String,
         password: String
-    ): Flow<UiState<TokenModel?>> {
+    ): Flow<UiState<BasicTokenModel?>> {
         return signInUseCase(
             memberId = id,
             memberPassword = password
@@ -43,6 +58,5 @@ class SignInViewModel @Inject constructor(
                 onSuccessListener()
             }
         }
-
     }
 }

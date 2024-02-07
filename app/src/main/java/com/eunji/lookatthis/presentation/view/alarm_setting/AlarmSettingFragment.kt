@@ -1,12 +1,15 @@
 package com.eunji.lookatthis.presentation.view.alarm_setting
 
+import android.opengl.Visibility
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.ViewCompat.jumpDrawablesToCurrentState
 import androidx.core.view.children
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -57,12 +60,11 @@ class AlarmSettingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as? MainActivity)?.setAppBarTitle(getString(R.string.text_alarm_setting_appbar))
         setOnClickListener()
-        setObserver()
-        getAlarm()
+        init()
     }
 
-    private fun getAlarm() {
-        mainViewModel.alarmType?.let { alarmType ->
+    private fun init() {
+        mainViewModel.alarmType.value?.let { alarmType ->
             val alarmModel = getAlarmModelFromAlarmType(alarmType)
             renderGetAlarmApiResult(UiState.Success(alarmModel))
             return
@@ -87,7 +89,7 @@ class AlarmSettingFragment : Fragment() {
                 uiState.value?.let { alarmModel ->
                     val alarmType = getAlarmTypeFromAlarmModel(alarmModel, alarmTypes)
                     saveAlarmCache(alarmType)
-                    toggleCheckBox(alarmType, true)
+                    setCheckBoxChecked(alarmType)
                 }
             }
 
@@ -113,21 +115,9 @@ class AlarmSettingFragment : Fragment() {
         }
     }
 
-    private fun setObserver() {
-        viewModel.checkedAlarmType.observe(viewLifecycleOwner) { alarmType ->
-            alarmTypes.filterNot { type ->
-                type == alarmType
-            }.forEach {
-                toggleCheckBox(it, false)
-            }
-        }
-    }
-
-    private fun toggleCheckBox(alarmType: AlarmType, shouldCheck: Boolean) {
+    private fun setCheckBoxChecked(alarmType: AlarmType) {
         alarmTypes.forEachIndexed { index, type ->
-            if (type == alarmType) {
-                checkBoxs[index]?.isChecked = shouldCheck
-            }
+           checkBoxs[index]?.isChecked = type == alarmType
         }
     }
 
@@ -155,7 +145,11 @@ class AlarmSettingFragment : Fragment() {
 
         checkBoxs.forEachIndexed { index, checkBox ->
             checkBox?.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) viewModel.setCheckedItem(alarmTypes[index])
+                if (isChecked) {
+                    binding.customItem15Pm.checkBox.isChecked = true 
+                    viewModel.setCheckedItem(alarmTypes[index])
+                    setCheckBoxChecked(alarmTypes[index])
+                }
             }
         }
     }

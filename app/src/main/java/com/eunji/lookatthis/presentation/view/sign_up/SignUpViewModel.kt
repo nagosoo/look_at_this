@@ -1,8 +1,10 @@
 package com.eunji.lookatthis.presentation.view.sign_up
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.eunji.lookatthis.data.model.TokenModel
+import com.eunji.lookatthis.data.model.BasicTokenModel
 import com.eunji.lookatthis.domain.UiState
 import com.eunji.lookatthis.domain.usecase.user.PostSignUpUseCase
 import com.eunji.lookatthis.domain.usecase.user.SaveBasicTokenUseCase
@@ -19,29 +21,33 @@ class SignUpViewModel @Inject constructor(
     private val userBasicTokenUseCase: SaveBasicTokenUseCase
 ) : ViewModel() {
 
-//    private var _id: MutableLiveData<String?> = MutableLiveData()
-//    val id: LiveData<String?> = _id
-//    private var _password: MutableLiveData<String?> = MutableLiveData()
-//    val password: LiveData<String?> = _password
-//    private var _reCheckPassword: MutableLiveData<String?> = MutableLiveData()
-//    val reCheckPassword: LiveData<String?> = _reCheckPassword
-//
-//    fun setId(id: String) {
-//        _id.value = id
-//    }
-//
-//    fun setPassword(password: String) {
-//        _password.value = password
-//    }
-//
-//    fun setReCheckPassword(reCheckPassword: String) {
-//        _reCheckPassword.value = reCheckPassword
-//    }
+    private val _id: MutableLiveData<String?> = MutableLiveData()
+    val id: LiveData<String?> = _id
+    private val _password: MutableLiveData<String?> = MutableLiveData()
+    val password: LiveData<String?> = _password
+    private val _reCheckPassword: MutableLiveData<String?> = MutableLiveData()
+    val reCheckPassword: LiveData<String?> = _reCheckPassword
+    private val _isPasswordSame: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isPasswordSame: LiveData<Boolean> = _isPasswordSame
+
+    fun setId(id: String) {
+        _id.value = id
+    }
+
+    fun setPassword(password: String) {
+        _password.value = password
+        _isPasswordSame.value = _password.value == _reCheckPassword.value
+    }
+
+    fun setReCheckPassword(reCheckPassword: String) {
+        _reCheckPassword.value = reCheckPassword
+        _isPasswordSame.value = _password.value == _reCheckPassword.value
+    }
 
     fun postAccountResultFlow(
         id: String,
         password: String,
-    ): Flow<UiState<TokenModel?>> = userAccountUseCase(
+    ): Flow<UiState<BasicTokenModel?>> = userAccountUseCase(
         memberId = id,
         memberPassword = password,
     )
@@ -56,7 +62,7 @@ class SignUpViewModel @Inject constructor(
     fun saveBasicToken(token: String, onSuccessListener: () -> Unit) {
         viewModelScope.launch {
             userBasicTokenUseCase(token)
-        }.invokeOnCompletion {throwable->
+        }.invokeOnCompletion { throwable ->
             if (throwable == null) onSuccessListener()
         }
     }

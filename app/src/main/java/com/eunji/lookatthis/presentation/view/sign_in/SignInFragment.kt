@@ -11,11 +11,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.eunji.lookatthis.R
-import com.eunji.lookatthis.data.model.TokenModel
+import com.eunji.lookatthis.data.model.BasicTokenModel
 import com.eunji.lookatthis.databinding.FragmentSignInBinding
 import com.eunji.lookatthis.domain.UiState
 import com.eunji.lookatthis.presentation.util.DialogUtil.showErrorDialog
-import com.eunji.lookatthis.presentation.view.CommonDialog
 import com.eunji.lookatthis.presentation.view.MainActivity
 import com.eunji.lookatthis.presentation.view.main.MainFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,8 +26,6 @@ class SignInFragment : Fragment() {
     private var _binding: FragmentSignInBinding? = null
     private val binding get() = _binding!!
     private val viewModel: SignInViewModel by viewModels()
-    private var id: String? = null
-    private var password: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,8 +39,19 @@ class SignInFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as? MainActivity)?.setAppBarTitle(getString(R.string.text_sign_in))
+        init()
         setOnEdittextListener()
         setOnClickListener()
+    }
+
+    private fun init() {
+        viewModel.id.value?.let { id ->
+            binding.etId.setText(id)
+        }
+
+        viewModel.password.value?.let { password ->
+            binding.etPw.setText(password)
+        }
     }
 
     private fun setOnClickListener() {
@@ -55,14 +63,15 @@ class SignInFragment : Fragment() {
     private fun signIn() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.signIn(id = id!!, password = password!!).collect {
-                    render(it)
-                }
+                viewModel.signIn(id = viewModel.id.value!!, password = viewModel.password.value!!)
+                    .collect {
+                        render(it)
+                    }
             }
         }
     }
 
-    private fun render(uiState: UiState<TokenModel?>) {
+    private fun render(uiState: UiState<BasicTokenModel?>) {
         when (uiState) {
             is UiState.Loading -> {}
             is UiState.Success -> {
@@ -84,16 +93,17 @@ class SignInFragment : Fragment() {
     }
 
     private fun setSignInButton() {
-        binding.buttonSignUp.isEnabled = !id.isNullOrBlank() && !password.isNullOrBlank()
+        binding.buttonSignUp.isEnabled =
+            !viewModel.id.value.isNullOrBlank() && !viewModel.password.value.isNullOrBlank()
     }
 
     private fun setOnEdittextListener() {
         binding.etId.addTextChangedListener { text ->
-            id = text.toString()
+            viewModel.setId(text.toString())
             setSignInButton()
         }
         binding.etPw.addTextChangedListener { text ->
-            password = text.toString()
+            viewModel.setPassword(text.toString())
             setSignInButton()
         }
     }

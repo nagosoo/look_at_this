@@ -2,7 +2,7 @@ package com.eunji.lookatthis.data.datasource.remote
 
 import com.eunji.lookatthis.data.model.PostUserAccountReqModel
 import com.eunji.lookatthis.data.model.ResponseModel
-import com.eunji.lookatthis.data.model.TokenModel
+import com.eunji.lookatthis.data.model.BasicTokenModel
 import com.eunji.lookatthis.data.retrofit.services.UserService
 import retrofit2.Response
 import javax.inject.Inject
@@ -14,13 +14,13 @@ class UserDataSourceRemote @Inject constructor(
 ) {
     suspend fun postSignUp(
         postUserAccountReqModel: PostUserAccountReqModel
-    ): Response<ResponseModel<TokenModel?>> = userService.postSingUp(
+    ): Response<ResponseModel<BasicTokenModel?>> = userService.postSingUp(
         body = postUserAccountReqModel
     )
 
     suspend fun postSignIn(
         postUserAccountReqModel: PostUserAccountReqModel
-    ): Response<ResponseModel<TokenModel?>> = userService.postSignIn(
+    ): Response<ResponseModel<BasicTokenModel?>> = userService.postSignIn(
         body = postUserAccountReqModel
     )
 }
