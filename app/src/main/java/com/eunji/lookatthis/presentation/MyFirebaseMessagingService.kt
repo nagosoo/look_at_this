@@ -10,17 +10,42 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.eunji.lookatthis.R
+import com.eunji.lookatthis.data.model.FcmTokenModel
+import com.eunji.lookatthis.domain.usecase.alarm.PostFcmTokenUseCase
+import com.eunji.lookatthis.domain.usecase.user.GetBasicTokenUseCase
 import com.eunji.lookatthis.presentation.Constance.CHANNEL_DESCRIPTION
 import com.eunji.lookatthis.presentation.Constance.CHANNEL_ID
 import com.eunji.lookatthis.presentation.Constance.CHANNEL_NAME
 import com.eunji.lookatthis.presentation.view.MainActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.random.Random
 
+@AndroidEntryPoint
 class MyFirebaseMessagingService : FirebaseMessagingService() {
+
+    @Inject
+    lateinit var postFcmTokenUseCase: PostFcmTokenUseCase
+
+    @Inject
+    lateinit var getBasicTokenUseCase: GetBasicTokenUseCase
+    private val job = SupervisorJob()
+    private val coroutineScope = CoroutineScope(job + Dispatchers.Default)
+
     override fun onNewToken(token: String) {
-        Log.d("FCM Log", "Refreshed fcm token: $token")
+        coroutineScope.launch {
+            if (getBasicTokenUseCase().firstOrNull() != null)
+                postFcmTokenUseCase(FcmTokenModel(fcmToken = token))
+        }
+        Log.d("Logging Fcm", "Refreshed fcm token: $token")
     }
 
     @SuppressLint("MissingPermission")
@@ -60,4 +85,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
     }
+
+    override fun onDestroy() {
+        coroutineScope.cancel()
+        super.onDestroy()
+    }
+
 }

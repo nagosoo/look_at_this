@@ -2,6 +2,7 @@ package com.eunji.lookatthis.domain.repositoryImpl
 
 import com.eunji.lookatthis.data.datasource.remote.AlarmDataSource
 import com.eunji.lookatthis.data.model.AlarmModel
+import com.eunji.lookatthis.data.model.FcmTokenModel
 import com.eunji.lookatthis.data.repository.AlarmRepository
 import com.eunji.lookatthis.domain.UiState
 import com.eunji.lookatthis.domain.safeApiCall
@@ -19,4 +20,7 @@ class AlarmRepositoryImpl @Inject constructor(
 
     override fun postAlarmSetting(alarmModel: AlarmModel): Flow<UiState<AlarmModel?>> =
         safeApiCall { alarmDataSource.postAlarmSetting(alarmModel) }
+
+    override fun postFcmToken(fcmTokenModel: FcmTokenModel): Flow<UiState<Boolean?>> =
+        safeApiCall { alarmDataSource.postFcmToken(fcmTokenModel) }
 }

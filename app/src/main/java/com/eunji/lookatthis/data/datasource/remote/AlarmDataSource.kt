@@ -1,6 +1,7 @@
 package com.eunji.lookatthis.data.datasource.remote
 
 import com.eunji.lookatthis.data.model.AlarmModel
+import com.eunji.lookatthis.data.model.FcmTokenModel
 import com.eunji.lookatthis.data.model.ResponseModel
 import com.eunji.lookatthis.data.retrofit.services.AlarmService
 import retrofit2.Response
@@ -19,5 +20,10 @@ class AlarmDataSource @Inject constructor(
         alarmModel: AlarmModel
     ): Response<ResponseModel<AlarmModel?>> =
         alarmService.postAlarmSetting(body = alarmModel)
+
+    suspend fun postFcmToken(
+        fcmTokenModel: FcmTokenModel
+    ): Response<ResponseModel<Boolean?>> =
+        alarmService.postFcmToken(body = fcmTokenModel)
 
 }

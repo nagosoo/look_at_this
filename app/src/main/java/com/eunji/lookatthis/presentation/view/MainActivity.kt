@@ -1,6 +1,7 @@
 package com.eunji.lookatthis.presentation.view
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.eunji.lookatthis.R
@@ -11,18 +12,24 @@ import com.eunji.lookatthis.presentation.Constance.SIGN_UP
 import com.eunji.lookatthis.presentation.view.main.MainFragment
 import com.eunji.lookatthis.presentation.view.sign_in.SignInFragment
 import com.eunji.lookatthis.presentation.view.sign_up.SignUpFragment
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        if(savedInstanceState==null) setPage()
+        if (savedInstanceState == null) {
+            setPage()
+            postFcmToken()
+        }
     }
 
     private fun setPage() {
@@ -44,4 +51,12 @@ class MainActivity : AppCompatActivity() {
         binding.appbar.tvTitle.text = title
     }
 
+    private fun postFcmToken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                return@OnCompleteListener
+            }
+            viewModel.postFcmToken(task.result)
+        })
+    }
 }
