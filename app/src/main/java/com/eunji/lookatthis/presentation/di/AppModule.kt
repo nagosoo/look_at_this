@@ -8,6 +8,7 @@ import androidx.datastore.preferences.preferencesDataStoreFile
 import com.eunji.lookatthis.BuildConfig
 import com.eunji.lookatthis.data.retrofit.ApiClient
 import com.eunji.lookatthis.data.retrofit.services.AlarmService
+import com.eunji.lookatthis.data.retrofit.services.LinkService
 import com.eunji.lookatthis.data.retrofit.services.UserService
 import dagger.Module
 import dagger.Provides
@@ -31,6 +32,12 @@ object AppModule {
     fun provideAlarmService(apiClient: ApiClient): AlarmService =
         apiClient.getRetrofitBuilder(BuildConfig.baseUrl, needAuthorization = true)
             .create(AlarmService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideLinkService(apiClient: ApiClient): LinkService =
+        apiClient.getRetrofitBuilder(BuildConfig.baseUrl, needAuthorization = true)
+            .create(LinkService::class.java)
 
     @Provides
     @Singleton

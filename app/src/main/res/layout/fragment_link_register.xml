@@ -91,7 +91,7 @@
             android:textColor="@color/grey_dark"
             app:layout_constraintBottom_toBottomOf="@id/et_memo"
             app:layout_constraintEnd_toEndOf="@id/et_memo"
-            tools:text="100/100" />
+            android:text="@string/text_initial_description_size" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_register"

@@ -1,6 +1,7 @@
 package com.eunji.lookatthis.presentation.view.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +11,7 @@ import com.eunji.lookatthis.R
 import com.eunji.lookatthis.databinding.FragmentMainBinding
 import com.eunji.lookatthis.presentation.model.MainItemModel
 import com.eunji.lookatthis.presentation.util.DisplayUnitUtil.dpToPx
-import com.eunji.lookatthis.presentation.view.LinkRegisterFragment
+import com.eunji.lookatthis.presentation.view.link_register.LinkRegisterFragment
 import com.eunji.lookatthis.presentation.view.alarm_setting.AlarmSettingFragment
 
 class MainFragment : Fragment() {

@@ -9,6 +9,8 @@
     <string name="text_already_exist_id">이미 존재하는 아이디야ㅠ_ㅠ</string>
     <string name="text_wrong_id_or_pw">아이디 혹은 비밀번호가 틀렸어ㅠ_ㅠ</string>
     <string name="text_not_same_password">비밀번호가 일치하지 않아ㅠ_ㅠ</string>
+    <string name="text_success_register_link">등록에 성공했어!</string>
+    <string name="text_fail_register_link">등록에 실패했어ㅠ_ㅠ</string>
     <string name="text_alarm_setting">알림 받을 시간을 골라줘</string>
     <string name="text_alarm_get_every_time">새 글이 올라올 때 마다 받을래</string>
     <string name="text_alarm_get_11_AM">11:00AM에 한번만 받을래</string>
@@ -30,7 +32,8 @@
     <string name="text_show_only_bookmark">북마크만 보기</string>
     <string name="text_show_all">모두 보기</string>
     <string name="text_empty">볼게 없오..</string>
-    <string name="text_loading">로딩중..</string>
+    <string name="text_loading">로딩중...</string>
+    <string name="text_initial_description_size">0/100</string>
     <string name="text_paste">붙여넣기</string>
 
 

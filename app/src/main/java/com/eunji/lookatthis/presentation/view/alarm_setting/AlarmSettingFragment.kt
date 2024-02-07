@@ -85,7 +85,7 @@ class AlarmSettingFragment : Fragment() {
             }
 
             is UiState.Success -> {
-                closeDialog(parentFragmentManager, CommonDialog.TAG)
+                closeDialog(parentFragmentManager)
                 uiState.value?.let { alarmModel ->
                     val alarmType = getAlarmTypeFromAlarmModel(alarmModel, alarmTypes)
                     saveAlarmCache(alarmType)

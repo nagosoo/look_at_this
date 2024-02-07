@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val userAccountUseCase: PostSignUpUseCase,
+    private val postSignUpUseCase: PostSignUpUseCase,
     private val userBasicTokenUseCase: SaveBasicTokenUseCase
 ) : ViewModel() {
 
@@ -47,7 +47,7 @@ class SignUpViewModel @Inject constructor(
     fun postAccountResultFlow(
         id: String,
         password: String,
-    ): Flow<UiState<BasicTokenModel?>> = userAccountUseCase(
+    ): Flow<UiState<BasicTokenModel?>> = postSignUpUseCase(
         memberId = id,
         memberPassword = password,
     )

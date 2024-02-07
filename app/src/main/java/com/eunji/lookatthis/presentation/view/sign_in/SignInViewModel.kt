@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
-    private val signInUseCase: PostSignInUseCase,
+    private val postSignInUseCase: PostSignInUseCase,
     private val saveBasicTokenUseCase: SaveBasicTokenUseCase,
 ) : ViewModel() {
 
@@ -38,7 +38,7 @@ class SignInViewModel @Inject constructor(
         id: String,
         password: String
     ): Flow<UiState<BasicTokenModel?>> {
-        return signInUseCase(
+        return postSignInUseCase(
             memberId = id,
             memberPassword = password
         ).stateIn(
