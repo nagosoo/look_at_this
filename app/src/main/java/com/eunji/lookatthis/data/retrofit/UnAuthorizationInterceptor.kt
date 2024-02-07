@@ -28,7 +28,7 @@ class UnAuthorizationInterceptor @Inject constructor(
                 userDataSourceLocal.deleteBasicToken()
             }
             val intent = Intent(context, EntryActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
             this.context.startActivity(intent)
         }
         return newRequest

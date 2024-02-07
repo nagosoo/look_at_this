@@ -99,6 +99,7 @@ class EntryActivity : AppCompatActivity() {
     private fun goToMain() {
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra(EXTRA_PAGE, MAIN)
+        finish()
         startActivity(intent)
     }
 
@@ -106,10 +107,12 @@ class EntryActivity : AppCompatActivity() {
         val intent = Intent(this, MainActivity::class.java)
         binding.btnSignIn.setOnClickListener {
             intent.putExtra(EXTRA_PAGE, SIGN_IN)
+            finish()
             startActivity(intent)
         }
         binding.btnSignUp.setOnClickListener {
             intent.putExtra(EXTRA_PAGE, SIGN_UP)
+            finish()
             startActivity(intent)
         }
     }
