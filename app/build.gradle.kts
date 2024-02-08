@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -7,6 +9,10 @@ plugins {
     id("kotlinx-serialization")
 }
 
+fun getLocalProperty(propertyKey: String): String {
+    return gradleLocalProperties(rootDir).getProperty(propertyKey)
+}
+
 android {
     namespace = "com.eunji.lookatthis"
     compileSdk = 34
@@ -14,9 +20,9 @@ android {
     signingConfigs {
         create("release") {
             storeFile = file("../keystore/key_store")
-            storePassword = file("../keystore/password.rtf").readText().trim()
+            storePassword = getLocalProperty("KEY_PASSWORD")
             keyAlias = "key0"
-            keyPassword = file("../keystore/password.rtf").readText().trim()
+            keyPassword = getLocalProperty("STORE_PASSWORD")
         }
     }
 
