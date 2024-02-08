@@ -3,6 +3,7 @@ package com.eunji.lookatthis.presentation.view.main
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -19,22 +20,88 @@ class MainAdapter(private val onItemClickListener: (String) -> Unit) :
 
     inner class ViewHolder(val binding: ItemMainBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
         fun bind(linkModel: LinkModel) {
             with(binding) {
                 imageView.setOnClickListener {
                     onItemClickListener(linkModel.linkUrl)
                 }
-                Glide.with(imageView.context)
-                    .load(Uri.parse(linkModel.linkThumbnail))
+                setImage(linkModel)
+                setMemo(linkModel)
+                setReadOrNot(linkModel.linkIsRead)
+                setBookmarkOrNot(linkModel.linkIsBookmark)
+                tvDate.text = linkModel.linkCreatedAt
+            }
+        }
+
+        private fun setBookmarkOrNot(isBookmarked: Boolean) {
+            if (isBookmarked) {
+                binding.ivLike.alpha = 1f
+            } else {
+                binding.ivLike.alpha = 0.3f
+            }
+        }
+
+        private fun setReadOrNot(isRead: Boolean) {
+            if (isRead) {
+                setTextColor(
+                    ContextCompat.getColor(
+                        binding.tvContent.context,
+                        R.color.grey_dark
+                    )
+                )
+            } else {
+                setTextColor(
+                    ContextCompat.getColor(
+                        binding.tvContent.context,
+                        R.color.black
+                    )
+                )
+            }
+        }
+
+        private fun setTextColor(color: Int) {
+            binding.tvContent.setTextColor(color)
+            binding.tvDate.setTextColor(color)
+        }
+
+        private fun setMemo(linkModel: LinkModel) {
+            if (linkModel.linkMemo?.isNotBlank() == true) {
+                binding.tvContent.text = linkModel.linkMemo
+            } else {
+                binding.tvContent.text =
+                    binding.tvContent.context.getString(R.string.text_empty_memo)
+            }
+        }
+
+        private fun setImage(linkModel: LinkModel) {
+            if (linkModel.linkThumbnail?.isNotBlank() == true) {
+                setThumbnail(linkModel.linkThumbnail)
+            } else {
+                setDefaultImage()
+            }
+        }
+
+        private fun setThumbnail(thumbnail: String) {
+            with(binding.imageView) {
+                Glide.with(context)
+                    .load(Uri.parse(thumbnail))
                     .transform(
                         CenterCrop(),
                         RoundedCorners(
-                            imageView.context.resources.getDimension(R.dimen.radius_8).toInt()
+                            context.resources.getDimension(R.dimen.radius_8).toInt()
                         )
                     )
-                    .into(imageView)
-                tvContent.text = linkModel.linkMemo
-                tvDate.text = linkModel.linkCreatedAt
+                    .into(this)
+            }
+        }
+
+        private fun setDefaultImage() {
+            with(binding.imageView) {
+                val image = ContextCompat.getDrawable(context, R.drawable.splash)
+                Glide.with(context)
+                    .load(image)
+                    .into(this)
             }
         }
     }

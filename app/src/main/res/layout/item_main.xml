@@ -11,8 +11,7 @@
         android:layout_height="88dp"
         android:background="@drawable/rectangular_grey_light_radius_8"
         android:contentDescription="@string/content_description_main_image"
-        android:scaleType="centerCrop"
-        android:src="@drawable/error"
+        android:src="@drawable/splash"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -28,11 +27,11 @@
         android:paddingStart="6dp"
         android:paddingTop="3dp"
         android:paddingEnd="6dp"
+        android:text="@string/text_empty_memo"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/image_view"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="푸바오 귀엽쥬 푸바오 귀엽쥬 푸바오 귀엽쥬 푸바오 귀엽쥬 푸바오 귀엽쥬 푸바오 귀엽쥬 푸바오 귀엽쥬 푸바오 귀엽쥬 푸바오 귀엽쥬 푸바오 귀엽쥬 푸바오 귀엽쥬 푸바오 귀엽쥬 푸바오 귀엽쥬 푸바오 귀엽쥬 푸바오 귀엽쥬 푸바오 귀엽쥬 푸바오 귀엽쥬 푸바오 귀엽쥬 " />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_date"
