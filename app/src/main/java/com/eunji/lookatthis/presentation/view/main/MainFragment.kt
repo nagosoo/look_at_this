@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.LoadState
 import androidx.paging.PagingData
 import com.eunji.lookatthis.R
 import com.eunji.lookatthis.databinding.FragmentMainBinding
@@ -105,6 +106,15 @@ class MainFragment : Fragment() {
         val paddingBottom = dpToPx(20f, requireContext())
         binding.recyclerView.adapter = adapter
         binding.recyclerView.addItemDecoration(MainRecyclerViewItemDecoration(paddingBottom))
+        adapter.addLoadStateListener { combinedLoadStates ->
+            if(combinedLoadStates.append.endOfPaginationReached) {
+                if(adapter.itemCount < 1) {
+                    binding.layoutEmpty.root.visibility = View.VISIBLE
+                }else {
+                    binding.layoutEmpty.root.visibility = View.GONE
+                }
+            }
+        }
     }
 
     private fun setOnClickListener() {

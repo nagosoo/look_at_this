@@ -45,6 +45,7 @@
         tools:listitem="@layout/item_main" />
 
     <include
+        android:id="@+id/layout_empty"
         layout="@layout/layout_empty"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
