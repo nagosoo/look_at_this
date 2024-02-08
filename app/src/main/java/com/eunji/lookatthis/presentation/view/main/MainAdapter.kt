@@ -1,38 +1,43 @@
 package com.eunji.lookatthis.presentation.view.main
 
-import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.startActivity
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.eunji.lookatthis.R
+import com.eunji.lookatthis.data.model.LinkModel
 import com.eunji.lookatthis.databinding.ItemMainBinding
-import com.eunji.lookatthis.presentation.model.MainItemModel
 
 
-class MainAdapter(private val items: List<MainItemModel>) :
-    RecyclerView.Adapter<MainAdapter.ViewHolder>() {
+class MainAdapter(private val onItemClickListener: (String) -> Unit) :
+    PagingDataAdapter<LinkModel, MainAdapter.ViewHolder>(DIFF_UTIL) {
 
     inner class ViewHolder(val binding: ItemMainBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        init {
-            binding.imageView.setOnClickListener {
-                openUrl(items[adapterPosition].link, it.context)
+        fun bind(linkModel: LinkModel) {
+            with(binding) {
+                imageView.setOnClickListener {
+                    onItemClickListener(linkModel.linkUrl)
+                }
+                Glide.with(imageView.context)
+                    .load(Uri.parse(linkModel.linkThumbnail))
+                    .transform(
+                        CenterCrop(),
+                        RoundedCorners(
+                            imageView.context.resources.getDimension(R.dimen.radius_8).toInt()
+                        )
+                    )
+                    .into(imageView)
+                tvContent.text = linkModel.linkMemo
+                tvDate.text = linkModel.linkCreatedAt
             }
         }
-
-        private fun openUrl(url: String, context: Context) {
-            val browserIntent =
-                Intent(Intent.ACTION_VIEW, Uri.parse(url))
-            startActivity(context, browserIntent, null)
-        }
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -41,21 +46,22 @@ class MainAdapter(private val items: List<MainItemModel>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.binding.apply {
-            val item = items[position]
-            Glide.with(imageView.context)
-                .load(Uri.parse(item.image))
-                .transform(
-                    CenterCrop(),
-                    RoundedCorners(
-                        imageView.context.resources.getDimension(R.dimen.radius_8).toInt()
-                    )
-                )
-                .into(imageView)
-            tvContent.text = item.description
-            tvDate.text = item.time
+        val item = getItem(position)
+        item?.let { link ->
+            holder.bind(link)
         }
     }
 
-    override fun getItemCount(): Int = items.size
+    companion object {
+        val DIFF_UTIL = object : DiffUtil.ItemCallback<LinkModel>() {
+            override fun areItemsTheSame(oldItem: LinkModel, newItem: LinkModel): Boolean {
+                return oldItem.linkId == newItem.linkId
+            }
+
+            override fun areContentsTheSame(oldItem: LinkModel, newItem: LinkModel): Boolean {
+                return oldItem == newItem
+            }
+        }
+    }
+
 }

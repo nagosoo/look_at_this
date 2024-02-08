@@ -12,7 +12,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        buildConfigField("String", "baseUrl", "\"http://192.168.0.105:8080\"")
+        buildConfigField("String", "baseUrl", "\"http://192.168.0.110:8080\"")
        // buildConfigField("String", "baseUrl", "\"http://lookatthisbe-env.eba-mmt8camh.ap-northeast-2.elasticbeanstalk.com\"")
 
         applicationId = "com.eunji.lookatthis"
@@ -100,6 +100,11 @@ dependencies {
 
     //splash
     implementation ("androidx.core:core-splashscreen:1.0.1")
+
+    //paging
+    implementation("androidx.paging:paging-common:3.2.1")
+    implementation("androidx.paging:paging-runtime:3.2.1")
+
 }
 
 kapt {

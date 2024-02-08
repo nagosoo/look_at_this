@@ -3,7 +3,7 @@ package com.eunji.lookatthis.presentation.di
 import com.eunji.lookatthis.data.repository.AlarmRepository
 import com.eunji.lookatthis.data.repository.LinkRepository
 import com.eunji.lookatthis.data.repository.UserRepository
-import com.eunji.lookatthis.domain.model.LinkRepositoryImpl
+import com.eunji.lookatthis.domain.repositoryImpl.LinkRepositoryImpl
 import com.eunji.lookatthis.domain.repositoryImpl.AlarmRepositoryImpl
 import com.eunji.lookatthis.domain.repositoryImpl.UserRepositoryImpl
 import dagger.Binds
