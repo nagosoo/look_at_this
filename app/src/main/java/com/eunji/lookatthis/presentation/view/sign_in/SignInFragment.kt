@@ -7,9 +7,7 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.eunji.lookatthis.R
 import com.eunji.lookatthis.data.model.BasicTokenModel
 import com.eunji.lookatthis.databinding.FragmentSignInBinding
@@ -62,12 +60,10 @@ class SignInFragment : Fragment() {
 
     private fun signIn() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.signIn(id = viewModel.id.value!!, password = viewModel.password.value!!)
-                    .collect {
-                        render(it)
-                    }
-            }
+            viewModel.signIn(id = viewModel.id.value!!, password = viewModel.password.value!!)
+                .collect {
+                    render(it)
+                }
         }
     }
 

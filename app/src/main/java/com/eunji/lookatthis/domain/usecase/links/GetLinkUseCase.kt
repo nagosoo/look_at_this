@@ -1,4 +1,4 @@
-package com.eunji.lookatthis.domain.usecase.Link
+package com.eunji.lookatthis.domain.usecase.links
 
 import androidx.paging.PagingData
 import com.eunji.lookatthis.data.model.LinkModel

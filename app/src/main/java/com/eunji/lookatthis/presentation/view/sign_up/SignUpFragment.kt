@@ -85,13 +85,11 @@ class SignUpFragment : Fragment() {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.postAccountResultFlow(
-                    id = viewModel.id.value!!,
-                    password = viewModel.password.value!!,
-                ).collect {
-                    render(it)
-                }
+            viewModel.postAccountResultFlow(
+                id = viewModel.id.value!!,
+                password = viewModel.password.value!!,
+            ).collect {
+                render(it)
             }
         }
     }

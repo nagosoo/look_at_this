@@ -1,4 +1,4 @@
-package com.eunji.lookatthis.domain.usecase.Link
+package com.eunji.lookatthis.domain.usecase.links
 
 import com.eunji.lookatthis.data.model.LinkModel
 import com.eunji.lookatthis.data.model.PostLinkReqModel

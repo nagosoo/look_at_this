@@ -12,8 +12,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.PagingData
 import com.eunji.lookatthis.R
 import com.eunji.lookatthis.databinding.FragmentMainBinding
+import com.eunji.lookatthis.domain.UiState
+import com.eunji.lookatthis.presentation.util.DialogUtil
 import com.eunji.lookatthis.presentation.util.DisplayUnitUtil.dpToPx
 import com.eunji.lookatthis.presentation.view.MainActivity
 import com.eunji.lookatthis.presentation.view.alarm_setting.AlarmSettingFragment
@@ -26,8 +29,8 @@ import kotlinx.coroutines.launch
 class MainFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: MainViewModel by viewModels()
-    private val adapter by lazy { MainAdapter(::openUrl) }
+    private val viewModel: MainFragmentViewModel by viewModels()
+    private val adapter by lazy { MainAdapter(::read, ::bookmark) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,6 +51,7 @@ class MainFragment : Fragment() {
 
     private fun getLinks() {
         viewLifecycleOwner.lifecycleScope.launch {
+            //Todo::필요한지?
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.getLinks().collectLatest { pagingData ->
                     adapter.submitData(pagingData)
@@ -60,6 +64,39 @@ class MainFragment : Fragment() {
         val browserIntent =
             Intent(Intent.ACTION_VIEW, Uri.parse(url))
         ContextCompat.startActivity(requireContext(), browserIntent, null)
+    }
+
+    private fun read(linkId: Int, url: String) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.read(linkId)
+                .collect {
+                    openUrl(url)
+                }
+        }
+    }
+
+    private fun bookmark(linkId: Int, isBookmarked: Boolean) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            toggleBookmarkImage(linkId, isBookmarked)
+            viewModel.bookmark(linkId).collect { uiState ->
+                if (uiState is UiState.Error) {
+                    DialogUtil.showErrorDialog(parentFragmentManager, uiState.errorMessage)
+                    toggleBookmarkImage(linkId, !isBookmarked) //북마크 이미지 되돌리기
+                }
+            }
+        }
+    }
+
+    private suspend fun toggleBookmarkImage(linkId: Int, isBookmarked: Boolean) {
+        adapter.submitData(
+            PagingData.from(adapter.snapshot().items.map { link ->
+                if (link.linkId == linkId) {
+                    link.copy(
+                        isBookmarked = !isBookmarked
+                    )
+                } else link
+            })
+        )
     }
 
     private fun setPagingAdapter() {

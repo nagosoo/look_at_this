@@ -83,10 +83,8 @@ class LinkRegisterFragment : Fragment() {
     private fun setOnClickListener() {
         binding.btnRegister.setOnClickListener {
             viewLifecycleOwner.lifecycleScope.launch {
-                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    viewModel.postLink().collect { uiState ->
-                        render(uiState)
-                    }
+                viewModel.postLink().collect { uiState ->
+                    render(uiState)
                 }
             }
         }

@@ -15,21 +15,26 @@ import com.eunji.lookatthis.data.model.LinkModel
 import com.eunji.lookatthis.databinding.ItemMainBinding
 
 
-class MainAdapter(private val onItemClickListener: (String) -> Unit) :
+class MainAdapter(
+    private val read: (Int, String) -> Unit,
+    private val bookmark: (Int,Boolean) -> Unit
+) :
     PagingDataAdapter<LinkModel, MainAdapter.ViewHolder>(DIFF_UTIL) {
 
     inner class ViewHolder(val binding: ItemMainBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
         fun bind(linkModel: LinkModel) {
             with(binding) {
                 imageView.setOnClickListener {
-                    onItemClickListener(linkModel.linkUrl)
+                    read(linkModel.linkId, linkModel.linkUrl)
+                }
+                ivLike.setOnClickListener {
+                    bookmark(linkModel.linkId, linkModel.isBookmarked)
                 }
                 setImage(linkModel)
                 setMemo(linkModel)
-                setReadOrNot(linkModel.linkIsRead)
-                setBookmarkOrNot(linkModel.linkIsBookmark)
+                setReadOrNot(linkModel.isRead)
+                setBookmarkOrNot(linkModel.isBookmarked)
                 tvDate.text = linkModel.linkCreatedAt
             }
         }

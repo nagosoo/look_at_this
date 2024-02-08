@@ -70,10 +70,8 @@ class AlarmSettingFragment : Fragment() {
             return
         }
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.getAlarmSetting().collect { uiState ->
-                    renderGetAlarmApiResult(uiState)
-                }
+            viewModel.getAlarmSetting().collect { uiState ->
+                renderGetAlarmApiResult(uiState)
             }
         }
     }
@@ -125,10 +123,8 @@ class AlarmSettingFragment : Fragment() {
         viewModel.checkedAlarmType.value?.let { alarmType ->
             val alarmModel = getAlarmModelFromAlarmType(alarmType)
             viewLifecycleOwner.lifecycleScope.launch {
-                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    viewModel.postAlarmSetting(alarmModel).collect { uiState ->
-                        renderPostAlarmResult(uiState, alarmType)
-                    }
+                viewModel.postAlarmSetting(alarmModel).collect { uiState ->
+                    renderPostAlarmResult(uiState, alarmType)
                 }
             }
         }

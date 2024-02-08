@@ -4,8 +4,10 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.eunji.lookatthis.data.datasource.remote.LinkDataSource
+import com.eunji.lookatthis.data.model.BookmarkReqModel
 import com.eunji.lookatthis.data.model.LinkModel
 import com.eunji.lookatthis.data.model.PostLinkReqModel
+import com.eunji.lookatthis.data.model.ReadReqModel
 import com.eunji.lookatthis.data.repository.LinkRepository
 import com.eunji.lookatthis.domain.LinkPagingSource
 import com.eunji.lookatthis.domain.LinkPagingSource.Companion.NETWORK_PAGE_SIZE
@@ -23,9 +25,15 @@ class LinkRepositoryImpl @Inject constructor(
     override fun postLink(linkReqModel: PostLinkReqModel): Flow<UiState<LinkModel?>> =
         safeApiCall { linkDataSource.postLink(linkReqModel) }
 
+    override fun postLinkBookmark(bookmarkReqModel: BookmarkReqModel): Flow<UiState<LinkModel?>> =
+        safeApiCall { linkDataSource.postLinkBookmark(bookmarkReqModel) }
+
+    override fun postLinkRead(readReqModel: ReadReqModel): Flow<UiState<LinkModel?>> =
+        safeApiCall { linkDataSource.postLinkRead(readReqModel) }
+
     override fun getLinks(): Flow<PagingData<LinkModel>> {
         val pageConfig = PagingConfig(
-            pageSize =NETWORK_PAGE_SIZE,
+            pageSize = NETWORK_PAGE_SIZE,
             enablePlaceholders = false,
         )
 

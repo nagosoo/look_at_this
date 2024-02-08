@@ -1,5 +1,6 @@
 package com.eunji.lookatthis.data.model
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -9,6 +10,8 @@ data class LinkModel(
     val linkMemo: String?,
     val linkThumbnail: String?,
     val linkCreatedAt: String,
-    val linkIsRead: Boolean,
-    val linkIsBookmark: Boolean,
+    @SerialName("linkIsRead")
+    val isRead: Boolean,
+    @SerialName("linkIsBookmark")
+    var isBookmarked: Boolean,
 )

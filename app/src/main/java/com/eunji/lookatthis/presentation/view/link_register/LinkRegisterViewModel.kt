@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.eunji.lookatthis.data.model.LinkModel
 import com.eunji.lookatthis.data.model.PostLinkReqModel
 import com.eunji.lookatthis.domain.UiState
-import com.eunji.lookatthis.domain.usecase.Link.PostLinkUseCase
+import com.eunji.lookatthis.domain.usecase.links.PostLinkUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
