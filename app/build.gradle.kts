@@ -11,10 +11,16 @@ android {
     namespace = "com.eunji.lookatthis"
     compileSdk = 34
 
-    defaultConfig {
-        buildConfigField("String", "baseUrl", "\"http://192.168.0.110:8080\"")
-       // buildConfigField("String", "baseUrl", "\"http://lookatthisbe-env.eba-mmt8camh.ap-northeast-2.elasticbeanstalk.com\"")
+    signingConfigs {
+        create("release") {
+            storeFile = file("../keystore/key_store")
+            storePassword = file("../keystore/password.rtf").readText().trim()
+            keyAlias = "key0"
+            keyPassword = file("../keystore/password.rtf").readText().trim()
+        }
+    }
 
+    defaultConfig {
         applicationId = "com.eunji.lookatthis"
         minSdk = 26
         targetSdk = 34
@@ -22,10 +28,17 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig = signingConfigs.getByName("debug")
     }
 
     buildTypes {
-        release {
+        getByName("debug"){
+            buildConfigField("String", "baseUrl", "\"http://192.168.0.110:8080\"")
+        }
+
+        getByName("release") {
+            signingConfig = signingConfigs.getByName("release")
+            buildConfigField("String", "baseUrl", "\"http://lookatthisbe-env.eba-mmt8camh.ap-northeast-2.elasticbeanstalk.com\"")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
