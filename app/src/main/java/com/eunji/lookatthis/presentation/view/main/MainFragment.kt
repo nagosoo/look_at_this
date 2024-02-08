@@ -77,6 +77,8 @@ class MainFragment : Fragment() {
 
     private fun bookmark(linkId: Int, isBookmarked: Boolean) {
         viewLifecycleOwner.lifecycleScope.launch {
+            //Todo::깜빡이는 거해결
+            //Todo::디바운스 넣기
             toggleBookmarkImage(linkId, isBookmarked)
             viewModel.bookmark(linkId).collect { uiState ->
                 if (uiState is UiState.Error) {
