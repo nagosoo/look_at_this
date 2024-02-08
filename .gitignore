@@ -185,6 +185,6 @@ fabric.properties
 !/gradle/wrapper/gradle-wrapper.jar
 
 ##key_stroe##
-./keystore/password.rtf
+/keystore/password.rtf
 
 # End of https://www.toptal.com/developers/gitignore/api/android,androidstudio,kotlin
