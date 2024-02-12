@@ -69,7 +69,7 @@ class LinkFragment : Fragment() {
 
     private fun read(link: LinkModel) {
         viewLifecycleOwner.lifecycleScope.launch {
-            toggleRead(link.linkId, link.isRead)
+            if(!link.isRead) setRead(link.linkId)
             viewModel.read(link.linkId)
                 .collect {
                     openUrl(link.linkUrl)
@@ -77,12 +77,12 @@ class LinkFragment : Fragment() {
         }
     }
 
-    private suspend fun toggleRead(linkId: Int, isRead: Boolean) {
+    private suspend fun setRead(linkId: Int) {
         adapter.submitData(
             PagingData.from(adapter.snapshot().items.map { link ->
                 if (link.linkId == linkId) {
                     link.copy(
-                        isRead = !isRead
+                        isRead = true
                     )
                 } else link
             })
