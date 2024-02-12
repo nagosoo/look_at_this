@@ -7,10 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.paging.PagingData
 import com.eunji.lookatthis.R
 import com.eunji.lookatthis.data.model.LinkModel
@@ -66,10 +68,10 @@ class LinkFragment : Fragment() {
         setPagingAdapter()
         setOnClickListener()
         //처음에 init
-        if(isFragmentCreateFirstTime) init()
+        if (isFragmentCreateFirstTime) init()
         setFragmentResultListener(requestKey) { requestKey, bundle ->
             val result = bundle.getBoolean(shouldRefreshPaging, false)
-            if(!result) return@setFragmentResultListener
+            if (!result) return@setFragmentResultListener
             init()
             binding.recyclerView.scrollToPosition(0)
         }
@@ -144,14 +146,20 @@ class LinkFragment : Fragment() {
         binding.recyclerView.adapter = adapter
         binding.recyclerView.addItemDecoration(LinkRecyclerViewItemDecoration(paddingBottom))
         adapter.addLoadStateListener { combinedLoadStates ->
-            if (combinedLoadStates.append.endOfPaginationReached) {
-                if (adapter.itemCount < 1) {
-                    binding.layoutEmpty.root.visibility = View.VISIBLE
-                } else {
-                    binding.layoutEmpty.root.visibility = View.GONE
-                }
+            val loadState = combinedLoadStates.source
+            val isEmpty =
+                adapter.itemCount < 1 && loadState.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached
+            binding.layoutEmpty.root.isVisible = isEmpty
+            val isError: LoadState.Error? =
+                loadState.append as? LoadState.Error ?: loadState.refresh as? LoadState.Error
+                ?: loadState.prepend as? LoadState.Error
+            isError?.let {
+                DialogUtil.showErrorDialog(parentFragmentManager, "잠시 후 다시 시도해줘")
             }
         }
+        binding.recyclerView.adapter = adapter.withLoadStateFooter(
+            footer = LinkLoadStateAdapter()
+        )
     }
 
     private fun setOnClickListener() {
@@ -182,7 +190,7 @@ class LinkFragment : Fragment() {
         super.onDestroy()
     }
 
-    companion object{
+    companion object {
         const val requestKey = "requestKey"
         const val shouldRefreshPaging = "shouldRefreshPaging"
     }
