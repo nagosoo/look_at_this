@@ -28,7 +28,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         if (savedInstanceState == null) {
             setPage()
-            postFcmToken()
         }
     }
 
@@ -51,12 +50,4 @@ class MainActivity : AppCompatActivity() {
         binding.appbar.tvTitle.text = title
     }
 
-    private fun postFcmToken() {
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                return@OnCompleteListener
-            }
-            viewModel.postFcmToken(task.result)
-        })
-    }
 }

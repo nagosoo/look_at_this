@@ -20,6 +20,8 @@ import com.eunji.lookatthis.presentation.util.DisplayUnitUtil.dpToPx
 import com.eunji.lookatthis.presentation.view.MainActivity
 import com.eunji.lookatthis.presentation.view.alarm_setting.AlarmSettingFragment
 import com.eunji.lookatthis.presentation.view.link_register.LinkRegisterFragment
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -30,6 +32,22 @@ class LinkFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: LinkViewModel by viewModels()
     private val adapter by lazy { LinkAdapter(::read, ::bookmark) }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if(savedInstanceState==null){
+            postFcmToken()
+        }
+    }
+
+    private fun postFcmToken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                return@OnCompleteListener
+            }
+            viewModel.postFcmToken(task.result)
+        })
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
