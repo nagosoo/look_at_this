@@ -8,10 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.core.view.postDelayed
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
@@ -27,6 +30,7 @@ import com.eunji.lookatthis.presentation.view.link_register.LinkRegisterFragment
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -36,7 +40,6 @@ class LinkFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: LinkViewModel by viewModels()
     private val adapter by lazy { LinkAdapter(::read, ::bookmark) }
-    private var isFragmentCreateFirstTime = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,29 +72,39 @@ class LinkFragment : Fragment() {
         setPagingAdapter()
         setOnClickListener()
         setSwipeLayout()
-        //처음에 init
-        if (isFragmentCreateFirstTime) init()
-        setFragmentResultListener(requestKey) { requestKey, bundle ->
+        init()
+        setFragmentResultListener(requestKey) { _, bundle ->
             val result = bundle.getBoolean(shouldRefreshPaging, false)
             if (!result) return@setFragmentResultListener
+            binding.swipeRefreshLayout.isRefreshing = true
             adapter.refresh()
+            scrollToTop()
         }
     }
 
     private fun setSwipeLayout() {
         binding.swipeRefreshLayout.setOnRefreshListener {
             adapter.refresh()
+            scrollToTop()
+        }
+    }
+
+    private fun scrollToTop(){
+        //submitData완료후에 0번째 아이템을 찾아가기 위함
+        binding.recyclerView.postDelayed(500){
+            binding.recyclerView.scrollToPosition(0)
             binding.swipeRefreshLayout.isRefreshing = false
         }
     }
 
     private fun init() {
-        isFragmentCreateFirstTime = false
-        lifecycleScope.launchWhenStarted {
-            viewModel.getLinks()
-                .collectLatest { pagingData ->
-                    adapter.submitData(pagingData)
-                }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.links
+                    .collectLatest { pagingData ->
+                        adapter.submitData(pagingData)
+                    }
+            }
         }
     }
 
@@ -101,7 +114,10 @@ class LinkFragment : Fragment() {
                 Intent(Intent.ACTION_VIEW, Uri.parse(url))
             ContextCompat.startActivity(requireContext(), browserIntent, null)
         } catch (e: Exception) {
-            DialogUtil.showErrorDialog(parentFragmentManager, getString(R.string.text_fail_open_url))
+            DialogUtil.showErrorDialog(
+                parentFragmentManager,
+                getString(R.string.text_fail_open_url)
+            )
         }
     }
 
@@ -173,14 +189,14 @@ class LinkFragment : Fragment() {
             footer = LinkLoadStateAdapter()
         )
         //새로운 아이템이 추가되면 맨 첫번째 아이템으로 이동 시킴
-        adapter.registerAdapterDataObserver(object : AdapterDataObserver() {
-            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                super.onItemRangeInserted(positionStart, itemCount)
-                if (positionStart == 0) {
-                    binding.recyclerView.scrollToPosition(0)
-                }
-            }
-        })
+//        adapter.registerAdapterDataObserver(object : AdapterDataObserver() {
+//            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+//                super.onItemRangeInserted(positionStart, itemCount)
+//                if (positionStart == 0) {
+//                    //binding.recyclerView.scrollToPosition(0)
+//                }
+//            }
+//        })
     }
 
     private fun setOnClickListener() {

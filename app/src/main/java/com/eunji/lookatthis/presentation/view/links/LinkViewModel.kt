@@ -1,7 +1,5 @@
 package com.eunji.lookatthis.presentation.view.links
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -19,7 +17,6 @@ import com.eunji.lookatthis.presentation.util.ApiRetry
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -33,10 +30,9 @@ class LinkViewModel @Inject constructor(
     private val postFcmTokenUseCase: PostFcmTokenUseCase,
 ) : ViewModel() {
 
-    fun getLinks(): Flow<PagingData<LinkModel>> {
-        return getLinkUseCase()
+    val links: Flow<PagingData<LinkModel>> =
+        getLinkUseCase()
             .cachedIn(viewModelScope)
-    }
 
     fun read(linkId: Int): Flow<UiState<LinkModel?>> {
         return postLinkReadUseCase(
