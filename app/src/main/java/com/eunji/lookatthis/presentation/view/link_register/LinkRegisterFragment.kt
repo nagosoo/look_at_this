@@ -4,18 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.eunji.lookatthis.data.model.LinkModel
 import com.eunji.lookatthis.databinding.FragmentLinkRegisterBinding
 import com.eunji.lookatthis.domain.UiState
 import com.eunji.lookatthis.presentation.util.ClipboardHelper
 import com.eunji.lookatthis.presentation.util.DialogUtil
 import com.eunji.lookatthis.presentation.view.MainActivity
+import com.eunji.lookatthis.presentation.view.links.LinkFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -96,7 +97,7 @@ class LinkRegisterFragment : Fragment() {
     private fun render(uiState: UiState<LinkModel?>) {
         when (uiState) {
             is UiState.Loading -> {
-                DialogUtil.showLoadingDialog(parentFragmentManager,requireContext())
+                DialogUtil.showLoadingDialog(parentFragmentManager, requireContext())
             }
 
             is UiState.Success -> {
@@ -106,6 +107,10 @@ class LinkRegisterFragment : Fragment() {
                         parentFragmentManager,
                         requireContext()
                     ) {
+                        setFragmentResult(
+                            LinkFragment.requestKey,
+                            bundleOf(LinkFragment.shouldRefreshPaging to true)
+                        )
                         parentFragmentManager.popBackStack()
                     }
                 }

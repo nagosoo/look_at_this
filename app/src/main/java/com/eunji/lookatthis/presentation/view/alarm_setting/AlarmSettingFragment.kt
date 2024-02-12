@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.os.bundleOf
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.eunji.lookatthis.R
@@ -23,6 +25,7 @@ import com.eunji.lookatthis.presentation.util.DialogUtil.showErrorDialog
 import com.eunji.lookatthis.presentation.util.DialogUtil.showLoadingDialog
 import com.eunji.lookatthis.presentation.view.MainActivity
 import com.eunji.lookatthis.presentation.view.MainViewModel
+import com.eunji.lookatthis.presentation.view.links.LinkFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -98,6 +101,10 @@ class AlarmSettingFragment : Fragment() {
 
             is UiState.Success -> {
                 saveAlarmCache(alarmType)
+                setFragmentResult(
+                    LinkFragment.requestKey,
+                    bundleOf(LinkFragment.shouldRefreshPaging to false)
+                )
                 parentFragmentManager.popBackStack()
             }
 

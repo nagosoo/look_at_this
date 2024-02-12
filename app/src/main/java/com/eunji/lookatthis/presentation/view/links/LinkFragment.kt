@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.PagingData
@@ -32,10 +33,11 @@ class LinkFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: LinkViewModel by viewModels()
     private val adapter by lazy { LinkAdapter(::read, ::bookmark) }
+    private var isFragmentCreateFirstTime = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if(savedInstanceState==null){
+        if (savedInstanceState == null) {
             postFcmToken()
         }
     }
@@ -58,24 +60,28 @@ class LinkFragment : Fragment() {
         return binding.root
     }
 
-    var isfirst = true
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as? MainActivity)?.setAppBarTitle(getString(R.string.app_name))
         setPagingAdapter()
         setOnClickListener()
-        init()
+        //처음에 init
+        if(isFragmentCreateFirstTime) init()
+        setFragmentResultListener(requestKey) { requestKey, bundle ->
+            val result = bundle.getBoolean(shouldRefreshPaging, false)
+            if(!result) return@setFragmentResultListener
+            init()
+            binding.recyclerView.scrollToPosition(0)
+        }
     }
 
     private fun init() {
-        if (isfirst) {
-            viewLifecycleOwner.lifecycleScope.launch {
-                isfirst = false
-                viewModel.getLinks()
-                    .collectLatest { pagingData ->
-                        adapter.submitData(lifecycle, pagingData)
-                    }
-            }
+        isFragmentCreateFirstTime = false
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.getLinks()
+                .collectLatest { pagingData ->
+                    adapter.submitData(pagingData)
+                }
         }
     }
 
@@ -87,7 +93,7 @@ class LinkFragment : Fragment() {
 
     private fun read(link: LinkModel) {
         viewLifecycleOwner.lifecycleScope.launch {
-            if(!link.isRead) setRead(link.linkId)
+            if (!link.isRead) setRead(link.linkId)
             viewModel.read(link.linkId)
                 .collect {
                     openUrl(link.linkUrl)
@@ -175,4 +181,10 @@ class LinkFragment : Fragment() {
         _binding = null
         super.onDestroy()
     }
+
+    companion object{
+        const val requestKey = "requestKey"
+        const val shouldRefreshPaging = "shouldRefreshPaging"
+    }
+
 }

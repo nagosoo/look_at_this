@@ -1,5 +1,7 @@
 package com.eunji.lookatthis.presentation.view.links
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -31,16 +33,9 @@ class LinkViewModel @Inject constructor(
     private val postFcmTokenUseCase: PostFcmTokenUseCase,
 ) : ViewModel() {
 
-    fun getLinks(): StateFlow<PagingData<LinkModel>> {
+    fun getLinks(): Flow<PagingData<LinkModel>> {
         return getLinkUseCase()
             .cachedIn(viewModelScope)
-            .stateIn(
-                initialValue = PagingData.empty(),
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(
-                    stopTimeoutMillis = 5000
-                )
-            )
     }
 
     fun read(linkId: Int): Flow<UiState<LinkModel?>> {
