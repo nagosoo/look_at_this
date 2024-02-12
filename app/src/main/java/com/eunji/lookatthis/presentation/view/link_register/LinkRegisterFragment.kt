@@ -95,9 +95,12 @@ class LinkRegisterFragment : Fragment() {
 
     private fun render(uiState: UiState<LinkModel?>) {
         when (uiState) {
-            is UiState.Loading -> {}
+            is UiState.Loading -> {
+                DialogUtil.showLoadingDialog(parentFragmentManager,requireContext())
+            }
 
             is UiState.Success -> {
+                DialogUtil.closeDialog(parentFragmentManager)
                 uiState.value?.let { value ->
                     DialogUtil.showRegisterLinkSuccessDialog(
                         parentFragmentManager,
