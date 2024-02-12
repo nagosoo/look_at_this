@@ -96,9 +96,13 @@ class LinkFragment : Fragment() {
     }
 
     private fun openUrl(url: String) {
-        val browserIntent =
-            Intent(Intent.ACTION_VIEW, Uri.parse(url))
-        ContextCompat.startActivity(requireContext(), browserIntent, null)
+        try {
+            val browserIntent =
+                Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            ContextCompat.startActivity(requireContext(), browserIntent, null)
+        } catch (e: Exception) {
+            DialogUtil.showErrorDialog(parentFragmentManager, getString(R.string.text_fail_open_url))
+        }
     }
 
     private fun read(link: LinkModel) {
