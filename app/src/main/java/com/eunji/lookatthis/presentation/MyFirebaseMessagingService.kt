@@ -51,15 +51,14 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     @SuppressLint("MissingPermission")
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         val mIntent = Intent(this, MainActivity::class.java).apply {
-            //FLAG_ACTIVITY_NEW_TASK
-            //이 액티비티가 실행될때 새로운 task를 만든다.
-            //혹시 이미 이 액티비티기 있는 task가 있다면 그 task에서 실행됨
-            //FLAG_ACTIVITY_CLEAR_TASK
-            //task에서 이 액티비티 말고 다른 액티비티는 모두 제거함
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            //FLAG_ACTIVITY_CLEAR_TOP
+            //호출하려는 액티비티가 스택에 존재하면, 해당 액티비티를 최상위로 올리면서 그 위에 존재하던 액티비티를 전부 삭제한다.
+            //FLAG_ACTIVITY_SINGLE_TOP
+            //top activity와 동일한 activity 실행 시, 해당 activity를 다시 생성하지 않고 기존의 top activity 재사용
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         }
         val pendingIntent: PendingIntent =
-            PendingIntent.getActivity(this, 0, mIntent, PendingIntent.FLAG_IMMUTABLE)
+            PendingIntent.getActivity(this, Random.nextInt(), mIntent, PendingIntent.FLAG_IMMUTABLE)
 
 
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)

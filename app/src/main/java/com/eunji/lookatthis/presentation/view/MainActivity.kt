@@ -1,6 +1,8 @@
 package com.eunji.lookatthis.presentation.view
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -20,7 +22,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,13 +32,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        setPage()
+    }
+
     private fun setPage() {
         val extra = intent.getStringExtra(EXTRA_PAGE)
-        extra?.let { extra ->
-            if (extra == SIGN_UP) replaceFragment(SignUpFragment())
-            else if (extra == SIGN_IN) replaceFragment(SignInFragment())
-            else replaceFragment(LinkFragment())
-        }
+        if (extra == SIGN_UP) replaceFragment(SignUpFragment())
+        else if (extra == SIGN_IN) replaceFragment(SignInFragment())
+        else replaceFragment(LinkFragment())
     }
 
     private fun replaceFragment(fragment: Fragment) {
