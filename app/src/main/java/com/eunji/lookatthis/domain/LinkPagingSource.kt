@@ -12,9 +12,7 @@ class LinkPagingSource(
 ) : PagingSource<Int, LinkModel>() {
 
     override fun getRefreshKey(state: PagingState<Int, LinkModel>): Int? {
-        return state.anchorPosition?.let { anchorPosition ->
-            state.closestItemToPosition(anchorPosition)?.linkId
-        }
+        return null //refresh시 항상 처음부터 로드
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, LinkModel> {

@@ -39,10 +39,11 @@ android {
 
     buildTypes {
         getByName("debug"){
-            buildConfigField("String", "baseUrl", "\"http://192.168.0.110:8080\"")
+            buildConfigField("String", "baseUrl", "\"http://192.168.0.109:8080\"")
         }
 
         getByName("release") {
+
             signingConfig = signingConfigs.getByName("release")
             buildConfigField("String", "baseUrl", "\"http://lookatthisbe-env.eba-mmt8camh.ap-northeast-2.elasticbeanstalk.com\"")
             isMinifyEnabled = false
@@ -120,9 +121,12 @@ dependencies {
     //splash
     implementation ("androidx.core:core-splashscreen:1.0.1")
 
-    //paging
+    //paging경
     implementation("androidx.paging:paging-common:3.2.1")
     implementation("androidx.paging:paging-runtime:3.2.1")
+
+    //swiperefreshlayout
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
 }
 

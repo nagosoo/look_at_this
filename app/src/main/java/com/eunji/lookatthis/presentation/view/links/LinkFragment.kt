@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.paging.PagingData
+import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import com.eunji.lookatthis.R
 import com.eunji.lookatthis.data.model.LinkModel
 import com.eunji.lookatthis.databinding.FragmentMainBinding
@@ -67,19 +68,26 @@ class LinkFragment : Fragment() {
         (requireActivity() as? MainActivity)?.setAppBarTitle(getString(R.string.app_name))
         setPagingAdapter()
         setOnClickListener()
+        setSwipeLayout()
         //처음에 init
         if (isFragmentCreateFirstTime) init()
         setFragmentResultListener(requestKey) { requestKey, bundle ->
             val result = bundle.getBoolean(shouldRefreshPaging, false)
             if (!result) return@setFragmentResultListener
-            init()
-            binding.recyclerView.scrollToPosition(0)
+            adapter.refresh()
+        }
+    }
+
+    private fun setSwipeLayout() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            adapter.refresh()
+            binding.swipeRefreshLayout.isRefreshing = false
         }
     }
 
     private fun init() {
         isFragmentCreateFirstTime = false
-        viewLifecycleOwner.lifecycleScope.launch {
+        lifecycleScope.launchWhenStarted {
             viewModel.getLinks()
                 .collectLatest { pagingData ->
                     adapter.submitData(pagingData)
@@ -160,6 +168,15 @@ class LinkFragment : Fragment() {
         binding.recyclerView.adapter = adapter.withLoadStateFooter(
             footer = LinkLoadStateAdapter()
         )
+        //새로운 아이템이 추가되면 맨 첫번째 아이템으로 이동 시킴
+        adapter.registerAdapterDataObserver(object : AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                super.onItemRangeInserted(positionStart, itemCount)
+                if (positionStart == 0) {
+                    binding.recyclerView.scrollToPosition(0)
+                }
+            }
+        })
     }
 
     private fun setOnClickListener() {
