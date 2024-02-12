@@ -1,11 +1,11 @@
-package com.eunji.lookatthis.presentation.view.main
+package com.eunji.lookatthis.presentation.view.links
 
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
 
-class MainRecyclerViewItemDecoration(private val bottom: Int) : RecyclerView.ItemDecoration() {
+class LinkRecyclerViewItemDecoration(private val bottom: Int) : RecyclerView.ItemDecoration() {
     override fun getItemOffsets(
         outRect: Rect,
         view: View,

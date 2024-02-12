@@ -1,6 +1,5 @@
-package com.eunji.lookatthis.presentation.view.main
+package com.eunji.lookatthis.presentation.view.links
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -20,7 +19,7 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class MainFragmentViewModel @Inject constructor(
+class LinkViewModel @Inject constructor(
     private val getLinkUseCase: GetLinkUseCase,
     private val postLinkReadUseCase: PostLinkReadUseCase,
     private val postLinkBookmarkUseCase: PostLinkBookmarkUseCase,

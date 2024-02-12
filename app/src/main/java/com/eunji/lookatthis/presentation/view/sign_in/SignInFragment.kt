@@ -14,7 +14,7 @@ import com.eunji.lookatthis.databinding.FragmentSignInBinding
 import com.eunji.lookatthis.domain.UiState
 import com.eunji.lookatthis.presentation.util.DialogUtil.showErrorDialog
 import com.eunji.lookatthis.presentation.view.MainActivity
-import com.eunji.lookatthis.presentation.view.main.MainFragment
+import com.eunji.lookatthis.presentation.view.links.LinkFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -84,7 +84,7 @@ class SignInFragment : Fragment() {
 
     private fun goToMain() {
         parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, MainFragment())
+            .replace(R.id.fragment_container, LinkFragment())
             .commit()
     }
 

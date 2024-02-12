@@ -1,4 +1,4 @@
-package com.eunji.lookatthis.presentation.view.main
+package com.eunji.lookatthis.presentation.view.links
 
 import android.net.Uri
 import android.view.LayoutInflater
@@ -15,18 +15,18 @@ import com.eunji.lookatthis.data.model.LinkModel
 import com.eunji.lookatthis.databinding.ItemMainBinding
 
 
-class MainAdapter(
-    private val read: (Int, String) -> Unit,
+class LinkAdapter(
+    private val read: (LinkModel) -> Unit,
     private val bookmark: (Int,Boolean) -> Unit
 ) :
-    PagingDataAdapter<LinkModel, MainAdapter.ViewHolder>(DIFF_UTIL) {
+    PagingDataAdapter<LinkModel, LinkAdapter.ViewHolder>(DIFF_UTIL) {
 
     inner class ViewHolder(val binding: ItemMainBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(linkModel: LinkModel) {
             with(binding) {
                 imageView.setOnClickListener {
-                    read(linkModel.linkId, linkModel.linkUrl)
+                    read(linkModel)
                 }
                 ivLike.setOnClickListener {
                     bookmark(linkModel.linkId, linkModel.isBookmarked)

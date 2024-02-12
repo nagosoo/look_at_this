@@ -9,7 +9,7 @@ import com.eunji.lookatthis.databinding.ActivityMainBinding
 import com.eunji.lookatthis.presentation.Constance.EXTRA_PAGE
 import com.eunji.lookatthis.presentation.Constance.SIGN_IN
 import com.eunji.lookatthis.presentation.Constance.SIGN_UP
-import com.eunji.lookatthis.presentation.view.main.MainFragment
+import com.eunji.lookatthis.presentation.view.links.LinkFragment
 import com.eunji.lookatthis.presentation.view.sign_in.SignInFragment
 import com.eunji.lookatthis.presentation.view.sign_up.SignUpFragment
 import com.google.android.gms.tasks.OnCompleteListener
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         extra?.let { extra ->
             if (extra == SIGN_UP) replaceFragment(SignUpFragment())
             else if (extra == SIGN_IN) replaceFragment(SignInFragment())
-            else replaceFragment(MainFragment())
+            else replaceFragment(LinkFragment())
         }
     }
 

@@ -10,7 +10,6 @@ import com.eunji.lookatthis.presentation.model.AlarmType
 import com.eunji.lookatthis.presentation.util.ApiRetry.retry
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

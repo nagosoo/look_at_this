@@ -1,4 +1,4 @@
-package com.eunji.lookatthis.presentation.view.main
+package com.eunji.lookatthis.presentation.view.links
 
 import android.content.Intent
 import android.net.Uri
@@ -9,12 +9,10 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import androidx.paging.LoadState
 import androidx.paging.PagingData
 import com.eunji.lookatthis.R
+import com.eunji.lookatthis.data.model.LinkModel
 import com.eunji.lookatthis.databinding.FragmentMainBinding
 import com.eunji.lookatthis.domain.UiState
 import com.eunji.lookatthis.presentation.util.DialogUtil
@@ -27,11 +25,11 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MainFragment : Fragment() {
+class LinkFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: MainFragmentViewModel by viewModels()
-    private val adapter by lazy { MainAdapter(::read, ::bookmark) }
+    private val viewModel: LinkViewModel by viewModels()
+    private val adapter by lazy { LinkAdapter(::read, ::bookmark) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,21 +40,23 @@ class MainFragment : Fragment() {
         return binding.root
     }
 
+    var isfirst = true
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as? MainActivity)?.setAppBarTitle(getString(R.string.app_name))
         setPagingAdapter()
         setOnClickListener()
-        getLinks()
+        init()
     }
 
-    private fun getLinks() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            //Todo::필요한지?
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.getLinks().collectLatest { pagingData ->
-                    adapter.submitData(pagingData)
-                }
+    private fun init() {
+        if (isfirst) {
+            viewLifecycleOwner.lifecycleScope.launch {
+                isfirst = false
+                viewModel.getLinks()
+                    .collectLatest { pagingData ->
+                        adapter.submitData(lifecycle, pagingData)
+                    }
             }
         }
     }
@@ -67,13 +67,26 @@ class MainFragment : Fragment() {
         ContextCompat.startActivity(requireContext(), browserIntent, null)
     }
 
-    private fun read(linkId: Int, url: String) {
+    private fun read(link: LinkModel) {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.read(linkId)
+            toggleRead(link.linkId, link.isRead)
+            viewModel.read(link.linkId)
                 .collect {
-                    openUrl(url)
+                    openUrl(link.linkUrl)
                 }
         }
+    }
+
+    private suspend fun toggleRead(linkId: Int, isRead: Boolean) {
+        adapter.submitData(
+            PagingData.from(adapter.snapshot().items.map { link ->
+                if (link.linkId == linkId) {
+                    link.copy(
+                        isRead = !isRead
+                    )
+                } else link
+            })
+        )
     }
 
     private fun bookmark(linkId: Int, isBookmarked: Boolean) {
@@ -105,12 +118,12 @@ class MainFragment : Fragment() {
     private fun setPagingAdapter() {
         val paddingBottom = dpToPx(20f, requireContext())
         binding.recyclerView.adapter = adapter
-        binding.recyclerView.addItemDecoration(MainRecyclerViewItemDecoration(paddingBottom))
+        binding.recyclerView.addItemDecoration(LinkRecyclerViewItemDecoration(paddingBottom))
         adapter.addLoadStateListener { combinedLoadStates ->
-            if(combinedLoadStates.append.endOfPaginationReached) {
-                if(adapter.itemCount < 1) {
+            if (combinedLoadStates.append.endOfPaginationReached) {
+                if (adapter.itemCount < 1) {
                     binding.layoutEmpty.root.visibility = View.VISIBLE
-                }else {
+                } else {
                     binding.layoutEmpty.root.visibility = View.GONE
                 }
             }

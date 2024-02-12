@@ -7,16 +7,14 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.eunji.lookatthis.R
 import com.eunji.lookatthis.data.model.BasicTokenModel
 import com.eunji.lookatthis.databinding.FragmentSignUpBinding
 import com.eunji.lookatthis.domain.UiState
 import com.eunji.lookatthis.presentation.util.DialogUtil.showErrorDialog
 import com.eunji.lookatthis.presentation.view.MainActivity
-import com.eunji.lookatthis.presentation.view.main.MainFragment
+import com.eunji.lookatthis.presentation.view.links.LinkFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -111,7 +109,7 @@ class SignUpFragment : Fragment() {
 
     private fun goToMain() {
         parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, MainFragment())
+            .replace(R.id.fragment_container, LinkFragment())
             .commit()
     }
 

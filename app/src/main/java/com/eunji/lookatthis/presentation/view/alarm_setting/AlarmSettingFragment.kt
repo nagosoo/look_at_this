@@ -1,21 +1,16 @@
 package com.eunji.lookatthis.presentation.view.alarm_setting
 
-import android.opengl.Visibility
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.ViewCompat.jumpDrawablesToCurrentState
 import androidx.core.view.children
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.eunji.lookatthis.R
 import com.eunji.lookatthis.data.model.AlarmModel
 import com.eunji.lookatthis.databinding.FragmentAlarmSettingBinding
@@ -26,7 +21,6 @@ import com.eunji.lookatthis.presentation.util.AlarmUtil.getAlarmTypeFromAlarmMod
 import com.eunji.lookatthis.presentation.util.DialogUtil.closeDialog
 import com.eunji.lookatthis.presentation.util.DialogUtil.showErrorDialog
 import com.eunji.lookatthis.presentation.util.DialogUtil.showLoadingDialog
-import com.eunji.lookatthis.presentation.view.CommonDialog
 import com.eunji.lookatthis.presentation.view.MainActivity
 import com.eunji.lookatthis.presentation.view.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -115,7 +109,7 @@ class AlarmSettingFragment : Fragment() {
 
     private fun setCheckBoxChecked(alarmType: AlarmType) {
         alarmTypes.forEachIndexed { index, type ->
-           checkBoxs[index]?.isChecked = type == alarmType
+            checkBoxs[index]?.isChecked = type == alarmType
         }
     }
 
@@ -142,7 +136,7 @@ class AlarmSettingFragment : Fragment() {
         checkBoxs.forEachIndexed { index, checkBox ->
             checkBox?.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    binding.customItem15Pm.checkBox.isChecked = true 
+                    binding.customItem15Pm.checkBox.isChecked = true
                     viewModel.setCheckedItem(alarmTypes[index])
                     setCheckBoxChecked(alarmTypes[index])
                 }
@@ -154,4 +148,5 @@ class AlarmSettingFragment : Fragment() {
         _binding = null
         super.onDestroyView()
     }
+
 }
