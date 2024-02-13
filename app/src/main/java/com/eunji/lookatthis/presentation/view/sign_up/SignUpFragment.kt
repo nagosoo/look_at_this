@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.eunji.lookatthis.R
 import com.eunji.lookatthis.data.model.BasicTokenModel
 import com.eunji.lookatthis.databinding.FragmentSignUpBinding
@@ -72,7 +74,18 @@ class SignUpFragment : Fragment() {
 
     private fun setOnClickListener() {
         binding.buttonSignUp.setOnClickListener {
+            subscribeUiState()
             signUp()
+        }
+    }
+
+    private fun subscribeUiState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { uiState ->
+                    render(uiState)
+                }
+            }
         }
     }
 
@@ -82,14 +95,10 @@ class SignUpFragment : Fragment() {
             return
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.postAccountResultFlow(
-                id = viewModel.id.value!!,
-                password = viewModel.password.value!!,
-            ).collect {
-                render(it)
-            }
-        }
+        viewModel.postAccountResultFlow(
+            id = viewModel.id.value!!,
+            password = viewModel.password.value!!,
+        )
     }
 
     private fun render(uiState: UiState<BasicTokenModel?>) {

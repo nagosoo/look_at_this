@@ -60,6 +60,7 @@ class AlarmSettingFragment : Fragment() {
         (requireActivity() as? MainActivity)?.setAppBarTitle(getString(R.string.text_alarm_setting_appbar))
         setOnClickListener()
         init()
+        subscribeUiState()
     }
 
     private fun init() {
@@ -67,6 +68,9 @@ class AlarmSettingFragment : Fragment() {
             val alarmModel = getAlarmModelFromAlarmType(alarmType)
             renderUiState(UiState.Success(alarmModel))
         }
+    }
+
+    private fun subscribeUiState() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { uiState ->
@@ -74,6 +78,9 @@ class AlarmSettingFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun subscribeResult() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.resultState.collect { uiState ->
@@ -90,8 +97,8 @@ class AlarmSettingFragment : Fragment() {
     private fun renderUiState(uiState: UiState<AlarmModel?>) {
         when (uiState) {
             is UiState.Loading -> {
-                if(viewModel.checkedAlarmType.value==null)
-                showLoadingDialog(parentFragmentManager, requireContext())
+                if (viewModel.checkedAlarmType.value == null)
+                    showLoadingDialog(parentFragmentManager, requireContext())
             }
 
             is UiState.Success -> {
@@ -139,9 +146,7 @@ class AlarmSettingFragment : Fragment() {
     private fun saveAlarm() {
         viewModel.checkedAlarmType.value?.let { alarmType ->
             val alarmModel = getAlarmModelFromAlarmType(alarmType)
-            viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.postAlarmSetting(alarmModel)
-            }
+            viewModel.postAlarmSetting(alarmModel)
         }
     }
 
@@ -151,6 +156,7 @@ class AlarmSettingFragment : Fragment() {
 
     private fun setOnClickListener() {
         binding.btnOk.setOnClickListener {
+            subscribeResult()
             saveAlarm()
         }
 

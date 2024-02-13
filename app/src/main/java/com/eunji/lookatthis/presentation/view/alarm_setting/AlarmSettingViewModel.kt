@@ -48,18 +48,20 @@ class AlarmSettingViewModel @Inject constructor(
         }
     }
 
-    suspend fun postAlarmSetting(alarmModel: AlarmModel) {
-        postAlarmSettingUseCase(alarmModel)
-            .stateIn(
-                initialValue = UiState.Loading,
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(
-                    stopTimeoutMillis = 5000
+    fun postAlarmSetting(alarmModel: AlarmModel) {
+        viewModelScope.launch {
+            postAlarmSettingUseCase(alarmModel)
+                .stateIn(
+                    initialValue = UiState.Loading,
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(
+                        stopTimeoutMillis = 5000
+                    )
                 )
-            )
-            .collect { uiState ->
-                _resultState.value = uiState
-            }
+                .collect { uiState ->
+                    _resultState.value = uiState
+                }
+        }
     }
 
     fun setCheckedItem(item: AlarmType) {
