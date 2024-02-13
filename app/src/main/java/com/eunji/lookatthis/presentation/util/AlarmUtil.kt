@@ -12,10 +12,10 @@ object AlarmUtil {
         )
     }
 
-    fun getAlarmTypeFromAlarmModel(alarmModel: AlarmModel, alarmTypes: List<AlarmType>): AlarmType {
+    fun getAlarmTypeFromAlarmModel(alarmModel: AlarmModel): AlarmType {
         if (alarmModel.keepReceiveAlarms) return AlarmType.EVERY_TIME
         else {
-            alarmTypes.forEach { alarmType ->
+            AlarmType.values().forEach { alarmType ->
                 if (alarmModel.alarmTime == alarmType.time) {
                     return alarmType
                 }

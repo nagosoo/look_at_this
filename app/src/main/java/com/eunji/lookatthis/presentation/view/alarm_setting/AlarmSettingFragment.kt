@@ -12,7 +12,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.eunji.lookatthis.R
 import com.eunji.lookatthis.data.model.AlarmModel
 import com.eunji.lookatthis.databinding.FragmentAlarmSettingBinding
@@ -63,26 +65,39 @@ class AlarmSettingFragment : Fragment() {
     private fun init() {
         mainViewModel.alarmType.value?.let { alarmType ->
             val alarmModel = getAlarmModelFromAlarmType(alarmType)
-            renderGetAlarmApiResult(UiState.Success(alarmModel))
-            return
+            renderUiState(UiState.Success(alarmModel))
         }
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.getAlarmSetting().collect { uiState ->
-                renderGetAlarmApiResult(uiState)
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { uiState ->
+                    renderUiState(uiState)
+                }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.resultState.collect { uiState ->
+                    viewModel.checkedAlarmType.value?.let { alarmType ->
+                        val alarmModel =
+                            getAlarmModelFromAlarmType(alarmType)
+                        renderResultState(uiState, alarmModel)
+                    }
+                }
             }
         }
     }
 
-    private fun renderGetAlarmApiResult(uiState: UiState<AlarmModel?>) {
+    private fun renderUiState(uiState: UiState<AlarmModel?>) {
         when (uiState) {
             is UiState.Loading -> {
+                if(viewModel.checkedAlarmType.value==null)
                 showLoadingDialog(parentFragmentManager, requireContext())
             }
 
             is UiState.Success -> {
                 closeDialog(parentFragmentManager)
                 uiState.value?.let { alarmModel ->
-                    val alarmType = getAlarmTypeFromAlarmModel(alarmModel, alarmTypes)
+                    val alarmType = getAlarmTypeFromAlarmModel(alarmModel)
                     saveAlarmCache(alarmType)
                     setCheckBoxChecked(alarmType)
                 }
@@ -94,12 +109,13 @@ class AlarmSettingFragment : Fragment() {
         }
     }
 
-    private fun renderPostAlarmResult(uiState: UiState<AlarmModel?>, alarmType: AlarmType) {
+    private fun renderResultState(uiState: UiState<AlarmModel?>, alarmModel: AlarmModel) {
         when (uiState) {
             is UiState.Loading -> {
             }
 
             is UiState.Success -> {
+                val alarmType = getAlarmTypeFromAlarmModel(alarmModel)
                 saveAlarmCache(alarmType)
                 setFragmentResult(
                     LinkFragment.requestKey,
@@ -124,9 +140,7 @@ class AlarmSettingFragment : Fragment() {
         viewModel.checkedAlarmType.value?.let { alarmType ->
             val alarmModel = getAlarmModelFromAlarmType(alarmType)
             viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.postAlarmSetting(alarmModel).collect { uiState ->
-                    renderPostAlarmResult(uiState, alarmType)
-                }
+                viewModel.postAlarmSetting(alarmModel)
             }
         }
     }
