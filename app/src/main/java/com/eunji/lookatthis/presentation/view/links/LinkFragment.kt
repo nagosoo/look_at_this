@@ -1,12 +1,9 @@
 package com.eunji.lookatthis.presentation.view.links
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.view.postDelayed
 import androidx.fragment.app.Fragment
@@ -17,20 +14,19 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
 import androidx.paging.PagingData
-import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import com.eunji.lookatthis.R
 import com.eunji.lookatthis.data.model.LinkModel
 import com.eunji.lookatthis.databinding.FragmentMainBinding
 import com.eunji.lookatthis.domain.UiState
 import com.eunji.lookatthis.presentation.util.DialogUtil
 import com.eunji.lookatthis.presentation.util.DisplayUnitUtil.dpToPx
+import com.eunji.lookatthis.presentation.util.UrlOpenUtil.openUrl
 import com.eunji.lookatthis.presentation.view.MainActivity
 import com.eunji.lookatthis.presentation.view.alarm_setting.AlarmSettingFragment
 import com.eunji.lookatthis.presentation.view.link_register.LinkRegisterFragment
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -89,9 +85,9 @@ class LinkFragment : Fragment() {
         }
     }
 
-    private fun scrollToTop(){
+    private fun scrollToTop() {
         //submitData완료후에 0번째 아이템을 찾아가기 위함
-        binding.recyclerView.postDelayed(500){
+        binding.recyclerView.postDelayed(500) {
             binding.recyclerView.scrollToPosition(0)
             binding.swipeRefreshLayout.isRefreshing = false
         }
@@ -108,25 +104,12 @@ class LinkFragment : Fragment() {
         }
     }
 
-    private fun openUrl(url: String) {
-        try {
-            val browserIntent =
-                Intent(Intent.ACTION_VIEW, Uri.parse(url))
-            ContextCompat.startActivity(requireContext(), browserIntent, null)
-        } catch (e: Exception) {
-            DialogUtil.showErrorDialog(
-                parentFragmentManager,
-                getString(R.string.text_fail_open_url)
-            )
-        }
-    }
-
     private fun read(link: LinkModel) {
         viewLifecycleOwner.lifecycleScope.launch {
             if (!link.isRead) setRead(link.linkId)
             viewModel.read(link.linkId)
                 .collect {
-                    openUrl(link.linkUrl)
+                    openUrl(link.linkUrl, requireContext(), parentFragmentManager)
                 }
         }
     }
