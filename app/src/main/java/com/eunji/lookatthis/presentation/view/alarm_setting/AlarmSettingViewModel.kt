@@ -32,7 +32,7 @@ class AlarmSettingViewModel @Inject constructor(
         MutableStateFlow(UiState.Loading)
     val resultState: StateFlow<UiState<AlarmModel?>> = _resultState
 
-    init {
+    fun getAlarmSetting() {
         viewModelScope.launch {
             getAlarmSettingUseCase()
                 .stateIn(

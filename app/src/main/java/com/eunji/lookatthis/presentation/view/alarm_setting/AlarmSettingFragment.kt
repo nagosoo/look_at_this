@@ -24,7 +24,6 @@ import com.eunji.lookatthis.presentation.util.AlarmUtil.getAlarmModelFromAlarmTy
 import com.eunji.lookatthis.presentation.util.AlarmUtil.getAlarmTypeFromAlarmModel
 import com.eunji.lookatthis.presentation.util.DialogUtil.closeDialog
 import com.eunji.lookatthis.presentation.util.DialogUtil.showErrorDialog
-import com.eunji.lookatthis.presentation.util.DialogUtil.showLoadingDialog
 import com.eunji.lookatthis.presentation.view.MainActivity
 import com.eunji.lookatthis.presentation.view.MainViewModel
 import com.eunji.lookatthis.presentation.view.links.LinkFragment
@@ -60,13 +59,16 @@ class AlarmSettingFragment : Fragment() {
         (requireActivity() as? MainActivity)?.setAppBarTitle(getString(R.string.text_alarm_setting_appbar))
         setOnClickListener()
         init()
-        subscribeUiState()
     }
 
     private fun init() {
-        mainViewModel.alarmType.value?.let { alarmType ->
-            val alarmModel = getAlarmModelFromAlarmType(alarmType)
+        val cachedAlarm = mainViewModel.alarmType.value
+        if (cachedAlarm != null) {
+            val alarmModel = getAlarmModelFromAlarmType(cachedAlarm)
             renderUiState(UiState.Success(alarmModel))
+        } else {
+            subscribeUiState()
+            viewModel.getAlarmSetting()
         }
     }
 
@@ -97,8 +99,8 @@ class AlarmSettingFragment : Fragment() {
     private fun renderUiState(uiState: UiState<AlarmModel?>) {
         when (uiState) {
             is UiState.Loading -> {
-                if (viewModel.checkedAlarmType.value == null)
-                    showLoadingDialog(parentFragmentManager, requireContext())
+//                if (viewModel.checkedAlarmType.value == null)
+//                    showLoadingDialog(parentFragmentManager, requireContext())
             }
 
             is UiState.Success -> {
