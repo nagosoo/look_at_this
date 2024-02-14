@@ -13,6 +13,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.eunji.lookatthis.R
 import com.eunji.lookatthis.data.model.LinkModel
 import com.eunji.lookatthis.databinding.ItemMainBinding
+import com.eunji.lookatthis.presentation.util.DateUtil
 
 
 class LinkAdapter(
@@ -35,8 +36,12 @@ class LinkAdapter(
                 setMemo(linkModel)
                 setReadOrNot(linkModel.isRead)
                 setBookmarkOrNot(linkModel.isBookmarked)
-                tvDate.text = linkModel.linkCreatedAt
+                setDate(linkModel.linkCreatedAt)
             }
+        }
+
+        private fun setDate(date: String) {
+            binding.tvDate.text = DateUtil.convertDateFormat(date)
         }
 
         private fun setBookmarkOrNot(isBookmarked: Boolean) {
