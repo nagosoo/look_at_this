@@ -67,7 +67,6 @@ class AlarmSettingFragment : Fragment() {
             val alarmModel = getAlarmModelFromAlarmType(cachedAlarm)
             renderUiState(UiState.Success(alarmModel))
         } else {
-            viewModel.getAlarmSetting()
             viewLifecycleOwner.lifecycleScope.launch {
                 viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                     viewModel.getAlarmSetting().collect { uiState ->
