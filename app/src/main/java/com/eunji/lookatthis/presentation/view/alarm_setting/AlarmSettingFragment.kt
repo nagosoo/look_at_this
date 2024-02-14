@@ -67,29 +67,11 @@ class AlarmSettingFragment : Fragment() {
             val alarmModel = getAlarmModelFromAlarmType(cachedAlarm)
             renderUiState(UiState.Success(alarmModel))
         } else {
-            subscribeUiState()
             viewModel.getAlarmSetting()
-        }
-    }
-
-    private fun subscribeUiState() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { uiState ->
-                    renderUiState(uiState)
-                }
-            }
-        }
-    }
-
-    private fun subscribeResult() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.resultState.collect { uiState ->
-                    viewModel.checkedAlarmType.value?.let { alarmType ->
-                        val alarmModel =
-                            getAlarmModelFromAlarmType(alarmType)
-                        renderResultState(uiState, alarmModel)
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    viewModel.getAlarmSetting().collect { uiState ->
+                        renderUiState(uiState)
                     }
                 }
             }
@@ -148,7 +130,16 @@ class AlarmSettingFragment : Fragment() {
     private fun saveAlarm() {
         viewModel.checkedAlarmType.value?.let { alarmType ->
             val alarmModel = getAlarmModelFromAlarmType(alarmType)
-            viewModel.postAlarmSetting(alarmModel)
+
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    viewModel.postAlarmSetting(alarmModel).collect { uiState ->
+                        viewModel.checkedAlarmType.value?.let { alarmType ->
+                            renderResultState(uiState, getAlarmModelFromAlarmType(alarmType))
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -158,7 +149,6 @@ class AlarmSettingFragment : Fragment() {
 
     private fun setOnClickListener() {
         binding.btnOk.setOnClickListener {
-            subscribeResult()
             saveAlarm()
         }
 

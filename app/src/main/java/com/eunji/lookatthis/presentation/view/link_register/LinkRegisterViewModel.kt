@@ -9,11 +9,9 @@ import com.eunji.lookatthis.data.model.PostLinkReqModel
 import com.eunji.lookatthis.domain.UiState
 import com.eunji.lookatthis.domain.usecase.links.PostLinkUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,8 +23,6 @@ class LinkRegisterViewModel @Inject constructor(
     val url: LiveData<String?> = _url
     private val _memo: MutableLiveData<String?> = MutableLiveData()
     val memo: LiveData<String?> = _memo
-    private val _uiState: MutableStateFlow<UiState<LinkModel?>> = MutableStateFlow(UiState.Loading)
-    val uiState: StateFlow<UiState<LinkModel?>> = _uiState
 
     fun setUrl(url: String) {
         _url.value = url
@@ -36,21 +32,17 @@ class LinkRegisterViewModel @Inject constructor(
         _memo.value = memo
     }
 
-    fun postLink() {
-        viewModelScope.launch {
-            postLinkUseCase(
-                PostLinkReqModel(
-                    _url.value!!, _memo.value
-                )
-            ).stateIn(
-                initialValue = UiState.Loading,
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(
-                    stopTimeoutMillis = 5000
-                )
-            ).collect { uiState ->
-                _uiState.value = uiState
-            }
-        }
+    fun postLink(): Flow<UiState<LinkModel?>> {
+        return postLinkUseCase(
+            PostLinkReqModel(
+                _url.value!!, _memo.value
+            )
+        ).stateIn(
+            initialValue = UiState.Loading,
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(
+                stopTimeoutMillis = 5000
+            )
+        )
     }
 }

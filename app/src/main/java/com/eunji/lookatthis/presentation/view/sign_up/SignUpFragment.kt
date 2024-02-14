@@ -74,18 +74,7 @@ class SignUpFragment : Fragment() {
 
     private fun setOnClickListener() {
         binding.buttonSignUp.setOnClickListener {
-            subscribeUiState()
             signUp()
-        }
-    }
-
-    private fun subscribeUiState() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { uiState ->
-                    render(uiState)
-                }
-            }
         }
     }
 
@@ -95,10 +84,16 @@ class SignUpFragment : Fragment() {
             return
         }
 
-        viewModel.postAccountResultFlow(
-            id = viewModel.id.value!!,
-            password = viewModel.password.value!!,
-        )
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.signUp(
+                    id = viewModel.id.value!!,
+                    password = viewModel.password.value!!
+                ).collect { uiState ->
+                    render(uiState)
+                }
+            }
+        }
     }
 
     private fun render(uiState: UiState<BasicTokenModel?>) {

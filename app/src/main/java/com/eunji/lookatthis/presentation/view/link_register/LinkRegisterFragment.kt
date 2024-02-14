@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.eunji.lookatthis.R
 import com.eunji.lookatthis.data.model.LinkModel
 import com.eunji.lookatthis.databinding.FragmentLinkRegisterBinding
 import com.eunji.lookatthis.domain.UiState
@@ -55,16 +56,6 @@ class LinkRegisterFragment : Fragment() {
         }
     }
 
-    private fun subscribeUiState() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { uiState ->
-                    render(uiState)
-                }
-            }
-        }
-    }
-
     private fun setOnEditTextListener() {
         binding.etLink.addTextChangedListener { url ->
             viewModel.setUrl(url.toString())
@@ -95,8 +86,14 @@ class LinkRegisterFragment : Fragment() {
 
     private fun setOnClickListener() {
         binding.btnRegister.setOnClickListener {
-            subscribeUiState()
             viewModel.postLink()
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    viewModel.postLink().collect { uiState ->
+                        render(uiState)
+                    }
+                }
+            }
         }
         binding.btnPaste.setOnClickListener {
             paste()
@@ -106,7 +103,11 @@ class LinkRegisterFragment : Fragment() {
     private fun render(uiState: UiState<LinkModel?>) {
         when (uiState) {
             is UiState.Loading -> {
-                DialogUtil.showLoadingDialog(parentFragmentManager, requireContext())
+                DialogUtil.showLoadingDialog(
+                    parentFragmentManager,
+                    requireContext(),
+                    requireContext().getString(R.string.text_registering)
+                )
             }
 
             is UiState.Success -> {

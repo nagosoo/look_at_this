@@ -20,6 +20,7 @@ import com.eunji.lookatthis.presentation.view.links.LinkFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+
 @AndroidEntryPoint
 class SignInFragment : Fragment() {
 
@@ -56,16 +57,15 @@ class SignInFragment : Fragment() {
 
     private fun setOnClickListener() {
         binding.buttonSignUp.setOnClickListener {
-            subscribeUiState()
-            viewModel.signIn(id = viewModel.id.value!!, password = viewModel.password.value!!)
-        }
-    }
-
-    private fun subscribeUiState() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { uiState ->
-                    render(uiState)
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    viewModel.signIn(
+                        id = viewModel.id.value!!,
+                        password = viewModel.password.value!!
+                    )
+                        .collect { uiState ->
+                            render(uiState)
+                        }
                 }
             }
         }
