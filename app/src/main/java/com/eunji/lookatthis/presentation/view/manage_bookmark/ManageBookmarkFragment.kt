@@ -64,57 +64,35 @@ class ManageBookmarkFragment : Fragment() {
         }
     }
 
-    private fun subscribeReadUiState() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.readUiState.collect { uiState ->
-                    when (uiState) {
-                        is UiState.Loading -> {
-                        }
-
-                        is UiState.Success -> {
-                            UrlOpenUtil.openUrl(
-                                uiState.value!!.linkUrl,
-                                requireContext(),
-                                parentFragmentManager
-                            )
-                        }
-
-                        is UiState.Error -> {
-                            DialogUtil.showErrorDialog(parentFragmentManager, uiState.errorMessage)
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private fun subscribeBookmarkUiState(position: Int) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.bookmarkUiState.collect { uiState ->
-                    when (uiState) {
-                        is UiState.Loading -> {
-                        }
-
-                        is UiState.Success -> {
-                            adapter.notifyItemRemoved(position)
-                        }
-
-                        is UiState.Error -> {
-                            DialogUtil.showErrorDialog(parentFragmentManager, uiState.errorMessage)
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     private fun read(link: LinkModel, position: Int) {
         if (!link.isRead) {
-            subscribeReadUiState()
             setReadView(position)
-            viewModel.read(link.linkId)
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    viewModel.read(link.linkId)
+                        .collect { uiState ->
+                            when (uiState) {
+                                is UiState.Loading -> {
+                                }
+
+                                is UiState.Success -> {
+                                    UrlOpenUtil.openUrl(
+                                        uiState.value!!.linkUrl,
+                                        requireContext(),
+                                        parentFragmentManager
+                                    )
+                                }
+
+                                is UiState.Error -> {
+                                    DialogUtil.showErrorDialog(
+                                        parentFragmentManager,
+                                        uiState.errorMessage
+                                    )
+                                }
+                            }
+                        }
+                }
+            }
         } else {
             UrlOpenUtil.openUrl(link.linkUrl, requireContext(), parentFragmentManager)
         }
@@ -126,8 +104,28 @@ class ManageBookmarkFragment : Fragment() {
     }
 
     private fun bookmark(link: LinkModel, position: Int) {
-        subscribeBookmarkUiState(position)
-        viewModel.bookmark(link.linkId)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.bookmark(link.linkId)
+                    .collect { uiState ->
+                        when (uiState) {
+                            is UiState.Loading -> {
+                            }
+
+                            is UiState.Success -> {
+                                adapter.notifyItemRemoved(position)
+                            }
+
+                            is UiState.Error -> {
+                                DialogUtil.showErrorDialog(
+                                    parentFragmentManager,
+                                    uiState.errorMessage
+                                )
+                            }
+                        }
+                    }
+            }
+        }
     }
 
     private fun setRecyclerView() {

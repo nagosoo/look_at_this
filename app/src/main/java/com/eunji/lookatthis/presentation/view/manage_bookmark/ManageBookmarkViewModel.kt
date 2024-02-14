@@ -12,6 +12,7 @@ import com.eunji.lookatthis.domain.usecase.links.GetBookmarkLinkUseCase
 import com.eunji.lookatthis.domain.usecase.links.PostLinkBookmarkUseCase
 import com.eunji.lookatthis.domain.usecase.links.PostLinkReadUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -29,14 +30,6 @@ class ManageBookmarkViewModel @Inject constructor(
     private val _links: MutableStateFlow<PagingData<LinkModel>> =
         MutableStateFlow(PagingData.empty())
     val links: StateFlow<PagingData<LinkModel>> = _links
-
-    private val _readUiState: MutableStateFlow<UiState<LinkModel?>> =
-        MutableStateFlow(UiState.Loading)
-    val readUiState: StateFlow<UiState<LinkModel?>> = _readUiState
-
-    private val _bookmarkUiState: MutableStateFlow<UiState<LinkModel?>> =
-        MutableStateFlow(UiState.Loading)
-    val bookmarkUiState: StateFlow<UiState<LinkModel?>> = _bookmarkUiState
 
     private val _bookmarkOffIds: MutableList<Int> = mutableListOf()
     val bookmarkOffIds: List<Int> = _bookmarkOffIds
@@ -72,41 +65,33 @@ class ManageBookmarkViewModel @Inject constructor(
         }
     }
 
-    fun read(linkId: Int) {
+    fun read(linkId: Int): Flow<UiState<LinkModel?>> {
         addReadLinkId(linkId)
-        viewModelScope.launch {
-            postLinkReadUseCase(
-                ReadReqModel(
-                    linkId = linkId
-                )
-            ).stateIn(
-                initialValue = UiState.Loading,
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(
-                    stopTimeoutMillis = 5000
-                )
-            ).collect {
-                _readUiState.value = it
-            }
-        }
+        return postLinkReadUseCase(
+            ReadReqModel(
+                linkId = linkId
+            )
+        ).stateIn(
+            initialValue = UiState.Loading,
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(
+                stopTimeoutMillis = 5000
+            )
+        )
     }
 
-    fun bookmark(linkId: Int) {
+    fun bookmark(linkId: Int): Flow<UiState<LinkModel?>> {
         addBookmarkOffLinkId(linkId)
-        viewModelScope.launch {
-            postLinkBookmarkUseCase(
-                BookmarkReqModel(
-                    linkId = linkId
-                )
-            ).stateIn(
-                initialValue = UiState.Loading,
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(
-                    stopTimeoutMillis = 5000
-                )
-            ).collect {
-                _bookmarkUiState.value = it
-            }
-        }
+        return postLinkBookmarkUseCase(
+            BookmarkReqModel(
+                linkId = linkId
+            )
+        ).stateIn(
+            initialValue = UiState.Loading,
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(
+                stopTimeoutMillis = 5000
+            )
+        )
     }
 }

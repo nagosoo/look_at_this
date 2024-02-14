@@ -1,11 +1,8 @@
 package com.eunji.lookatthis.data.model
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@Parcelize
 @Serializable
 data class LinkModel(
     val linkId: Int,
@@ -17,4 +14,4 @@ data class LinkModel(
     var isRead: Boolean,
     @SerialName("linkIsBookmark")
     var isBookmarked: Boolean,
-) : Parcelable
+)
