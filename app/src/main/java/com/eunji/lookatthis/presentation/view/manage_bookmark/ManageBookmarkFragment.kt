@@ -68,30 +68,28 @@ class ManageBookmarkFragment : Fragment() {
         if (!link.isRead) {
             setReadView(position)
             viewLifecycleOwner.lifecycleScope.launch {
-                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    viewModel.read(link.linkId)
-                        .collect { uiState ->
-                            when (uiState) {
-                                is UiState.Loading -> {
-                                }
+                viewModel.read(link.linkId)
+                    .collect { uiState ->
+                        when (uiState) {
+                            is UiState.Loading -> {
+                            }
 
-                                is UiState.Success -> {
-                                    UrlOpenUtil.openUrl(
-                                        uiState.value!!.linkUrl,
-                                        requireContext(),
-                                        parentFragmentManager
-                                    )
-                                }
+                            is UiState.Success -> {
+                                UrlOpenUtil.openUrl(
+                                    uiState.value!!.linkUrl,
+                                    requireContext(),
+                                    parentFragmentManager
+                                )
+                            }
 
-                                is UiState.Error -> {
-                                    DialogUtil.showErrorDialog(
-                                        parentFragmentManager,
-                                        uiState.errorMessage
-                                    )
-                                }
+                            is UiState.Error -> {
+                                DialogUtil.showErrorDialog(
+                                    parentFragmentManager,
+                                    uiState.errorMessage
+                                )
                             }
                         }
-                }
+                    }
             }
         } else {
             UrlOpenUtil.openUrl(link.linkUrl, requireContext(), parentFragmentManager)
@@ -105,26 +103,24 @@ class ManageBookmarkFragment : Fragment() {
 
     private fun bookmark(link: LinkModel, position: Int) {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.bookmark(link.linkId)
-                    .collect { uiState ->
-                        when (uiState) {
-                            is UiState.Loading -> {
-                            }
+            viewModel.bookmark(link.linkId)
+                .collect { uiState ->
+                    when (uiState) {
+                        is UiState.Loading -> {
+                        }
 
-                            is UiState.Success -> {
-                                adapter.notifyItemRemoved(position)
-                            }
+                        is UiState.Success -> {
+                            adapter.notifyItemRemoved(position)
+                        }
 
-                            is UiState.Error -> {
-                                DialogUtil.showErrorDialog(
-                                    parentFragmentManager,
-                                    uiState.errorMessage
-                                )
-                            }
+                        is UiState.Error -> {
+                            DialogUtil.showErrorDialog(
+                                parentFragmentManager,
+                                uiState.errorMessage
+                            )
                         }
                     }
-            }
+                }
         }
     }
 
