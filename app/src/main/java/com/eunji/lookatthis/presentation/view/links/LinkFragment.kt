@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
 import androidx.paging.PagingData
+import androidx.paging.filter
 import com.eunji.lookatthis.R
 import com.eunji.lookatthis.data.model.LinkModel
 import com.eunji.lookatthis.databinding.FragmentMainBinding
@@ -28,6 +29,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -104,9 +106,9 @@ class LinkFragment : Fragment() {
         }
     }
 
-    private fun read(link: LinkModel) {
+    private fun read(link: LinkModel, position: Int) {
         viewLifecycleOwner.lifecycleScope.launch {
-            if (!link.isRead) setRead(link.linkId)
+            if (!link.isRead) setRead(position)
             viewModel.read(link.linkId)
                 .collect {
                     openUrl(link.linkUrl, requireContext(), parentFragmentManager)
@@ -114,42 +116,28 @@ class LinkFragment : Fragment() {
         }
     }
 
-    private suspend fun setRead(linkId: Int) {
-        adapter.submitData(
-            PagingData.from(adapter.snapshot().items.map { link ->
-                if (link.linkId == linkId) {
-                    link.copy(
-                        isRead = true
-                    )
-                } else link
-            })
-        )
+    private fun setRead(position: Int) {
+        adapter.snapshot()[position]?.isRead = true
+        adapter.notifyItemChanged(position)
     }
 
-    private fun bookmark(linkId: Int, isBookmarked: Boolean) {
+    private fun bookmark(link: LinkModel, position: Int) {
         viewLifecycleOwner.lifecycleScope.launch {
             //Todo::깜빡이는 거해결
             //Todo::디바운스 넣기
-            toggleBookmarkImage(linkId, isBookmarked)
-            viewModel.bookmark(linkId).collect { uiState ->
+            toggleBookmarkImage(link, position)
+            viewModel.bookmark(link.linkId).collect { uiState ->
                 if (uiState is UiState.Error) {
                     DialogUtil.showErrorDialog(parentFragmentManager, uiState.errorMessage)
-                    toggleBookmarkImage(linkId, !isBookmarked) //북마크 이미지 되돌리기
+                    toggleBookmarkImage(link, position) //북마크 이미지 되돌리기
                 }
             }
         }
     }
 
-    private suspend fun toggleBookmarkImage(linkId: Int, isBookmarked: Boolean) {
-        adapter.submitData(
-            PagingData.from(adapter.snapshot().items.map { link ->
-                if (link.linkId == linkId) {
-                    link.copy(
-                        isBookmarked = !isBookmarked
-                    )
-                } else link
-            })
-        )
+    private fun toggleBookmarkImage(link: LinkModel, position: Int) {
+        adapter.snapshot()[position]?.isBookmarked = !link.isBookmarked
+        adapter.notifyItemChanged(position)
     }
 
     private fun setPagingAdapter() {
@@ -188,6 +176,17 @@ class LinkFragment : Fragment() {
         }
         binding.btnRegister.setOnClickListener {
             replaceToRegisterFragment()
+        }
+        binding.btnShowType.setOnClickListener {
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.links.map {
+                    it.filter {
+                        it.isBookmarked
+                    }
+                }.collect {
+                    adapter.submitData(it)
+                }
+            }
         }
     }
 

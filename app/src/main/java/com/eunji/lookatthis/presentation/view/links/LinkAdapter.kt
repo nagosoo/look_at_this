@@ -16,8 +16,8 @@ import com.eunji.lookatthis.databinding.ItemMainBinding
 
 
 class LinkAdapter(
-    private val read: (LinkModel) -> Unit,
-    private val bookmark: (Int,Boolean) -> Unit
+    private val read: (LinkModel, Int) -> Unit,
+    private val bookmark: (LinkModel, Int) -> Unit
 ) :
     PagingDataAdapter<LinkModel, LinkAdapter.ViewHolder>(DIFF_UTIL) {
 
@@ -26,10 +26,10 @@ class LinkAdapter(
         fun bind(linkModel: LinkModel) {
             with(binding) {
                 imageView.setOnClickListener {
-                    read(linkModel)
+                    read(linkModel, absoluteAdapterPosition)
                 }
                 ivLike.setOnClickListener {
-                    bookmark(linkModel.linkId, linkModel.isBookmarked)
+                    bookmark(linkModel, absoluteAdapterPosition)
                 }
                 setImage(linkModel)
                 setMemo(linkModel)

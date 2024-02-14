@@ -11,7 +11,7 @@ data class LinkModel(
     val linkThumbnail: String?,
     val linkCreatedAt: String,
     @SerialName("linkIsRead")
-    val isRead: Boolean,
+    var isRead: Boolean,
     @SerialName("linkIsBookmark")
     var isBookmarked: Boolean,
 )
