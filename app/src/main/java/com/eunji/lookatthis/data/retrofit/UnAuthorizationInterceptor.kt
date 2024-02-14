@@ -24,12 +24,12 @@ class UnAuthorizationInterceptor @Inject constructor(
     override fun intercept(chain: Chain): Response {
         val newRequest = chain.proceed(chain.request())
         if (newRequest.code == 401) {
-//            runBlocking {
-//                userDataSourceLocal.deleteBasicToken()
-//            }
-//            val intent = Intent(context, EntryActivity::class.java)
-//            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-//            this.context.startActivity(intent)
+            runBlocking {
+                userDataSourceLocal.deleteBasicToken()
+            }
+            val intent = Intent(context, EntryActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            this.context.startActivity(intent)
         }
         return newRequest
     }
