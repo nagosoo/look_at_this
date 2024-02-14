@@ -33,7 +33,7 @@ class LinkRegisterFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        linkFromInstagram = arguments?.getString(LinkFragment.linkFromInstagram)
+        linkFromInstagram = arguments?.getString(LinkFragment.linkFromOtherApp)
     }
 
     override fun onCreateView(
