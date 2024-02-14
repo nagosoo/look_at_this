@@ -46,5 +46,6 @@
     <string name="content_description_main_image">메인 이미지의 그림</string>
     <string name="content_description_like">링크를 좋아요 눌렀는지 나타내는 그림</string>
     <string name="content_description_empty">링크가 하나도 없을 때 나타나는 그림</string>
+    <string name="content_description_loading">로딩 시 나타나는 그림</string>
     <string name="content_description_splash">스플래시 그림</string>
 </resources>

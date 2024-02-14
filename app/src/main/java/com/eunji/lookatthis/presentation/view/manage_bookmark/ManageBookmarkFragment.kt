@@ -134,6 +134,8 @@ class ManageBookmarkFragment : Fragment() {
         binding.recyclerView.addItemDecoration(LinkRecyclerViewItemDecoration(paddingBottom))
         adapter.addLoadStateListener { combinedLoadStates ->
             val loadState = combinedLoadStates.source
+            val isFirstLoading = adapter.itemCount < 1 && loadState.refresh is LoadState.Loading
+            binding.layoutLoading.root.isVisible = isFirstLoading
             val isEmpty =
                 adapter.itemCount < 1 && loadState.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached
             binding.layoutEmpty.root.isVisible = isEmpty
