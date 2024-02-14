@@ -42,8 +42,10 @@ class ApiClient @Inject constructor(
                 add(httpLoggingInterceptor.apply {
                     level = HttpLoggingInterceptor.Level.BODY
                 })
-                if (needAuthorization) add(authorizationInterceptor)
-                add(unAuthorizationInterceptor)
+                if (needAuthorization) {
+                    add(authorizationInterceptor)
+                    add(unAuthorizationInterceptor)
+                }
             }
         }.build()
     }
