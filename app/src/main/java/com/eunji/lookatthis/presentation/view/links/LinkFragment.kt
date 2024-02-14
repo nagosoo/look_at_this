@@ -44,11 +44,11 @@ class LinkFragment : Fragment() {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) {
             postFcmToken()
-            getTextFromInstagram()
+            getLinkFromInstagram()
         }
     }
 
-    private fun getTextFromInstagram() {
+    private fun getLinkFromInstagram() {
         val action = requireActivity().intent.action
         val type = requireActivity().intent.type
         if ("android.intent.action.SEND" == action && type != null && "text/plain" == type) {
