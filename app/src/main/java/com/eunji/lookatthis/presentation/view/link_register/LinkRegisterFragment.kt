@@ -97,10 +97,8 @@ class LinkRegisterFragment : Fragment() {
         binding.btnRegister.setOnClickListener {
             viewModel.postLink()
             viewLifecycleOwner.lifecycleScope.launch {
-                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    viewModel.postLink().collect { uiState ->
-                        render(uiState)
-                    }
+                viewModel.postLink().collect { uiState ->
+                    render(uiState)
                 }
             }
         }

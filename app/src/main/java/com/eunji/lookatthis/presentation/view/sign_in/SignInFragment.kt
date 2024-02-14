@@ -58,15 +58,13 @@ class SignInFragment : Fragment() {
     private fun setOnClickListener() {
         binding.buttonSignUp.setOnClickListener {
             viewLifecycleOwner.lifecycleScope.launch {
-                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    viewModel.signIn(
-                        id = viewModel.id.value!!,
-                        password = viewModel.password.value!!
-                    )
-                        .collect { uiState ->
-                            render(uiState)
-                        }
-                }
+                viewModel.signIn(
+                    id = viewModel.id.value!!,
+                    password = viewModel.password.value!!
+                )
+                    .collect { uiState ->
+                        render(uiState)
+                    }
             }
         }
     }

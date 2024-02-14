@@ -85,13 +85,11 @@ class SignUpFragment : Fragment() {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.signUp(
-                    id = viewModel.id.value!!,
-                    password = viewModel.password.value!!
-                ).collect { uiState ->
-                    render(uiState)
-                }
+            viewModel.signUp(
+                id = viewModel.id.value!!,
+                password = viewModel.password.value!!
+            ).collect { uiState ->
+                render(uiState)
             }
         }
     }
