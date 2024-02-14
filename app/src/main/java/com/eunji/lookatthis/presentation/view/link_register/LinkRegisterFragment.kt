@@ -29,6 +29,12 @@ class LinkRegisterFragment : Fragment() {
     private var _binding: FragmentLinkRegisterBinding? = null
     private val binding get() = _binding!!
     private val viewModel: LinkRegisterViewModel by viewModels()
+    private var linkFromInstagram: String? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        linkFromInstagram = arguments?.getString(LinkFragment.linkFromInstagram)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,6 +54,9 @@ class LinkRegisterFragment : Fragment() {
     }
 
     private fun init() {
+        linkFromInstagram?.let { url ->
+            binding.etLink.setText(url)
+        }
         viewModel.url.value?.let { url ->
             binding.etLink.setText(url)
         }

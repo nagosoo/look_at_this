@@ -2,8 +2,6 @@ package com.eunji.lookatthis.presentation.view
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.eunji.lookatthis.R
@@ -14,8 +12,6 @@ import com.eunji.lookatthis.presentation.Constance.SIGN_UP
 import com.eunji.lookatthis.presentation.view.links.LinkFragment
 import com.eunji.lookatthis.presentation.view.sign_in.SignInFragment
 import com.eunji.lookatthis.presentation.view.sign_up.SignUpFragment
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

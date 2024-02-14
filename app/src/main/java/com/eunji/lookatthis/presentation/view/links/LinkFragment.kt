@@ -44,6 +44,23 @@ class LinkFragment : Fragment() {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) {
             postFcmToken()
+            getTextFromInstagram()
+        }
+    }
+
+    private fun getTextFromInstagram() {
+        val action = requireActivity().intent.action
+        val type = requireActivity().intent.type
+        if ("android.intent.action.SEND" == action && type != null && "text/plain" == type) {
+            val link = requireActivity().intent.getStringExtra("android.intent.extra.TEXT")
+            link?.let { url ->
+                val bundle = Bundle().apply {
+                    putString(linkFromInstagram, url)
+                }
+                val linkRegisterFragment = LinkRegisterFragment()
+                linkRegisterFragment.arguments = bundle
+                replaceFragment(linkRegisterFragment)
+            }
         }
     }
 
@@ -262,6 +279,7 @@ class LinkFragment : Fragment() {
         const val resultFromManageBookmarkView = "toggleBookmarkKey"
         const val bookmarkIds = "bookmarkIds"
         const val readIds = "readIds"
+        const val linkFromInstagram = "linkFromInstagram"
     }
 
 }
