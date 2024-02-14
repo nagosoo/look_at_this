@@ -44,6 +44,7 @@
             android:inputType="text"
             android:labelFor="@id/tv_id"
             android:paddingStart="13dp"
+            android:textColor="@color/black"
             tools:text="sampleId" />
 
         <Space
@@ -71,6 +72,7 @@
             android:inputType="textPassword"
             android:labelFor="@id/tv_pw"
             android:paddingStart="13dp"
+            android:textColor="@color/black"
             tools:text="1234" />
 
         <Space

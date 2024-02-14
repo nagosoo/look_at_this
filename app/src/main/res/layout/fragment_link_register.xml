@@ -45,6 +45,7 @@
             android:inputType="textMultiLine"
             android:labelFor="@id/tv_link"
             android:padding="13dp"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toTopOf="@id/tv_memo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -75,6 +76,7 @@
             android:labelFor="@id/tv_memo"
             android:maxLength="100"
             android:padding="13dp"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toTopOf="@id/et_memo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -88,10 +90,10 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
+            android:text="@string/text_initial_description_size"
             android:textColor="@color/grey_dark"
             app:layout_constraintBottom_toBottomOf="@id/et_memo"
-            app:layout_constraintEnd_toEndOf="@id/et_memo"
-            android:text="@string/text_initial_description_size" />
+            app:layout_constraintEnd_toEndOf="@id/et_memo" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_register"
