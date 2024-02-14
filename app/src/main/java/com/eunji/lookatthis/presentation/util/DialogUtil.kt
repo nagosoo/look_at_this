@@ -20,10 +20,15 @@ object DialogUtil {
         ).show(fragmentManager, CommonDialog.TAG)
     }
 
-    fun showLoadingDialog(fragmentManager: FragmentManager, context: Context) {
+    fun showLoadingDialog(
+        fragmentManager: FragmentManager,
+        context: Context,
+        title: String? = null
+    ) {
         CommonDialog(
-            title = context.getString(R.string.text_loading),
+            title = title ?: context.getString(R.string.text_loading),
             drawableResId = R.drawable.loading,
+            showPositiveButton = false
         ).show(fragmentManager, CommonDialog.TAG)
     }
 

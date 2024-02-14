@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import com.eunji.lookatthis.R
 import com.eunji.lookatthis.databinding.FragmentCommonDialogBinding
@@ -14,7 +15,8 @@ class CommonDialog(
     private val title: String,
     private val drawableResId: Int,
     private val onPositiveBtnClickListener: (() -> Unit)? = null,
-    private val positiveBtnText: String = "확인"
+    private val positiveBtnText: String = "확인",
+    private val showPositiveButton: Boolean = true
 ) : DialogFragment() {
 
     private var _binding: FragmentCommonDialogBinding? = null
@@ -36,9 +38,14 @@ class CommonDialog(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setPositiveButtonVisibility()
         setImage()
         setContent()
         setButton()
+    }
+
+    private fun setPositiveButtonVisibility() {
+        binding.btnPositive.isVisible = showPositiveButton
     }
 
     private fun setImage() {
