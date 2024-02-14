@@ -14,5 +14,6 @@ interface LinkRepository {
     fun postLinkBookmark(bookmarkReqModel: BookmarkReqModel): Flow<UiState<LinkModel?>>
     fun postLinkRead(readReqModel: ReadReqModel): Flow<UiState<LinkModel?>>
     fun getLinks(): Flow<PagingData<LinkModel>>
+    fun getBookmarkLinks(): Flow<PagingData<LinkModel>>
 
 }

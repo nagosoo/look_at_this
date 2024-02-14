@@ -1,13 +1,12 @@
-package com.eunji.lookatthis.presentation.view.links
+package com.eunji.lookatthis.presentation.view.manage_bookmark
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.core.view.postDelayed
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -15,76 +14,43 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
 import com.eunji.lookatthis.R
 import com.eunji.lookatthis.data.model.LinkModel
-import com.eunji.lookatthis.databinding.FragmentLinkBinding
+import com.eunji.lookatthis.databinding.FragmentManageBookmarkBinding
 import com.eunji.lookatthis.domain.UiState
 import com.eunji.lookatthis.presentation.adapter.LinkAdapter
 import com.eunji.lookatthis.presentation.adapter.LinkLoadStateAdapter
 import com.eunji.lookatthis.presentation.decoration.LinkRecyclerViewItemDecoration
 import com.eunji.lookatthis.presentation.util.DialogUtil
-import com.eunji.lookatthis.presentation.util.DisplayUnitUtil.dpToPx
+import com.eunji.lookatthis.presentation.util.DisplayUnitUtil
 import com.eunji.lookatthis.presentation.util.UrlOpenUtil
 import com.eunji.lookatthis.presentation.view.MainActivity
-import com.eunji.lookatthis.presentation.view.alarm_setting.AlarmSettingFragment
-import com.eunji.lookatthis.presentation.view.link_register.LinkRegisterFragment
-import com.eunji.lookatthis.presentation.view.manage_bookmark.ManageBookmarkFragment
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.messaging.FirebaseMessaging
+import com.eunji.lookatthis.presentation.view.links.LinkFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class LinkFragment : Fragment() {
-    private var _binding: FragmentLinkBinding? = null
+class ManageBookmarkFragment : Fragment() {
+
+    private var _binding: FragmentManageBookmarkBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: LinkViewModel by viewModels()
+    private val viewModel: ManageBookmarkViewModel by viewModels()
     private val adapter by lazy { LinkAdapter(::read, ::bookmark) }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (savedInstanceState == null) {
-            postFcmToken()
-        }
-    }
-
-    private fun postFcmToken() {
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                return@OnCompleteListener
-            }
-            viewModel.postFcmToken(task.result)
-        })
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentLinkBinding.inflate(inflater, container, false)
+        _binding = FragmentManageBookmarkBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (requireActivity() as? MainActivity)?.setAppBarTitle(getString(R.string.app_name))
+        (requireActivity() as? MainActivity)?.setAppBarTitle(getString(R.string.text_manage_bookmark))
         setRecyclerView()
-        setOnClickListener()
-        setSwipeLayout()
         init()
-        setFragmentResultListener(shouldRefreshPagingKey) { _, bundle ->
-            val result = bundle.getBoolean(shouldRefreshPaging, false)
-            if (!result) return@setFragmentResultListener
-            binding.swipeRefreshLayout.isRefreshing = true
-            adapter.refresh()
-            scrollToTop()
-        }
-        setFragmentResultListener(resultFromManageBookmarkView) { _, bundle ->
-            val bookmarkOffIds = bundle.getIntegerArrayList(bookmarkIds)
-            val readIds = bundle.getIntegerArrayList(readIds)
-            setResultBookmarkOff(bookmarkOffIds)
-            setResultRead(readIds)
-        }
     }
 
     private fun init() {
@@ -95,45 +61,6 @@ class LinkFragment : Fragment() {
                         adapter.submitData(pagingData)
                     }
             }
-        }
-    }
-
-    private fun setResultBookmarkOff(bookmarkOffIds: ArrayList<Int>?) {
-        bookmarkOffIds?.forEach { id ->
-            val link = adapter.snapshot().items.firstOrNull { linkModel ->
-                linkModel.linkId == id
-            }
-            link?.let { linkModel ->
-                val position = adapter.snapshot().items.indexOf(linkModel)
-                toggleBookmarkView(linkModel, position)
-            }
-        }
-    }
-
-    private fun setResultRead(readIds: ArrayList<Int>?) {
-        readIds?.forEach { id ->
-            val link = adapter.snapshot().items.firstOrNull { linkModel ->
-                linkModel.linkId == id
-            }
-            link?.let { linkModel ->
-                val position = adapter.snapshot().items.indexOf(linkModel)
-                setReadView(position)
-            }
-        }
-    }
-
-    private fun setSwipeLayout() {
-        binding.swipeRefreshLayout.setOnRefreshListener {
-            adapter.refresh()
-            scrollToTop()
-        }
-    }
-
-    private fun scrollToTop() {
-        //submitData완료후에 0번째 아이템을 찾아가기 위함
-        binding.recyclerView.postDelayed(500) {
-            binding.recyclerView.scrollToPosition(0)
-            binding.swipeRefreshLayout.isRefreshing = false
         }
     }
 
@@ -171,7 +98,7 @@ class LinkFragment : Fragment() {
                         }
 
                         is UiState.Success -> {
-                            toggleBookmarkView(uiState.value!!, position)
+                            adapter.notifyItemRemoved(position)
                         }
 
                         is UiState.Error -> {
@@ -203,13 +130,8 @@ class LinkFragment : Fragment() {
         viewModel.bookmark(link.linkId)
     }
 
-    private fun toggleBookmarkView(link: LinkModel, position: Int) {
-        adapter.snapshot()[position]?.isBookmarked = !link.isBookmarked
-        adapter.notifyItemChanged(position)
-    }
-
     private fun setRecyclerView() {
-        val paddingBottom = dpToPx(20f, requireContext())
+        val paddingBottom = DisplayUnitUtil.dpToPx(20f, requireContext())
         binding.recyclerView.adapter = adapter
         binding.recyclerView.addItemDecoration(LinkRecyclerViewItemDecoration(paddingBottom))
         adapter.addLoadStateListener { combinedLoadStates ->
@@ -232,36 +154,23 @@ class LinkFragment : Fragment() {
         )
     }
 
-    private fun setOnClickListener() {
-        binding.btnAlarmSetting.setOnClickListener {
-            replaceFragment(AlarmSettingFragment())
-        }
-        binding.btnRegister.setOnClickListener {
-            replaceFragment(LinkRegisterFragment())
-        }
-        binding.btnGoToBookmarkLink.setOnClickListener {
-            replaceFragment(ManageBookmarkFragment())
-        }
-    }
-
-    private fun replaceFragment(fragment: Fragment) {
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-            .addToBackStack(null)
-            .commit()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        val bundle = Bundle()
+        bundle.putIntegerArrayList(
+            LinkFragment.bookmarkIds,
+            viewModel.bookmarkOffIds as ArrayList<Int>
+        )
+        bundle.putIntegerArrayList(LinkFragment.readIds, viewModel.readIds as ArrayList<Int>)
+        setFragmentResult(
+            LinkFragment.resultFromManageBookmarkView,
+            bundle
+        )
     }
 
     override fun onDestroy() {
         _binding = null
         super.onDestroy()
-    }
-
-    companion object {
-        const val shouldRefreshPagingKey = "shouldRefreshPagingKey"
-        const val shouldRefreshPaging = "shouldRefreshPaging"
-        const val resultFromManageBookmarkView = "toggleBookmarkKey"
-        const val bookmarkIds = "bookmarkIds"
-        const val readIds = "readIds"
     }
 
 }

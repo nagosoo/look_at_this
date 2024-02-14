@@ -1,4 +1,4 @@
-package com.eunji.lookatthis.presentation.view.links
+package com.eunji.lookatthis.presentation.decoration
 
 import android.graphics.Rect
 import android.view.View

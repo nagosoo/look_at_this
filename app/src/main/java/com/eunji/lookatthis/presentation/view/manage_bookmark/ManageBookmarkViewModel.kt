@@ -1,34 +1,29 @@
-package com.eunji.lookatthis.presentation.view.links
+package com.eunji.lookatthis.presentation.view.manage_bookmark
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.eunji.lookatthis.data.model.BookmarkReqModel
-import com.eunji.lookatthis.data.model.FcmTokenModel
 import com.eunji.lookatthis.data.model.LinkModel
 import com.eunji.lookatthis.data.model.ReadReqModel
 import com.eunji.lookatthis.domain.UiState
-import com.eunji.lookatthis.domain.usecase.alarm.PostFcmTokenUseCase
-import com.eunji.lookatthis.domain.usecase.links.GetLinkUseCase
+import com.eunji.lookatthis.domain.usecase.links.GetBookmarkLinkUseCase
 import com.eunji.lookatthis.domain.usecase.links.PostLinkBookmarkUseCase
 import com.eunji.lookatthis.domain.usecase.links.PostLinkReadUseCase
-import com.eunji.lookatthis.presentation.util.ApiRetry
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LinkViewModel @Inject constructor(
-    private val getLinkUseCase: GetLinkUseCase,
+class ManageBookmarkViewModel @Inject constructor(
+    private val getBookmarkLinkUseCase: GetBookmarkLinkUseCase,
     private val postLinkReadUseCase: PostLinkReadUseCase,
     private val postLinkBookmarkUseCase: PostLinkBookmarkUseCase,
-    private val postFcmTokenUseCase: PostFcmTokenUseCase,
 ) : ViewModel() {
 
     private val _links: MutableStateFlow<PagingData<LinkModel>> =
@@ -43,13 +38,27 @@ class LinkViewModel @Inject constructor(
         MutableStateFlow(UiState.Loading)
     val bookmarkUiState: StateFlow<UiState<LinkModel?>> = _bookmarkUiState
 
+    private val _bookmarkOffIds: MutableList<Int> = mutableListOf()
+    val bookmarkOffIds: List<Int> = _bookmarkOffIds
+
+    private val _readIds: MutableList<Int> = mutableListOf()
+    val readIds: List<Int> = _readIds
+
     init {
-        getAllLinks()
+        getBookmarkLinks()
     }
 
-    private fun getAllLinks() {
+    private fun addBookmarkOffLinkId(id: Int) {
+        _bookmarkOffIds.add(id)
+    }
+
+    private fun addReadLinkId(id: Int) {
+        _readIds.add(id)
+    }
+
+    private fun getBookmarkLinks() {
         viewModelScope.launch {
-            getLinkUseCase()
+            getBookmarkLinkUseCase()
                 .cachedIn(viewModelScope)
                 .stateIn(
                     initialValue = PagingData.empty(),
@@ -64,6 +73,7 @@ class LinkViewModel @Inject constructor(
     }
 
     fun read(linkId: Int) {
+        addReadLinkId(linkId)
         viewModelScope.launch {
             postLinkReadUseCase(
                 ReadReqModel(
@@ -82,6 +92,7 @@ class LinkViewModel @Inject constructor(
     }
 
     fun bookmark(linkId: Int) {
+        addBookmarkOffLinkId(linkId)
         viewModelScope.launch {
             postLinkBookmarkUseCase(
                 BookmarkReqModel(
@@ -98,13 +109,4 @@ class LinkViewModel @Inject constructor(
             }
         }
     }
-
-    fun postFcmToken(fcmToken: String) {
-        viewModelScope.launch {
-            ApiRetry.retry(2) {
-                postFcmTokenUseCase(FcmTokenModel(fcmToken)).collect()
-            }
-        }
-    }
-
 }

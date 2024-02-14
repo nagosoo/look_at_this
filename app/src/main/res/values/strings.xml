@@ -30,13 +30,14 @@
     <string name="text_link_register">링크등록</string>
     <string name="text_max_memo_size">/100</string>
     <string name="text_alarm_setting_appbar">알림설정</string>
-    <string name="text_show_only_bookmark">북마크만 보기</string>
+    <string name="text_manage_bookmark">북마크 관리</string>
     <string name="text_show_all">모두 보기</string>
     <string name="text_empty">볼게 없오..</string>
     <string name="text_loading">로딩중...</string>
     <string name="text_empty_memo">메모가 없오</string>
     <string name="text_initial_description_size">0/100</string>
     <string name="text_paste">붙여넣기</string>
+    <string name="text_normal_error">잠시 후 다시 시도해줘ㅠ_ㅠ</string>
 
 
     <string name="content_description_hello">유저를 환영하는 그림</string>

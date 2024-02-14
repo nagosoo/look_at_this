@@ -127,7 +127,7 @@ class AlarmSettingFragment : Fragment() {
                 val alarmType = getAlarmTypeFromAlarmModel(alarmModel)
                 saveAlarmCache(alarmType)
                 setFragmentResult(
-                    LinkFragment.requestKey,
+                    LinkFragment.shouldRefreshPagingKey,
                     bundleOf(LinkFragment.shouldRefreshPaging to false)
                 )
                 parentFragmentManager.popBackStack()

@@ -117,7 +117,7 @@ class LinkRegisterFragment : Fragment() {
                         requireContext()
                     ) {
                         setFragmentResult(
-                            LinkFragment.requestKey,
+                            LinkFragment.shouldRefreshPagingKey,
                             bundleOf(LinkFragment.shouldRefreshPaging to true)
                         )
                         parentFragmentManager.popBackStack()

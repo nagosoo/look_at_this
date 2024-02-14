@@ -1,6 +1,5 @@
-package com.eunji.lookatthis.presentation.view.links
+package com.eunji.lookatthis.presentation.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible

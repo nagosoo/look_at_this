@@ -1,4 +1,4 @@
-package com.eunji.lookatthis.presentation.view.links
+package com.eunji.lookatthis.presentation.adapter
 
 import android.net.Uri
 import android.view.LayoutInflater
