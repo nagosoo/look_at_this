@@ -85,8 +85,9 @@ class LinkAdapter(
         }
 
         private fun setImage(linkModel: LinkModel) {
-            if (linkModel.linkThumbnail?.isNotBlank() == true) {
-                setThumbnail(linkModel.linkThumbnail)
+            val hasThumbnail = linkModel.linkThumbnail?.isNotBlank() == true
+            if (hasThumbnail) {
+                setThumbnail(linkModel.linkThumbnail!!)
             } else {
                 setDefaultImage()
             }
@@ -111,6 +112,7 @@ class LinkAdapter(
                 val image = ContextCompat.getDrawable(context, R.drawable.splash)
                 Glide.with(context)
                     .load(image)
+                    .placeholder(image)
                     .into(this)
             }
         }

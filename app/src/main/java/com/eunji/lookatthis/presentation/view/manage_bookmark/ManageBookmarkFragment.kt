@@ -12,6 +12,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.eunji.lookatthis.R
 import com.eunji.lookatthis.data.model.LinkModel
 import com.eunji.lookatthis.databinding.FragmentManageBookmarkBinding
@@ -127,6 +128,7 @@ class ManageBookmarkFragment : Fragment() {
     private fun setRecyclerView() {
         val paddingBottom = DisplayUnitUtil.dpToPx(20f, requireContext())
         binding.recyclerView.adapter = adapter
+        (binding.recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         binding.recyclerView.addItemDecoration(LinkRecyclerViewItemDecoration(paddingBottom))
         adapter.addLoadStateListener { combinedLoadStates ->
             val loadState = combinedLoadStates.source
