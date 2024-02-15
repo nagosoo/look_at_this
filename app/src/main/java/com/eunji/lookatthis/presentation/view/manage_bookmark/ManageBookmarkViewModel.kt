@@ -1,6 +1,5 @@
 package com.eunji.lookatthis.presentation.view.manage_bookmark
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn

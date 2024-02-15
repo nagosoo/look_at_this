@@ -30,4 +30,9 @@ class LinkDataSource @Inject constructor(
         cursorId: Int? = null
     ): Response<PaginationModel<LinkModel>> = linkService.getLinks(pageSize, cursorId)
 
+    suspend fun getBookmarkLinks(
+        pageSize: Int? = null,
+        cursorId: Int? = null
+    ): Response<PaginationModel<LinkModel>> = linkService.getBookmarkLinks(pageSize, cursorId)
+
 }

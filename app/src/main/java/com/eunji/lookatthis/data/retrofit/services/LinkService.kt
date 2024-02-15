@@ -25,6 +25,12 @@ interface LinkService {
         @Query("cursorId") cursorId: Int? = null,
     ): Response<PaginationModel<LinkModel>>
 
+    @GET("/link/bookmark")
+    suspend fun getBookmarkLinks(
+        @Query("pageSize") pageSize: Int? = null,
+        @Query("cursorId") cursorId: Int? = null,
+    ): Response<PaginationModel<LinkModel>>
+
     @POST("/link/bookmark")
     suspend fun postLinkBookmark(
         @Body body: BookmarkReqModel

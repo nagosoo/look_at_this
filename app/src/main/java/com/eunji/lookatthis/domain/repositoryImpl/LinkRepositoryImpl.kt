@@ -3,19 +3,19 @@ package com.eunji.lookatthis.domain.repositoryImpl
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import androidx.paging.filter
 import com.eunji.lookatthis.data.datasource.remote.LinkDataSource
 import com.eunji.lookatthis.data.model.BookmarkReqModel
 import com.eunji.lookatthis.data.model.LinkModel
 import com.eunji.lookatthis.data.model.PostLinkReqModel
 import com.eunji.lookatthis.data.model.ReadReqModel
 import com.eunji.lookatthis.data.repository.LinkRepository
+import com.eunji.lookatthis.domain.BookmarkLinkPagingSource
+import com.eunji.lookatthis.domain.BookmarkLinkPagingSource.Companion.BOOKMARK_LINK_NETWORK_PAGE_SIZE
 import com.eunji.lookatthis.domain.LinkPagingSource
-import com.eunji.lookatthis.domain.LinkPagingSource.Companion.NETWORK_PAGE_SIZE
+import com.eunji.lookatthis.domain.LinkPagingSource.Companion.ALL_LINK_NETWORK_PAGE_SIZE
 import com.eunji.lookatthis.domain.UiState
 import com.eunji.lookatthis.domain.safeApiCall
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -35,7 +35,7 @@ class LinkRepositoryImpl @Inject constructor(
 
     override fun getLinks(): Flow<PagingData<LinkModel>> {
         val pageConfig = PagingConfig(
-            pageSize = NETWORK_PAGE_SIZE,
+            pageSize = ALL_LINK_NETWORK_PAGE_SIZE,
             enablePlaceholders = false,
         )
 
@@ -47,17 +47,13 @@ class LinkRepositoryImpl @Inject constructor(
 
     override fun getBookmarkLinks(): Flow<PagingData<LinkModel>> {
         val pageConfig = PagingConfig(
-            pageSize = NETWORK_PAGE_SIZE,
+            pageSize = BOOKMARK_LINK_NETWORK_PAGE_SIZE,
             enablePlaceholders = false,
         )
 
         return Pager(
             config = pageConfig,
-            pagingSourceFactory = { LinkPagingSource(linkDataSource) }
-        ).flow.map { pagingData ->
-            pagingData.filter { link ->
-                link.isBookmarked
-            }
-        }
+            pagingSourceFactory = { BookmarkLinkPagingSource(linkDataSource) }
+        ).flow
     }
 }

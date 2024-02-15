@@ -7,7 +7,7 @@ import com.eunji.lookatthis.data.model.LinkModel
 import retrofit2.HttpException
 import java.io.IOException
 
-class LinkPagingSource(
+class BookmarkLinkPagingSource(
     private val linkDataSource: LinkDataSource
 ) : PagingSource<Int, LinkModel>() {
 
@@ -18,7 +18,7 @@ class LinkPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, LinkModel> {
         val cursorId = params.key //처음에는 null
         return try {
-            val response = linkDataSource.getLinks(pageSize = params.loadSize, cursorId = cursorId)
+            val response = linkDataSource.getBookmarkLinks(pageSize = params.loadSize, cursorId = cursorId)
             val endOfPagination = response.body()?.hasNext == false
             val repos = response.body()?.values!!
             val nextKey = if (endOfPagination) {
@@ -37,7 +37,7 @@ class LinkPagingSource(
     }
 
     companion object {
-        const val ALL_LINK_NETWORK_PAGE_SIZE = 10
+        const val BOOKMARK_LINK_NETWORK_PAGE_SIZE = 10
     }
 
 }
