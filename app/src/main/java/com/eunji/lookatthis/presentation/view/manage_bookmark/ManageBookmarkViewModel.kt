@@ -11,6 +11,7 @@ import com.eunji.lookatthis.domain.UiState
 import com.eunji.lookatthis.domain.usecase.links.GetBookmarkLinkUseCase
 import com.eunji.lookatthis.domain.usecase.links.PostLinkBookmarkUseCase
 import com.eunji.lookatthis.domain.usecase.links.PostLinkReadUseCase
+import com.eunji.lookatthis.presentation.view.BaseLinkViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,7 +26,7 @@ class ManageBookmarkViewModel @Inject constructor(
     private val getBookmarkLinkUseCase: GetBookmarkLinkUseCase,
     private val postLinkReadUseCase: PostLinkReadUseCase,
     private val postLinkBookmarkUseCase: PostLinkBookmarkUseCase,
-) : ViewModel() {
+) : BaseLinkViewModel() {
 
     private val _links: MutableStateFlow<PagingData<LinkModel>> =
         MutableStateFlow(PagingData.empty())
@@ -65,7 +66,7 @@ class ManageBookmarkViewModel @Inject constructor(
         }
     }
 
-    fun read(linkId: Int): Flow<UiState<LinkModel?>> {
+    override fun read(linkId: Int): Flow<UiState<LinkModel?>> {
         addReadLinkId(linkId)
         return postLinkReadUseCase(
             ReadReqModel(
@@ -80,7 +81,7 @@ class ManageBookmarkViewModel @Inject constructor(
         )
     }
 
-    fun bookmark(linkId: Int): Flow<UiState<LinkModel?>> {
+    override fun bookmark(linkId: Int): Flow<UiState<LinkModel?>> {
         addBookmarkOffLinkId(linkId)
         return postLinkBookmarkUseCase(
             BookmarkReqModel(

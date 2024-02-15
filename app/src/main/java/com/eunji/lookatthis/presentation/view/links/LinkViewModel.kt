@@ -1,6 +1,5 @@
 package com.eunji.lookatthis.presentation.view.links
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -14,6 +13,7 @@ import com.eunji.lookatthis.domain.usecase.links.GetLinkUseCase
 import com.eunji.lookatthis.domain.usecase.links.PostLinkBookmarkUseCase
 import com.eunji.lookatthis.domain.usecase.links.PostLinkReadUseCase
 import com.eunji.lookatthis.presentation.util.ApiRetry
+import com.eunji.lookatthis.presentation.view.BaseLinkViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,7 +30,7 @@ class LinkViewModel @Inject constructor(
     private val postLinkReadUseCase: PostLinkReadUseCase,
     private val postLinkBookmarkUseCase: PostLinkBookmarkUseCase,
     private val postFcmTokenUseCase: PostFcmTokenUseCase,
-) : ViewModel() {
+) : BaseLinkViewModel() {
 
     private val _links: MutableStateFlow<PagingData<LinkModel>> =
         MutableStateFlow(PagingData.empty())
@@ -56,7 +56,17 @@ class LinkViewModel @Inject constructor(
         }
     }
 
-    fun read(linkId: Int): Flow<UiState<LinkModel?>> {
+
+    fun postFcmToken(fcmToken: String) {
+        viewModelScope.launch {
+            ApiRetry.retry(2) {
+                postFcmTokenUseCase(FcmTokenModel(fcmToken)).collect()
+            }
+        }
+    }
+
+
+    override fun read(linkId: Int): Flow<UiState<LinkModel?>> {
         return postLinkReadUseCase(
             ReadReqModel(
                 linkId = linkId
@@ -70,7 +80,7 @@ class LinkViewModel @Inject constructor(
         )
     }
 
-    fun bookmark(linkId: Int): Flow<UiState<LinkModel?>> {
+    override fun bookmark(linkId: Int): Flow<UiState<LinkModel?>> {
         return postLinkBookmarkUseCase(
             BookmarkReqModel(
                 linkId = linkId
@@ -84,12 +94,5 @@ class LinkViewModel @Inject constructor(
         )
     }
 
-    fun postFcmToken(fcmToken: String) {
-        viewModelScope.launch {
-            ApiRetry.retry(2) {
-                postFcmTokenUseCase(FcmTokenModel(fcmToken)).collect()
-            }
-        }
-    }
 
 }

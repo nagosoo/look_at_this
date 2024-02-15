@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.core.view.postDelayed
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -12,18 +11,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.paging.LoadState
-import androidx.recyclerview.widget.SimpleItemAnimator
 import com.eunji.lookatthis.R
 import com.eunji.lookatthis.data.model.LinkModel
 import com.eunji.lookatthis.databinding.FragmentLinkBinding
-import com.eunji.lookatthis.domain.UiState
 import com.eunji.lookatthis.presentation.adapter.LinkAdapter
-import com.eunji.lookatthis.presentation.adapter.LinkLoadStateAdapter
-import com.eunji.lookatthis.presentation.decoration.LinkRecyclerViewItemDecoration
-import com.eunji.lookatthis.presentation.util.DialogUtil
-import com.eunji.lookatthis.presentation.util.DisplayUnitUtil.dpToPx
-import com.eunji.lookatthis.presentation.util.UrlOpenUtil
+import com.eunji.lookatthis.presentation.view.BaseLinkFragment
 import com.eunji.lookatthis.presentation.view.MainActivity
 import com.eunji.lookatthis.presentation.view.alarm_setting.AlarmSettingFragment
 import com.eunji.lookatthis.presentation.view.link_register.LinkRegisterFragment
@@ -35,11 +27,11 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class LinkFragment : Fragment() {
+class LinkFragment : BaseLinkFragment() {
     private var _binding: FragmentLinkBinding? = null
     private val binding get() = _binding!!
     private val viewModel: LinkViewModel by viewModels()
-    private val adapter by lazy { LinkAdapter(::read, ::bookmark) }
+    private val adapter by lazy { LinkAdapter(::readCallback, ::bookmarkCallback) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,7 +78,12 @@ class LinkFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as? MainActivity)?.setAppBarTitle(getString(R.string.app_name))
-        setRecyclerView()
+        setRecyclerView(
+            adapter = adapter,
+            recyclerView = binding.recyclerView,
+            layoutLoading = binding.layoutLoading,
+            layoutEmpty = binding.layoutEmpty
+        )
         setOnClickListener()
         setSwipeLayout()
         init()
@@ -155,35 +152,21 @@ class LinkFragment : Fragment() {
         }
     }
 
-    private fun read(link: LinkModel, position: Int) {
-        if (!link.isRead) {
+    private fun readCallback(link: LinkModel, position: Int) {
+        read(
+            link = link,
+            viewModel = viewModel
+        ) {
             setReadView(position)
-            viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.read(link.linkId)
-                    .collect { uiState ->
-                        when (uiState) {
-                            is UiState.Loading -> {
-                            }
+        }
+    }
 
-                            is UiState.Success -> {
-                                UrlOpenUtil.openUrl(
-                                    uiState.value!!.linkUrl,
-                                    requireContext(),
-                                    parentFragmentManager
-                                )
-                            }
-
-                            is UiState.Error -> {
-                                DialogUtil.showErrorDialog(
-                                    parentFragmentManager,
-                                    uiState.errorMessage
-                                )
-                            }
-                        }
-                    }
-            }
-        } else {
-            UrlOpenUtil.openUrl(link.linkUrl, requireContext(), parentFragmentManager)
+    private fun bookmarkCallback(link: LinkModel, position: Int) {
+        bookmark(
+            link = link,
+            viewModel = viewModel
+        ) {
+            toggleBookmarkView(link, position)
         }
     }
 
@@ -192,60 +175,9 @@ class LinkFragment : Fragment() {
         adapter.notifyItemChanged(position)
     }
 
-    private fun bookmark(link: LinkModel, position: Int) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.bookmark(link.linkId)
-                .collect { uiState ->
-                    when (uiState) {
-                        is UiState.Loading -> {
-                        }
-
-                        is UiState.Success -> {
-                            toggleBookmarkView(link, position)
-                        }
-
-                        is UiState.Error -> {
-                            DialogUtil.showErrorDialog(
-                                parentFragmentManager,
-                                uiState.errorMessage
-                            )
-                        }
-                    }
-                }
-        }
-    }
-
     private fun toggleBookmarkView(link: LinkModel, position: Int) {
         adapter.snapshot()[position]?.isBookmarked = !link.isBookmarked
         adapter.notifyItemChanged(position)
-    }
-
-    private fun setRecyclerView() {
-        val paddingBottom = dpToPx(20f, requireContext())
-        binding.recyclerView.adapter = adapter
-        (binding.recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
-        binding.recyclerView.addItemDecoration(LinkRecyclerViewItemDecoration(paddingBottom))
-        adapter.addLoadStateListener { combinedLoadStates ->
-            val loadState = combinedLoadStates.source
-            val isFirstLoading = adapter.itemCount < 1 && loadState.refresh is LoadState.Loading
-            binding.layoutLoading.root.isVisible = isFirstLoading
-            val isEmpty =
-                adapter.itemCount < 1 && loadState.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached
-            binding.layoutEmpty.root.isVisible = isEmpty
-            val isError: LoadState.Error? =
-                loadState.append as? LoadState.Error ?: loadState.refresh as? LoadState.Error
-                ?: loadState.prepend as? LoadState.Error
-            isError?.let {
-                DialogUtil.showErrorDialog(
-                    parentFragmentManager,
-                    getString(R.string.text_normal_error)
-                )
-            }
-        }
-        binding.recyclerView.adapter = adapter.withLoadStateFooter(
-            footer = LinkLoadStateAdapter()
-        )
-        binding.recyclerView.setHasFixedSize(true)
     }
 
     private fun setOnClickListener() {
