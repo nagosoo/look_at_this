@@ -12,9 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.eunji.lookatthis.R
 import com.eunji.lookatthis.data.model.AlarmModel
 import com.eunji.lookatthis.databinding.FragmentAlarmSettingBinding
@@ -62,15 +60,24 @@ class AlarmSettingFragment : Fragment() {
     }
 
     private fun init() {
+        //for configuration change
+        val alarmFromViewModel = viewModel.checkedAlarmType.value
+        if (alarmFromViewModel != null) {
+            val alarmModel = getAlarmModelFromAlarmType(alarmFromViewModel)
+            renderUiState(UiState.Success(alarmModel))
+            return
+        }
+        //알림 세팅에 한번이라도 들어온 적이 있는 경우
         val cachedAlarm = mainViewModel.alarmType.value
         if (cachedAlarm != null) {
             val alarmModel = getAlarmModelFromAlarmType(cachedAlarm)
             renderUiState(UiState.Success(alarmModel))
-        } else {
-            viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.getAlarmSetting().collect { uiState ->
-                    renderUiState(uiState)
-                }
+            return
+        }
+        //알림 세팅에 한번도 들어온 적이 없는 경우
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.getAlarmSetting().collect { uiState ->
+                renderUiState(uiState)
             }
         }
     }
@@ -150,7 +157,6 @@ class AlarmSettingFragment : Fragment() {
         checkBoxs.forEachIndexed { index, checkBox ->
             checkBox?.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    binding.customItem15Pm.checkBox.isChecked = true
                     viewModel.setCheckedItem(alarmTypes[index])
                     setCheckBoxChecked(alarmTypes[index])
                 }

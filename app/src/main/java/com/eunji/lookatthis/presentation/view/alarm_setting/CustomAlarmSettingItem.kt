@@ -36,7 +36,7 @@ class CustomAlarmSettingItem : LinearLayout {
         val inflater = LayoutInflater.from(context)
         val binding = CustomAlarmSettingItemBinding.inflate(inflater, this, false)
         _textView = binding.textView
-        _checkBox = binding.checkbox.checkbox
+        _checkBox = binding.checkbox.root
         _textView.setOnClickListener {
             _checkBox.isChecked = !_checkBox.isChecked
         }

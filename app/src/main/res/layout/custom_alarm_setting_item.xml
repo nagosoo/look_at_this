@@ -8,8 +8,8 @@
     <include
         android:id="@+id/checkbox"
         layout="@layout/check_box"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="31dp"
+        android:layout_height="31dp" />
 
     <TextView
         android:id="@+id/text_view"
