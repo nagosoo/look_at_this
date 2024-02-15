@@ -9,9 +9,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.eunji.lookatthis.R
 import com.eunji.lookatthis.data.model.LinkModel
 import com.eunji.lookatthis.databinding.FragmentLinkRegisterBinding
@@ -29,11 +27,11 @@ class LinkRegisterFragment : Fragment() {
     private var _binding: FragmentLinkRegisterBinding? = null
     private val binding get() = _binding!!
     private val viewModel: LinkRegisterViewModel by viewModels()
-    private var linkFromInstagram: String? = null
+    private var linkFromOtherApp: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        linkFromInstagram = arguments?.getString(LinkFragment.linkFromOtherApp)
+        linkFromOtherApp = arguments?.getString(LinkFragment.linkFromOtherApp)
     }
 
     override fun onCreateView(
@@ -54,7 +52,7 @@ class LinkRegisterFragment : Fragment() {
     }
 
     private fun init() {
-        linkFromInstagram?.let { url ->
+        linkFromOtherApp?.let { url ->
             binding.etLink.setText(url)
         }
         viewModel.url.value?.let { url ->
