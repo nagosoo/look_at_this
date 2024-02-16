@@ -146,7 +146,7 @@ class LinkFragment : BaseLinkFragment() {
 
     private fun scrollToTop() {
         //submitData완료후에 0번째 아이템을 찾아가기 위함
-        binding.recyclerView.postDelayed(500) {
+        binding.recyclerView.postDelayed(1000) {
             binding.recyclerView.scrollToPosition(0)
             binding.swipeRefreshLayout.isRefreshing = false
         }
