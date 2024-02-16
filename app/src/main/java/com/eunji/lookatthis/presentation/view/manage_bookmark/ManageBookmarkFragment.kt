@@ -75,7 +75,9 @@ class ManageBookmarkFragment : BaseLinkFragment() {
             link = link,
             viewModel = viewModel
         ) {
-            adapter.notifyItemRemoved(position)
+            val layoutManagerState = binding.recyclerView.layoutManager?.onSaveInstanceState()
+            adapter.refresh()
+            binding.recyclerView.layoutManager?.onRestoreInstanceState(layoutManagerState)
         }
     }
 
