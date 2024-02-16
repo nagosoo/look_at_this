@@ -1,10 +1,10 @@
 package com.eunji.lookatthis.domain.repositoryImpl
 
 import com.eunji.lookatthis.data.datasource.remote.AlarmDataSource
-import com.eunji.lookatthis.data.model.AlarmModel
-import com.eunji.lookatthis.data.model.FcmTokenModel
 import com.eunji.lookatthis.data.repository.AlarmRepository
 import com.eunji.lookatthis.domain.UiState
+import com.eunji.lookatthis.domain.model.AlarmModel
+import com.eunji.lookatthis.domain.model.FcmTokenModel
 import com.eunji.lookatthis.domain.safeApiCall
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

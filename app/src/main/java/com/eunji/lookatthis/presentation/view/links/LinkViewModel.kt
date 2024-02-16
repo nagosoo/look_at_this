@@ -3,11 +3,11 @@ package com.eunji.lookatthis.presentation.view.links
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.eunji.lookatthis.data.model.BookmarkReqModel
-import com.eunji.lookatthis.data.model.FcmTokenModel
-import com.eunji.lookatthis.data.model.LinkModel
-import com.eunji.lookatthis.data.model.ReadReqModel
 import com.eunji.lookatthis.domain.UiState
+import com.eunji.lookatthis.domain.model.BookmarkReqModel
+import com.eunji.lookatthis.domain.model.FcmTokenModel
+import com.eunji.lookatthis.domain.model.LinkModel
+import com.eunji.lookatthis.domain.model.ReadReqModel
 import com.eunji.lookatthis.domain.usecase.alarm.PostFcmTokenUseCase
 import com.eunji.lookatthis.domain.usecase.links.GetLinkUseCase
 import com.eunji.lookatthis.domain.usecase.links.PostLinkBookmarkUseCase

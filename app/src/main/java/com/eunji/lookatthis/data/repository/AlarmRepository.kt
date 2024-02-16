@@ -1,8 +1,8 @@
 package com.eunji.lookatthis.data.repository
 
-import com.eunji.lookatthis.data.model.AlarmModel
-import com.eunji.lookatthis.data.model.FcmTokenModel
 import com.eunji.lookatthis.domain.UiState
+import com.eunji.lookatthis.domain.model.AlarmModel
+import com.eunji.lookatthis.domain.model.FcmTokenModel
 import kotlinx.coroutines.flow.Flow
 
 interface AlarmRepository {

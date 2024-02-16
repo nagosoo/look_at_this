@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.eunji.lookatthis.data.model.AlarmModel
 import com.eunji.lookatthis.domain.UiState
+import com.eunji.lookatthis.domain.model.AlarmModel
 import com.eunji.lookatthis.domain.usecase.alarm.GetAlarmSettingUseCase
 import com.eunji.lookatthis.domain.usecase.alarm.PostAlarmSettingUseCase
-import com.eunji.lookatthis.presentation.model.AlarmType
+import com.eunji.lookatthis.domain.status.AlarmType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted

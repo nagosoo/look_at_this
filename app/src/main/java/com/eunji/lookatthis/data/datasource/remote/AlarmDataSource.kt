@@ -1,9 +1,9 @@
 package com.eunji.lookatthis.data.datasource.remote
 
-import com.eunji.lookatthis.data.model.AlarmModel
-import com.eunji.lookatthis.data.model.FcmTokenModel
-import com.eunji.lookatthis.data.model.ResponseModel
 import com.eunji.lookatthis.data.retrofit.services.AlarmService
+import com.eunji.lookatthis.domain.model.AlarmModel
+import com.eunji.lookatthis.domain.model.FcmTokenModel
+import com.eunji.lookatthis.domain.model.ResponseModel
 import retrofit2.Response
 import javax.inject.Inject
 import javax.inject.Singleton

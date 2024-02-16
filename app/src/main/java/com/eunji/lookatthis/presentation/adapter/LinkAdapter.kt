@@ -11,8 +11,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.eunji.lookatthis.R
-import com.eunji.lookatthis.data.model.LinkModel
 import com.eunji.lookatthis.databinding.ItemMainBinding
+import com.eunji.lookatthis.domain.model.LinkModel
 import com.eunji.lookatthis.presentation.util.DateUtil
 
 

@@ -1,11 +1,11 @@
 package com.eunji.lookatthis.data.retrofit.services
 
-import com.eunji.lookatthis.data.model.BookmarkReqModel
-import com.eunji.lookatthis.data.model.LinkModel
-import com.eunji.lookatthis.data.model.PaginationModel
-import com.eunji.lookatthis.data.model.PostLinkReqModel
-import com.eunji.lookatthis.data.model.ReadReqModel
-import com.eunji.lookatthis.data.model.ResponseModel
+import com.eunji.lookatthis.domain.model.BookmarkReqModel
+import com.eunji.lookatthis.domain.model.LinkModel
+import com.eunji.lookatthis.domain.model.PaginationModel
+import com.eunji.lookatthis.domain.model.PostLinkReqModel
+import com.eunji.lookatthis.domain.model.ReadReqModel
+import com.eunji.lookatthis.domain.model.ResponseModel
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET

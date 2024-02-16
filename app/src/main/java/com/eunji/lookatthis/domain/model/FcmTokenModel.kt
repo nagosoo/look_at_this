@@ -1,4 +1,4 @@
-package com.eunji.lookatthis.data.model
+package com.eunji.lookatthis.domain.model
 
 import kotlinx.serialization.Serializable
 

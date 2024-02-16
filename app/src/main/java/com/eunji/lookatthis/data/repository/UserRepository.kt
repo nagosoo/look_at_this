@@ -1,8 +1,8 @@
 package com.eunji.lookatthis.data.repository
 
-import com.eunji.lookatthis.data.model.PostUserAccountReqModel
-import com.eunji.lookatthis.data.model.BasicTokenModel
 import com.eunji.lookatthis.domain.UiState
+import com.eunji.lookatthis.domain.model.BasicTokenModel
+import com.eunji.lookatthis.domain.model.PostUserAccountReqModel
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {

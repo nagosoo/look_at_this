@@ -1,7 +1,7 @@
 package com.eunji.lookatthis.domain
 
-import com.eunji.lookatthis.data.model.ResponseModel
 import com.eunji.lookatthis.domain.model.ErrorBodyModel
+import com.eunji.lookatthis.domain.model.ResponseModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.serialization.json.Json

@@ -10,7 +10,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.eunji.lookatthis.R
-import com.eunji.lookatthis.data.model.FcmTokenModel
+import com.eunji.lookatthis.domain.model.FcmTokenModel
 import com.eunji.lookatthis.domain.usecase.alarm.PostFcmTokenUseCase
 import com.eunji.lookatthis.domain.usecase.user.GetBasicTokenUseCase
 import com.eunji.lookatthis.presentation.Constance.CHANNEL_DESCRIPTION

@@ -1,11 +1,11 @@
 package com.eunji.lookatthis.data.repository
 
 import androidx.paging.PagingData
-import com.eunji.lookatthis.data.model.BookmarkReqModel
-import com.eunji.lookatthis.data.model.LinkModel
-import com.eunji.lookatthis.data.model.PostLinkReqModel
-import com.eunji.lookatthis.data.model.ReadReqModel
 import com.eunji.lookatthis.domain.UiState
+import com.eunji.lookatthis.domain.model.BookmarkReqModel
+import com.eunji.lookatthis.domain.model.LinkModel
+import com.eunji.lookatthis.domain.model.PostLinkReqModel
+import com.eunji.lookatthis.domain.model.ReadReqModel
 import kotlinx.coroutines.flow.Flow
 
 interface LinkRepository {

@@ -14,12 +14,12 @@ import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.eunji.lookatthis.R
-import com.eunji.lookatthis.data.model.AlarmModel
 import com.eunji.lookatthis.databinding.FragmentAlarmSettingBinding
 import com.eunji.lookatthis.domain.UiState
-import com.eunji.lookatthis.presentation.model.AlarmType
-import com.eunji.lookatthis.presentation.util.AlarmUtil.getAlarmModelFromAlarmType
-import com.eunji.lookatthis.presentation.util.AlarmUtil.getAlarmTypeFromAlarmModel
+import com.eunji.lookatthis.domain.model.AlarmModel
+import com.eunji.lookatthis.domain.model.AlarmModel.Companion.getAlarmModelFromAlarmType
+import com.eunji.lookatthis.domain.model.AlarmModel.Companion.getAlarmTypeFromAlarmModel
+import com.eunji.lookatthis.domain.status.AlarmType
 import com.eunji.lookatthis.presentation.util.DialogUtil.closeDialog
 import com.eunji.lookatthis.presentation.util.DialogUtil.showErrorDialog
 import com.eunji.lookatthis.presentation.view.MainActivity

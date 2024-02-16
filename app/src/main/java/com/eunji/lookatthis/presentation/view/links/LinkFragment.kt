@@ -12,8 +12,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.eunji.lookatthis.R
-import com.eunji.lookatthis.data.model.LinkModel
 import com.eunji.lookatthis.databinding.FragmentLinkBinding
+import com.eunji.lookatthis.domain.model.LinkModel
 import com.eunji.lookatthis.presentation.adapter.LinkAdapter
 import com.eunji.lookatthis.presentation.view.BaseLinkFragment
 import com.eunji.lookatthis.presentation.view.MainActivity

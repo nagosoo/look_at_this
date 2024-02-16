@@ -8,10 +8,10 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.eunji.lookatthis.R
-import com.eunji.lookatthis.data.model.LinkModel
 import com.eunji.lookatthis.databinding.LayoutEmptyBinding
 import com.eunji.lookatthis.databinding.LayoutLoadingBinding
 import com.eunji.lookatthis.domain.UiState
+import com.eunji.lookatthis.domain.model.LinkModel
 import com.eunji.lookatthis.presentation.adapter.LinkAdapter
 import com.eunji.lookatthis.presentation.adapter.LinkLoadStateAdapter
 import com.eunji.lookatthis.presentation.decoration.LinkRecyclerViewItemDecoration

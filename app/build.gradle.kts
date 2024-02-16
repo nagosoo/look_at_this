@@ -121,7 +121,7 @@ dependencies {
     //splash
     implementation ("androidx.core:core-splashscreen:1.0.1")
 
-    //paging경
+    //paging
     implementation("androidx.paging:paging-common:3.2.1")
     implementation("androidx.paging:paging-runtime:3.2.1")
 

@@ -1,8 +1,8 @@
 package com.eunji.lookatthis.data.retrofit.services
 
-import com.eunji.lookatthis.data.model.AlarmModel
-import com.eunji.lookatthis.data.model.FcmTokenModel
-import com.eunji.lookatthis.data.model.ResponseModel
+import com.eunji.lookatthis.domain.model.AlarmModel
+import com.eunji.lookatthis.domain.model.FcmTokenModel
+import com.eunji.lookatthis.domain.model.ResponseModel
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET

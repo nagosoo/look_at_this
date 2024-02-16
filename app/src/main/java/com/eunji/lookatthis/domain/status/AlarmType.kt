@@ -1,4 +1,4 @@
-package com.eunji.lookatthis.presentation.model
+package com.eunji.lookatthis.domain.status
 
 enum class AlarmType(val time:String?) {
     EVERY_TIME(null),

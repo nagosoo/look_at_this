@@ -1,8 +1,8 @@
 package com.eunji.lookatthis.domain.usecase.alarm
 
-import com.eunji.lookatthis.data.model.FcmTokenModel
 import com.eunji.lookatthis.data.repository.AlarmRepository
 import com.eunji.lookatthis.domain.UiState
+import com.eunji.lookatthis.domain.model.FcmTokenModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton

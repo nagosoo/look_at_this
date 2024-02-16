@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.eunji.lookatthis.data.model.LinkModel
-import com.eunji.lookatthis.data.model.PostLinkReqModel
 import com.eunji.lookatthis.domain.UiState
+import com.eunji.lookatthis.domain.model.LinkModel
+import com.eunji.lookatthis.domain.model.PostLinkReqModel
 import com.eunji.lookatthis.domain.usecase.links.PostLinkUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow

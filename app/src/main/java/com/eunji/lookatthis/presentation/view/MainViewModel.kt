@@ -3,7 +3,7 @@ package com.eunji.lookatthis.presentation.view
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.eunji.lookatthis.presentation.model.AlarmType
+import com.eunji.lookatthis.domain.status.AlarmType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

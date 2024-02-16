@@ -3,7 +3,7 @@ package com.eunji.lookatthis.domain
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.eunji.lookatthis.data.datasource.remote.LinkDataSource
-import com.eunji.lookatthis.data.model.LinkModel
+import com.eunji.lookatthis.domain.model.LinkModel
 import retrofit2.HttpException
 import java.io.IOException
 

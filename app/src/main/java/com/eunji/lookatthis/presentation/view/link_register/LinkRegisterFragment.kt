@@ -11,9 +11,9 @@ import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.eunji.lookatthis.R
-import com.eunji.lookatthis.data.model.LinkModel
 import com.eunji.lookatthis.databinding.FragmentLinkRegisterBinding
 import com.eunji.lookatthis.domain.UiState
+import com.eunji.lookatthis.domain.model.LinkModel
 import com.eunji.lookatthis.presentation.util.ClipboardHelper
 import com.eunji.lookatthis.presentation.util.DialogUtil
 import com.eunji.lookatthis.presentation.view.MainActivity
