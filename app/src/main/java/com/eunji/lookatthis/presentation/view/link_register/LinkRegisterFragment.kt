@@ -118,9 +118,9 @@ class LinkRegisterFragment : Fragment() {
             is UiState.Success -> {
                 DialogUtil.closeDialog(parentFragmentManager)
                 uiState.value?.let { value ->
-                    DialogUtil.showRegisterLinkSuccessDialog(
+                    DialogUtil.showSuccessDialog(
                         parentFragmentManager,
-                        requireContext()
+                        requireContext().getString(R.string.text_success_register_link)
                     ) {
                         setFragmentResult(
                             LinkFragment.shouldRefreshPagingKey,

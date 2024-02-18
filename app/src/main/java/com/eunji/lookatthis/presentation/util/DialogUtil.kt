@@ -32,13 +32,13 @@ object DialogUtil {
         ).show(fragmentManager, CommonDialog.TAG)
     }
 
-    fun showRegisterLinkSuccessDialog(
+    fun showSuccessDialog(
         fragmentManager: FragmentManager,
-        context: Context,
+        title: String,
         onPositiveButtonClickListener: () -> Unit
     ) {
         CommonDialog(
-            title = context.getString(R.string.text_success_register_link),
+            title = title,
             drawableResId = R.drawable.success,
             onPositiveBtnClickListener = onPositiveButtonClickListener
         ).show(fragmentManager, CommonDialog.TAG)
