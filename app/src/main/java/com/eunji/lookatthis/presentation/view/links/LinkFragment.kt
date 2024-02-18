@@ -8,13 +8,9 @@ import androidx.core.view.postDelayed
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.eunji.lookatthis.R
 import com.eunji.lookatthis.databinding.FragmentLinkBinding
 import com.eunji.lookatthis.domain.model.LinkModel
-import com.eunji.lookatthis.presentation.adapter.LinkAdapter
 import com.eunji.lookatthis.presentation.view.BaseLinkFragment
 import com.eunji.lookatthis.presentation.view.MainActivity
 import com.eunji.lookatthis.presentation.view.alarm_setting.AlarmSettingFragment
@@ -23,15 +19,11 @@ import com.eunji.lookatthis.presentation.view.manage_bookmark.ManageBookmarkFrag
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LinkFragment : BaseLinkFragment() {
     private var _binding: FragmentLinkBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: LinkViewModel by viewModels()
-    private val adapter by lazy { LinkAdapter(::readCallback, ::bookmarkCallback) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +54,7 @@ class LinkFragment : BaseLinkFragment() {
             if (!task.isSuccessful) {
                 return@OnCompleteListener
             }
-            viewModel.postFcmToken(task.result)
+            (viewModel as LinkViewModel).postFcmToken(task.result)
         })
     }
 
@@ -76,17 +68,17 @@ class LinkFragment : BaseLinkFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        viewModel = viewModels<LinkViewModel>().value
+        recyclerView = binding.recyclerView
+        layoutLoading = binding.layoutLoading
+        layoutEmpty = binding.layoutEmpty
+        toggleBookmarkView = { link, position ->
+            toggleBookmarkView(link, position)
+        }
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as? MainActivity)?.setAppBarTitle(getString(R.string.app_name))
-        setRecyclerView(
-            adapter = adapter,
-            recyclerView = binding.recyclerView,
-            layoutLoading = binding.layoutLoading,
-            layoutEmpty = binding.layoutEmpty
-        )
         setOnClickListener()
         setSwipeLayout()
-        init()
         setFragmentResultListener(shouldRefreshPagingKey) { _, bundle ->
             val result = bundle.getBoolean(shouldRefreshPaging, false)
             if (!result) return@setFragmentResultListener
@@ -99,17 +91,6 @@ class LinkFragment : BaseLinkFragment() {
             val readIds = bundle.getIntegerArrayList(readIds)
             setResultBookmarkOff(bookmarkOffIds)
             setResultRead(readIds)
-        }
-    }
-
-    private fun init() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.links
-                    .collectLatest { pagingData ->
-                        adapter.submitData(pagingData)
-                    }
-            }
         }
     }
 
@@ -150,29 +131,6 @@ class LinkFragment : BaseLinkFragment() {
             binding.recyclerView.scrollToPosition(0)
             binding.swipeRefreshLayout.isRefreshing = false
         }
-    }
-
-    private fun readCallback(link: LinkModel, position: Int) {
-        read(
-            link = link,
-            viewModel = viewModel
-        ) {
-            setReadView(position)
-        }
-    }
-
-    private fun bookmarkCallback(link: LinkModel, position: Int) {
-        bookmark(
-            link = link,
-            viewModel = viewModel
-        ) {
-            toggleBookmarkView(link, position)
-        }
-    }
-
-    private fun setReadView(position: Int) {
-        adapter.snapshot()[position]?.isRead = true
-        adapter.notifyItemChanged(position)
     }
 
     private fun toggleBookmarkView(link: LinkModel, position: Int) {

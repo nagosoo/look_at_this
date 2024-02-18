@@ -9,8 +9,9 @@ import com.eunji.lookatthis.domain.model.BasicTokenModel
 import com.eunji.lookatthis.domain.usecase.user.PostSignInUseCase
 import com.eunji.lookatthis.domain.usecase.user.SaveBasicTokenUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,6 +26,9 @@ class SignInViewModel @Inject constructor(
     val id: LiveData<String?> = _id
     private val _password: MutableLiveData<String?> = MutableLiveData()
     val password: LiveData<String?> = _password
+    private val _uiState: MutableStateFlow<UiState<BasicTokenModel?>> =
+        MutableStateFlow(UiState.Loading)
+    val uiState: StateFlow<UiState<BasicTokenModel?>> = _uiState
 
     fun setId(id: String) {
         _id.value = id
@@ -37,17 +41,25 @@ class SignInViewModel @Inject constructor(
     fun signIn(
         id: String,
         password: String
-    ): Flow<UiState<BasicTokenModel?>> {
-        return postSignInUseCase(
-            memberId = id,
-            memberPassword = password
-        ).stateIn(
-            initialValue = UiState.Loading,
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(
-                stopTimeoutMillis = 5000
-            )
-        )
+    ) {
+        viewModelScope.launch {
+            postSignInUseCase(
+                memberId = id,
+                memberPassword = password
+            ).stateIn(
+                initialValue = UiState.None,
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(
+                    stopTimeoutMillis = 5000
+                )
+            ).collect { uiState ->
+                _uiState.value = uiState
+            }
+        }
+    }
+
+    fun resetUiState() {
+        _uiState.value = UiState.None
     }
 
     fun saveBasicToken(token: String, onSuccessListener: () -> Unit) {

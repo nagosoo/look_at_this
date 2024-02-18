@@ -12,11 +12,16 @@ object DialogUtil {
         (fragmentManager.findFragmentByTag(tag) as? DialogFragment)?.dismiss()
     }
 
-    fun showErrorDialog(fragmentManager: FragmentManager, title: String) {
+    fun showErrorDialog(
+        fragmentManager: FragmentManager,
+        title: String,
+        onPositiveButtonClickListener: (() -> Unit)? = null
+    ) {
         closeDialog(fragmentManager)
         CommonDialog(
             title = title,
             drawableResId = R.drawable.error,
+            onPositiveBtnClickListener = onPositiveButtonClickListener
         ).show(fragmentManager, CommonDialog.TAG)
     }
 

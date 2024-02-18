@@ -12,7 +12,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.eunji.lookatthis.R
 import com.eunji.lookatthis.databinding.FragmentAlarmSettingBinding
 import com.eunji.lookatthis.domain.UiState
@@ -57,6 +59,28 @@ class AlarmSettingFragment : Fragment() {
         (requireActivity() as? MainActivity)?.setAppBarTitle(getString(R.string.text_alarm_setting_appbar))
         setOnClickListener()
         init()
+        subscribeUiState()
+        subscribeSaveState()
+    }
+
+    private fun subscribeUiState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { uiState ->
+                    renderUiState(uiState)
+                }
+            }
+        }
+    }
+
+    private fun subscribeSaveState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.saveState.collect { saveState ->
+                    renderSaveState(saveState)
+                }
+            }
+        }
     }
 
     private fun init() {
@@ -75,15 +99,12 @@ class AlarmSettingFragment : Fragment() {
             return
         }
         //알림 세팅에 한번도 들어온 적이 없는 경우
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.getAlarmSetting().collect { uiState ->
-                renderUiState(uiState)
-            }
-        }
+        viewModel.getAlarmSetting()
     }
 
     private fun renderUiState(uiState: UiState<AlarmModel?>) {
         when (uiState) {
+            is UiState.None -> {}
             is UiState.Loading -> {
 //                if (viewModel.checkedAlarmType.value == null)
 //                    showLoadingDialog(parentFragmentManager, requireContext())
@@ -99,28 +120,29 @@ class AlarmSettingFragment : Fragment() {
             }
 
             is UiState.Error -> {
-                showErrorDialog(parentFragmentManager, uiState.errorMessage)
+                showErrorDialog(parentFragmentManager, uiState.errorMessage) {
+                    viewModel.resetUiState()
+                }
             }
         }
     }
 
-    private fun renderResultState(uiState: UiState<AlarmModel?>, alarmModel: AlarmModel) {
+    private fun renderSaveState(uiState: UiState<AlarmModel?>) {
         when (uiState) {
+            is UiState.None -> {}
             is UiState.Loading -> {
             }
 
             is UiState.Success -> {
-                val alarmType = getAlarmTypeFromAlarmModel(alarmModel)
+                val alarmType = getAlarmTypeFromAlarmModel(uiState.value!!)
                 saveAlarmCache(alarmType)
-                setFragmentResult(
-                    LinkFragment.shouldRefreshPagingKey,
-                    bundleOf(LinkFragment.shouldRefreshPaging to false)
-                )
                 parentFragmentManager.popBackStack()
             }
 
             is UiState.Error -> {
-                showErrorDialog(parentFragmentManager, uiState.errorMessage)
+                showErrorDialog(parentFragmentManager, uiState.errorMessage) {
+                    viewModel.resetSaveState()
+                }
             }
         }
     }
@@ -134,14 +156,7 @@ class AlarmSettingFragment : Fragment() {
     private fun saveAlarm() {
         viewModel.checkedAlarmType.value?.let { alarmType ->
             val alarmModel = getAlarmModelFromAlarmType(alarmType)
-
-            viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.postAlarmSetting(alarmModel).collect { uiState ->
-                    viewModel.checkedAlarmType.value?.let { alarmType ->
-                        renderResultState(uiState, getAlarmModelFromAlarmType(alarmType))
-                    }
-                }
-            }
+            viewModel.postAlarmSetting(alarmModel)
         }
     }
 
@@ -166,6 +181,10 @@ class AlarmSettingFragment : Fragment() {
 
     override fun onDestroyView() {
         _binding = null
+        setFragmentResult(
+            LinkFragment.shouldRefreshPagingKey,
+            bundleOf(LinkFragment.shouldRefreshPaging to false)
+        )
         super.onDestroyView()
     }
 

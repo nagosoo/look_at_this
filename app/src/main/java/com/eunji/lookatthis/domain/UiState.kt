@@ -1,7 +1,8 @@
 package com.eunji.lookatthis.domain
 
 sealed class UiState<out T> {
-    object Loading : UiState<Nothing>()
+    data object None : UiState<Nothing>()
+    data object Loading : UiState<Nothing>()
 
     data class Success<T>(
         val value: T

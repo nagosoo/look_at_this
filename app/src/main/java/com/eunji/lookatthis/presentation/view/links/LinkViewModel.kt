@@ -15,7 +15,6 @@ import com.eunji.lookatthis.domain.usecase.links.PostLinkReadUseCase
 import com.eunji.lookatthis.presentation.util.ApiRetry
 import com.eunji.lookatthis.presentation.view.BaseLinkViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -34,7 +33,15 @@ class LinkViewModel @Inject constructor(
 
     private val _links: MutableStateFlow<PagingData<LinkModel>> =
         MutableStateFlow(PagingData.empty())
-    val links: StateFlow<PagingData<LinkModel>> = _links
+    override val links: StateFlow<PagingData<LinkModel>> = _links
+
+    private val _readUiState: MutableStateFlow<UiState<LinkModel?>> =
+        MutableStateFlow(UiState.Loading)
+    override val readUiState: StateFlow<UiState<LinkModel?>> = _readUiState
+
+    private val _bookmarkUiState: MutableStateFlow<UiState<LinkModel?>> =
+        MutableStateFlow(UiState.Loading)
+    override val bookmarkUiState: StateFlow<UiState<LinkModel?>> = _bookmarkUiState
 
     init {
         getAllLinks()
@@ -56,7 +63,6 @@ class LinkViewModel @Inject constructor(
         }
     }
 
-
     fun postFcmToken(fcmToken: String) {
         viewModelScope.launch {
             ApiRetry.retry(2) {
@@ -65,34 +71,48 @@ class LinkViewModel @Inject constructor(
         }
     }
 
-
-    override fun read(linkId: Int): Flow<UiState<LinkModel?>> {
-        return postLinkReadUseCase(
-            ReadReqModel(
-                linkId = linkId
-            )
-        ).stateIn(
-            initialValue = UiState.Loading,
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(
-                stopTimeoutMillis = 5000
-            )
-        )
+    override fun read(linkId: Int) {
+        viewModelScope.launch {
+            postLinkReadUseCase(
+                ReadReqModel(
+                    linkId = linkId
+                )
+            ).stateIn(
+                initialValue = UiState.None,
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(
+                    stopTimeoutMillis = 5000
+                )
+            ).collect { readState ->
+                _readUiState.value = readState
+            }
+        }
     }
 
-    override fun bookmark(linkId: Int): Flow<UiState<LinkModel?>> {
-        return postLinkBookmarkUseCase(
-            BookmarkReqModel(
-                linkId = linkId
-            )
-        ).stateIn(
-            initialValue = UiState.Loading,
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(
-                stopTimeoutMillis = 5000
-            )
-        )
+    override fun bookmark(linkId: Int) {
+        viewModelScope.launch {
+            postLinkBookmarkUseCase(
+                BookmarkReqModel(
+                    linkId = linkId
+                )
+            ).stateIn(
+                initialValue = UiState.None,
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(
+                    stopTimeoutMillis = 5000
+                )
+            ).collect { bookmarkState ->
+                _bookmarkUiState.value = bookmarkState
+            }
+        }
     }
 
+    override fun resetReadState() {
+        _readUiState.value = UiState.None
+    }
+
+    override fun resetBookmarkState() {
+        _bookmarkUiState.value = UiState.None
+    }
 
 }

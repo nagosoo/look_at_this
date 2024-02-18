@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.eunji.lookatthis.R
 import com.eunji.lookatthis.databinding.FragmentSignUpBinding
 import com.eunji.lookatthis.domain.UiState
@@ -42,6 +44,7 @@ class SignUpFragment : Fragment() {
         setOnClickListener()
         setObserver()
         init()
+        subscribeUiState()
     }
 
     private fun init() {
@@ -81,19 +84,25 @@ class SignUpFragment : Fragment() {
             showErrorDialog(parentFragmentManager, getString(R.string.text_not_same_password))
             return
         }
+        viewModel.signUp(
+            id = viewModel.id.value!!,
+            password = viewModel.password.value!!
+        )
+    }
 
+    private fun subscribeUiState() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.signUp(
-                id = viewModel.id.value!!,
-                password = viewModel.password.value!!
-            ).collect { uiState ->
-                render(uiState)
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { uiState ->
+                    render(uiState)
+                }
             }
         }
     }
 
     private fun render(uiState: UiState<BasicTokenModel?>) {
         when (uiState) {
+            is UiState.None -> {}
             is UiState.Loading -> {}
             is UiState.Success -> {
                 uiState.value?.let { value ->
@@ -102,7 +111,9 @@ class SignUpFragment : Fragment() {
             }
 
             is UiState.Error -> {
-                showErrorDialog(parentFragmentManager, uiState.errorMessage)
+                showErrorDialog(parentFragmentManager, uiState.errorMessage) {
+                    viewModel.resetUiState()
+                }
             }
         }
     }

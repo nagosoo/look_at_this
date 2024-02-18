@@ -9,7 +9,9 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.eunji.lookatthis.R
 import com.eunji.lookatthis.databinding.FragmentLinkRegisterBinding
 import com.eunji.lookatthis.domain.UiState
@@ -49,6 +51,7 @@ class LinkRegisterFragment : Fragment() {
         setOnEditTextListener()
         setOnClickListener()
         init()
+        subscribeUiState()
     }
 
     private fun init() {
@@ -60,6 +63,16 @@ class LinkRegisterFragment : Fragment() {
         }
         viewModel.memo.value?.let { memo ->
             binding.etMemo.setText(memo)
+        }
+    }
+
+    private fun subscribeUiState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { uiState ->
+                    render(uiState)
+                }
+            }
         }
     }
 
@@ -94,11 +107,6 @@ class LinkRegisterFragment : Fragment() {
     private fun setOnClickListener() {
         binding.btnRegister.setOnClickListener {
             viewModel.postLink()
-            viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.postLink().collect { uiState ->
-                    render(uiState)
-                }
-            }
         }
         binding.btnPaste.setOnClickListener {
             paste()
@@ -107,6 +115,8 @@ class LinkRegisterFragment : Fragment() {
 
     private fun render(uiState: UiState<LinkModel?>) {
         when (uiState) {
+            is UiState.None -> {}
+
             is UiState.Loading -> {
                 DialogUtil.showLoadingDialog(
                     parentFragmentManager,
@@ -132,7 +142,9 @@ class LinkRegisterFragment : Fragment() {
             }
 
             is UiState.Error -> {
-                DialogUtil.showErrorDialog(parentFragmentManager, uiState.errorMessage)
+                DialogUtil.showErrorDialog(parentFragmentManager, uiState.errorMessage) {
+                    viewModel.resetUiState()
+                }
             }
         }
     }

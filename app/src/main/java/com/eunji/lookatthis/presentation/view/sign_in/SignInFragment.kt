@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.eunji.lookatthis.R
 import com.eunji.lookatthis.databinding.FragmentSignInBinding
 import com.eunji.lookatthis.domain.UiState
@@ -41,6 +43,7 @@ class SignInFragment : Fragment() {
         init()
         setOnEdittextListener()
         setOnClickListener()
+        subscribeUiState()
     }
 
     private fun init() {
@@ -53,22 +56,19 @@ class SignInFragment : Fragment() {
         }
     }
 
-    private fun setOnClickListener() {
-        binding.buttonSignUp.setOnClickListener {
-            viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.signIn(
-                    id = viewModel.id.value!!,
-                    password = viewModel.password.value!!
-                )
-                    .collect { uiState ->
-                        render(uiState)
-                    }
+    private fun subscribeUiState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { uiState ->
+                    render(uiState)
+                }
             }
         }
     }
 
     private fun render(uiState: UiState<BasicTokenModel?>) {
         when (uiState) {
+            is UiState.None -> {}
             is UiState.Loading -> {}
             is UiState.Success -> {
                 uiState.value?.let { value ->
@@ -77,8 +77,19 @@ class SignInFragment : Fragment() {
             }
 
             is UiState.Error -> {
-                showErrorDialog(parentFragmentManager, uiState.errorMessage)
+                showErrorDialog(parentFragmentManager, uiState.errorMessage) {
+                    viewModel.resetUiState()
+                }
             }
+        }
+    }
+
+    private fun setOnClickListener() {
+        binding.buttonSignUp.setOnClickListener {
+            viewModel.signIn(
+                id = viewModel.id.value!!,
+                password = viewModel.password.value!!
+            )
         }
     }
 
