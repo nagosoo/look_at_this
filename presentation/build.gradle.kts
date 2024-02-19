@@ -1,48 +1,25 @@
-import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
-
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    alias(libs.plugins.com.android.application)
+    alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.hilt)
-}
-
-fun getLocalProperty(propertyKey: String): String {
-    return gradleLocalProperties(rootDir).getProperty(propertyKey)
+    alias(libs.plugins.gms)
 }
 
 android {
-    namespace = "com.eunji.lookatthis"
+    namespace = "com.eunji.lookatthis.presentation"
     compileSdk = 34
 
-    signingConfigs {
-        create("release") {
-            storeFile = file("../keystore/key_store")
-            storePassword = getLocalProperty("KEY_PASSWORD")
-            keyAlias = "key0"
-            keyPassword = getLocalProperty("STORE_PASSWORD")
-        }
-    }
-
     defaultConfig {
-        applicationId = "com.eunji.lookatthis"
         minSdk = 26
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        //consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
-        getByName("debug") {
-            signingConfig = signingConfigs.getByName("debug")
-        }
-
-        getByName("release") {
-            signingConfig = signingConfigs.getByName("release")
-
+        release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -72,8 +49,6 @@ android {
 dependencies {
 
     implementation(project(":domain"))
-    implementation(project(":data"))
-    implementation(project(":presentation"))
 
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
@@ -84,22 +59,19 @@ dependencies {
 
     implementation(libs.activity.ktx)
     implementation(libs.fragment.ktx)
-
-    //serialization
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.retrofit2.kotlinx.serialization.converter)
-
+    //image
+    implementation(libs.glide)
     //hilt
     implementation(libs.hilt)
     kapt(libs.hilt.compiler)
     //splash
     implementation(libs.splash)
     //paging
-    implementation(libs.paging.common)
     implementation(libs.paging.runtime)
-
-    //implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-
+    //swiperefreshlayout
+    implementation(libs.swiperefreshlayout)
+    //fcm
+    implementation(platform(libs.com.google.firebase))
+    implementation(libs.firebase.messagesing)
+    implementation(libs.firebase.analytics)
 }
-
-

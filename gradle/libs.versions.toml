@@ -1,0 +1,68 @@
+[versions]
+agp = "8.1.4"
+orgJetbrainsKotlinAndroid = "1.9.0"
+gms = "4.3.15"
+hilt = "2.48"
+kotlinPluginSerialization = "1.9.21"
+orgJetbrainKotlinJvm = "1.9.21"
+coreKtx = "1.9.0"
+appcompat = "1.6.1"
+material = "1.9.0"
+junit = "4.13.2"
+testExtJunit = "1.1.5"
+espresso = "3.5.1"
+activityKtx = "1.8.2"
+fragmentKtx = "1.6.2"
+glide = "4.16.0"
+googleFirebase = "32.3.1"
+retrofit = "2.9.0"
+okhttp = "5.0.0-alpha.2"
+kotlinxSerializationJson = "1.6.2"
+retrofitKotlinxSerializationConverter = "0.8.0"
+dataStore = "1.0.0"
+encryptedSharedPreferences = "1.1.0-alpha06"
+splash = "1.0.1"
+paging = "3.2.1"
+swiperefreshlayout = "1.1.0"
+kotlinxCourutinesCore = "1.8.0"
+javaxInject = "1"
+constraintlayout = "2.2.0-alpha07"
+
+[libraries]
+core-ktx = {group = "androidx.core", name = "core-ktx", version.ref = "coreKtx"}
+appcompat = {group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat"}
+material = {group = "com.google.android.material", name = "material", version.ref = "material"}
+junit = {group = "junit", name = "junit", version.ref = "junit"}
+test-ext-junit = {group = "androidx.test.ext", name = "junit", version.ref = "testExtJunit"}
+espresso = {group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso"}
+activity-ktx = {group = "androidx.activity", name = "activity-ktx", version.ref = "activityKtx"}
+fragment-ktx = {group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragmentKtx"}
+glide = {group = "com.github.bumptech.glide", name = "glide", version.ref = "glide"}
+com-google-firebase = {group = "com.google.firebase", name = "firebase-bom", version.ref = "googleFirebase"}
+firebase-messagesing = {group = "com.google.firebase", name = "firebase-messaging-ktx"}
+firebase-analytics = {group = "com.google.firebase", name = "firebase-analytics-ktx"}
+retrofit = {group = "com.squareup.retrofit2", name = "retrofit", version.ref ="retrofit"}
+okhttp = {group = "com.squareup.okhttp3", name = "okhttp", version.ref ="okhttp"}
+okhttp-logging-interceptor = {group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref ="okhttp"}
+kotlinx-serialization-json = {group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref ="kotlinxSerializationJson"}
+retrofit2-kotlinx-serialization-converter = {group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref ="retrofitKotlinxSerializationConverter"}
+datastore = {group = "androidx.datastore", name = "datastore-preferences", version.ref ="dataStore"}
+security-crypto-ktx = {group = "androidx.security", name = "security-crypto-ktx", version.ref ="encryptedSharedPreferences"}
+hilt = {group = "com.google.dagger", name = "hilt-android", version.ref ="hilt"}
+hilt-compiler = {group = "com.google.dagger", name = "hilt-android-compiler", version.ref ="hilt"}
+splash = {group = "androidx.core", name = "core-splashscreen", version.ref ="splash"}
+paging-common = {group = "androidx.paging", name = "paging-common", version.ref ="paging"}
+paging-runtime = {group = "androidx.paging", name = "paging-runtime", version.ref ="paging"}
+swiperefreshlayout = {group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref ="swiperefreshlayout"}
+kotlinx-courutines-core = {group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref ="kotlinxCourutinesCore"}
+javax-inject = { group = "javax.inject", name="javax.inject", version.ref = "javaxInject" }
+
+[plugins]
+com-android-application = { id = "com.android.application", version.ref = "agp" }
+org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "orgJetbrainsKotlinAndroid" }
+gms = { id = "com.google.gms.google-services", version.ref = "gms" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinPluginSerialization" }
+com-android-library = { id = "com.android.library", version.ref = "agp" }
+org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "orgJetbrainKotlinJvm" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "orgJetbrainsKotlinAndroid"}

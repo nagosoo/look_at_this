@@ -1,48 +1,34 @@
-import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
-
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.com.android.library)
+    alias(libs.plugins.kotlin.plugin.serialization)
     alias(libs.plugins.hilt)
-}
-
-fun getLocalProperty(propertyKey: String): String {
-    return gradleLocalProperties(rootDir).getProperty(propertyKey)
+    alias(libs.plugins.kotlin.kapt)
 }
 
 android {
-    namespace = "com.eunji.lookatthis"
-    compileSdk = 34
-
-    signingConfigs {
-        create("release") {
-            storeFile = file("../keystore/key_store")
-            storePassword = getLocalProperty("KEY_PASSWORD")
-            keyAlias = "key0"
-            keyPassword = getLocalProperty("STORE_PASSWORD")
-        }
-    }
+    namespace = "com.eunji.lookatthis.data"
+    compileSdk = 33
 
     defaultConfig {
-        applicationId = "com.eunji.lookatthis"
         minSdk = 26
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
         getByName("debug") {
-            signingConfig = signingConfigs.getByName("debug")
+            buildConfigField("String", "baseUrl", "\"http://192.168.0.109:8080\"")
         }
 
         getByName("release") {
-            signingConfig = signingConfigs.getByName("release")
-
+            buildConfigField(
+                "String",
+                "baseUrl",
+                "\"http://lookatthisbe-env.eba-mmt8camh.ap-northeast-2.elasticbeanstalk.com\""
+            )
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -59,21 +45,13 @@ android {
     }
 
     buildFeatures {
-        viewBinding = true
         buildConfig = true
     }
-
-    kapt {
-        correctErrorTypes = true
-    }
-
 }
 
 dependencies {
 
     implementation(project(":domain"))
-    implementation(project(":data"))
-    implementation(project(":presentation"))
 
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
@@ -82,24 +60,21 @@ dependencies {
     androidTestImplementation(libs.test.ext.junit)
     androidTestImplementation(libs.espresso)
 
-    implementation(libs.activity.ktx)
-    implementation(libs.fragment.ktx)
-
+    //retrofit
+    implementation(libs.retrofit)
+    //okhttp
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging.interceptor)
     //serialization
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.retrofit2.kotlinx.serialization.converter)
-
+    //datastore
+    implementation(libs.datastore)
+    //EncryptedSharedPreferences
+    implementation(libs.security.crypto.ktx)
     //hilt
     implementation(libs.hilt)
     kapt(libs.hilt.compiler)
-    //splash
-    implementation(libs.splash)
     //paging
-    implementation(libs.paging.common)
     implementation(libs.paging.runtime)
-
-    //implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-
 }
-
-

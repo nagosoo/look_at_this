@@ -15,3 +15,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "LookAtThis"
 include(":app")
+include(":presentation")
+include(":data")
+include(":domain")
