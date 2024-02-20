@@ -27,7 +27,7 @@ android {
             buildConfigField(
                 "String",
                 "baseUrl",
-                "\"http://lookatthisbe-env.eba-mmt8camh.ap-northeast-2.elasticbeanstalk.com\""
+                "\"http://34.64.216.71:8080\""
             )
             isMinifyEnabled = false
             proguardFiles(
