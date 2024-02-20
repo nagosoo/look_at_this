@@ -36,6 +36,7 @@ class LinkRegisterViewModel @Inject constructor(
     }
 
     fun postLink() {
+        _uiState.value= UiState.Loading
         viewModelScope.launch {
             postLinkUseCase(
                 _url.value!!, _memo.value
