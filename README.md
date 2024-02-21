@@ -8,6 +8,7 @@
 - 북마크 기능을 이용해 다시 보고 싶은 링크만 따로 관리
 - 링크가 등록되면 알림을 보내줌
 - 외부 앱에서 공유하기로 바로 링크 등록 가능
+- 라이트모드, 다크모드 대응 
 ```
 ---
 ### 🌈 앱 미리보기
@@ -20,11 +21,12 @@
         - Spring boot
         - Jpa
         - Mysql
+        - Google Cloud Platform
         - ERD
     
 <img src="https://github.com/nagosoo/look_at_this/assets/82588344/5b328c75-fe00-4cbd-bb5e-f6596cf01553"   alt="ERD"></img>
 - [안드로이드](https://github.com/nagosoo/look_at_this)
   - 단순한 기능 개발을 넘어서, 앱의 안정성과 사용자 경험을 고려하였습니다.  
 특히 **configuration change 이후에도 데이터를 유지하고, 페이지 이동 시에도 데이터가 손실되지 않도록 주의**하며 개발하였습니다.  
-  - Flow
+  - 클린 아키텍처를 기반으로 모듈화 + Flow를 사용하여 MVVM 패턴 구현 
   - Paging3
