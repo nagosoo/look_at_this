@@ -3,6 +3,7 @@ package com.eunji.lookatthis.data.repositoyImpl
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.map
 import com.eunji.lookatthis.data.BookmarkLinkPagingSource
 import com.eunji.lookatthis.data.BookmarkLinkPagingSource.Companion.BOOKMARK_LINK_NETWORK_PAGE_SIZE
 import com.eunji.lookatthis.data.LinkPagingSource
@@ -58,6 +59,11 @@ class LinkRepositoryImpl @Inject constructor(
             config = pageConfig,
             pagingSourceFactory = { LinkPagingSource(linkDataSource) }
         ).flow
+            .map { pagingData ->
+                pagingData.map { linkDto ->
+                    linkDto.toDomainModel()
+                }
+            }
     }
 
     override fun getBookmarkLinks(): Flow<PagingData<Link>> {
@@ -70,5 +76,10 @@ class LinkRepositoryImpl @Inject constructor(
             config = pageConfig,
             pagingSourceFactory = { BookmarkLinkPagingSource(linkDataSource) }
         ).flow
+            .map { pagingData ->
+                pagingData.map { linkDto ->
+                    linkDto.toDomainModel()
+                }
+            }
     }
 }

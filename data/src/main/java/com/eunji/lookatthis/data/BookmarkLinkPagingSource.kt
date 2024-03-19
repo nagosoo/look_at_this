@@ -3,27 +3,25 @@ package com.eunji.lookatthis.data
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.eunji.lookatthis.data.datasource.remote.LinkDataSource
-import com.eunji.lookatthis.domain.model.Link
+import com.eunji.lookatthis.data.model.LinkDto
 import retrofit2.HttpException
 import java.io.IOException
 
 class BookmarkLinkPagingSource(
     private val linkDataSource: LinkDataSource
-) : PagingSource<Int, Link>() {
+) : PagingSource<Int, LinkDto>() {
 
-    override fun getRefreshKey(state: PagingState<Int, Link>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, LinkDto>): Int? {
         return null //refresh시 항상 처음부터 로드
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Link> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, LinkDto> {
         val cursorId = params.key //처음에는 null
         return try {
             val response =
                 linkDataSource.getBookmarkLinks(pageSize = params.loadSize, cursorId = cursorId)
             val endOfPagination = response.body()?.hasNext == false
-            val repos = response.body()?.values!!.map {linkDto->
-                linkDto.toDomainModel()
-            }
+            val repos = response.body()?.values!!
             val nextKey = if (endOfPagination) {
                 null
             } else {
