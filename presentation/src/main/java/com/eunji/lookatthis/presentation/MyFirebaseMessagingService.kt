@@ -49,11 +49,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     @SuppressLint("MissingPermission")
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         val mIntent = Intent(this, MainActivity::class.java).apply {
-            //FLAG_ACTIVITY_CLEAR_TOP
-            //호출하려는 액티비티가 스택에 존재하면, 해당 액티비티를 최상위로 올리면서 그 위에 존재하던 액티비티를 전부 삭제한다.
-            //FLAG_ACTIVITY_SINGLE_TOP
-            //top activity와 동일한 activity 실행 시, 해당 activity를 다시 생성하지 않고 기존의 top activity 재사용
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         }
         val pendingIntent: PendingIntent =
             PendingIntent.getActivity(this, Random.nextInt(), mIntent, PendingIntent.FLAG_IMMUTABLE)
