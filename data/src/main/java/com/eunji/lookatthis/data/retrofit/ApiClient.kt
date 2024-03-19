@@ -35,9 +35,9 @@ class ApiClient @Inject constructor(
 
     private fun getOkHttpClient(needAuthorization: Boolean): OkHttpClient {
         return OkHttpClient.Builder().apply {
-            connectTimeout(2, TimeUnit.MINUTES)
-            readTimeout(2, TimeUnit.MINUTES)
-            writeTimeout(2, TimeUnit.MINUTES)
+            connectTimeout(1, TimeUnit.MINUTES)
+            readTimeout(30, TimeUnit.SECONDS)
+            writeTimeout(30, TimeUnit.SECONDS)
             interceptors().apply {
                 add(httpLoggingInterceptor.apply {
                     level = HttpLoggingInterceptor.Level.BODY
