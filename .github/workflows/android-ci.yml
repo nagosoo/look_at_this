@@ -44,8 +44,8 @@ jobs:
             -   name: Upload Release Build to Artifacts
                 uses: actions/upload-artifact@v3
                 with:
-                    name: release-artifacts
-                    path: app/build/outputs/apk/debug/
+                    name: debug-artifacts
+                    path: app/build/outputs/apk/debug
                     if-no-files-found: error
 
             -   name: Create Github Release
