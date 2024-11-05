@@ -69,6 +69,18 @@ android {
 
 }
 
+tasks.register("printVersionName") {
+    doLast {
+        println(android.defaultConfig.versionName)
+    }
+}
+
+tasks.register("printVersionCode") {
+    doLast {
+        println(android.defaultConfig.versionCode)
+    }
+}
+
 dependencies {
 
     implementation(project(":domain"))
