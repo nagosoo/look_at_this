@@ -10,6 +10,9 @@ on:
         branches:
             - dev
 
+permissions:
+    contents: write
+
 jobs:
     cd-build:
         runs-on: ubuntu-latest
@@ -45,7 +48,7 @@ jobs:
                 uses: actions/upload-artifact@v3
                 with:
                     name: debug-artifacts
-                    path: app/build/outputs/apk/debug
+                    path: app/build/outputs/apk/debug/
                     if-no-files-found: error
 
             -   name: Create Github Release
