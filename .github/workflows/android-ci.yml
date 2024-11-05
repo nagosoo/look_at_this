@@ -5,6 +5,7 @@ env:
     GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
 
 on:
+    workflow_dispatch:
     push:
         branches:
             - dev
@@ -28,7 +29,7 @@ jobs:
                     echo '${{ secrets.LOCAL_PROPERTIES }}' | base64 --d >> ./local.properties
 
             -   name: Generate google-services.json
-                run: echo '${{ secrets.GOOGLE_SERVICES }}' | base64 --d > ./app/presentation/google-services.json
+                run: echo '${{ secrets.GOOGLE_SERVICE_JSON }}' | base64 --d > ./presentation/google-services.json
 
             -   name: Extract Version Name
                 run: echo "##[set-output name=version;]v$(echo '${{ github.event.pull_request.title }}' | grep -oP 'release v\K[0-9]+\.[0-9]+\.[0-9]+')"
@@ -42,7 +43,7 @@ jobs:
                 uses: actions/upload-artifact@v3
                 with:
                     name: release-artifacts
-                    path: app/build/outputs/apk/release/
+                    path: app/build/outputs/apk/debug/
                     if-no-files-found: error
 
             -   name: Create Github Release
