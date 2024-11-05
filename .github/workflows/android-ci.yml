@@ -32,7 +32,9 @@ jobs:
                 run: echo '${{ secrets.GOOGLE_SERVICE_JSON }}' | base64 --d > ./presentation/google-services.json
 
             -   name: Extract Version Name
-                run: echo "##[set-output name=version;]v$(echo '${{ github.event.pull_request.title }}' | grep -oP 'release v\K[0-9]+\.[0-9]+\.[0-9]+')"
+                run: |
+                    echo "VERSION_NAME=$(./gradlew -q printVersionName)" >> $GITHUB_ENV
+                    echo "VERSION_CODE=$(./gradlew -q printVersionCode)" >> $GITHUB_ENV
                 id: extract_version
 
             -   name: Build Release APK
@@ -49,8 +51,8 @@ jobs:
             -   name: Create Github Release
                 uses: softprops/action-gh-release@v1
                 with:
-                    tag_name: ${{ steps.extract_version.outputs.version }}
-                    release_name: ${{ steps.extract_version.outputs.version }}
+                    tag_name: "${{ env.VERSION_NAME }}.${{ env.VERSION_CODE }}"
+                    release_name: "${{ env.VERSION_NAME }}.${{ env.VERSION_CODE }}"
                     generate_release_notes: true
                     files: |
                         app/build/outputs/apk/debug/app-debug.apk
