@@ -27,6 +27,10 @@ jobs:
                     distribution: 'corretto'
                     java-version: 17
                     
+            -   name: Generate keystore
+                run: |
+                    echo '${{ secrets.KEYSTORE }}' | base64 --d >> ./keystore/key_store
+                    
             -   name: Generate local.properties
                 run: |
                     echo '${{ secrets.LOCAL_PROPERTIES }}' | base64 --d >> ./local.properties
