@@ -27,7 +27,7 @@ android {
             buildConfigField(
                 "String",
                 "baseUrl",
-                "\"http://35.216.68.8:8080\""
+                "\"http://34.64.93.230:8080\""
             )
             isMinifyEnabled = false
             proguardFiles(
